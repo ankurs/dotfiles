@@ -1,0 +1,265 @@
+set nocompatible
+syntax on
+filetype off
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Let Vundle manage Vundle
+Bundle 'gmarik/vundle'
+
+" My Bundles
+Bundle 'tpope/vim-sensible'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-rake'
+Bundle 'nanotech/jellybeans.vim'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'scrooloose/syntastic'
+Bundle 'scrooloose/nerdtree'
+Bundle 'kien/ctrlp.vim'
+Bundle 'rking/ag.vim'
+Bundle 'kana/vim-textobj-user'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'slim-template/vim-slim'
+Plugin 'nsf/gocode', {'rtp': 'vim/'}
+
+Bundle 'majutsushi/tagbar'
+"Bundle 'ervandew/supertab'
+Bundle 'bronson/vim-trailing-whitespace'
+
+Bundle 'fatih/vim-go'
+Bundle 'Shougo/neocomplete.vim'
+Bundle 'Shougo/neosnippet'
+Bundle 'Shougo/neosnippet-snippets'
+
+Plugin 'flazz/vim-colorschemes'
+
+filetype plugin indent on
+
+let mapleader="\\"
+
+colorscheme apprentice
+
+set cursorline
+set expandtab
+set modelines=0
+set shiftwidth=2
+set clipboard=unnamed
+set synmaxcol=128
+set ttyscroll=10
+set encoding=utf-8
+set tabstop=2
+set nowrap
+set number
+set expandtab
+set nowritebackup
+set noswapfile
+set nobackup
+set hlsearch
+set ignorecase
+set smartcase
+set guifont=Monaco:h12
+set bg=dark
+set t_Co=256
+" for GVIM
+if has("gui_running")
+    "remove menu and toolbar
+   set guioptions-=m
+   set guioptions-=T
+   set columns=95
+   set lines=35
+endif
+
+nmap <leader>hs :set hlsearch! hlsearch?<CR>
+nmap <leader>rt :TagbarToggle<CR>
+" Automatic formatting
+autocmd BufWritePre *.rb :%s/\s\+$//e
+autocmd BufWritePre *.go :%s/\s\+$//e
+autocmd BufWritePre *.haml :%s/\s\+$//e
+autocmd BufWritePre *.html :%s/\s\+$//e
+autocmd BufWritePre *.scss :%s/\s\+$//e
+autocmd BufWritePre *.slim :%s/\s\+$//e
+
+au BufNewFile * set noeol
+au BufRead,BufNewFile *.go set filetype=go
+
+" No show command
+autocmd VimEnter * set nosc
+
+" Quick ESC
+imap jj <ESC>
+
+" Jump to the next row on long lines
+map <Down> gj
+map <Up>   gk
+nnoremap j gj
+nnoremap k gk
+
+" format the entire file
+nmap <leader>fef ggVG=
+
+" Open new buffers
+nmap <leader>s<left>   :leftabove  vnew<cr>
+nmap <leader>s<right>  :rightbelow vnew<cr>
+nmap <leader>s<up>     :leftabove  new<cr>
+nmap <leader>s<down>   :rightbelow new<cr>
+
+" Tab between buffers
+noremap <tab> <c-w><c-w>
+
+" Switch between last two buffers
+nnoremap <leader><leader> <C-^>
+
+" Resize buffers
+if bufwinnr(1)
+  nmap Ä <C-W><<C-W><
+  nmap Ö <C-W>><C-W>>
+  nmap ö <C-W>-<C-W>-
+  nmap ä <C-W>+<C-W>+
+endif
+
+" NERDTree
+nmap <leader>n :NERDTreeToggle<CR>
+let NERDTreeHighlightCursorline=1
+let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
+
+" Syntastic
+let g:syntastic_mode_map = { 'mode': 'passive' }
+let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
+
+" CtrlP
+nnoremap <silent> t :CtrlP<cr>
+let g:ctrlp_working_path_mode = 2
+let g:ctrlp_by_filename = 1
+let g:ctrlp_max_files = 600
+let g:ctrlp_max_depth = 5
+
+" Go programming
+"set rtp+=/usr/local/Cellar/go/1.0.3/misc/vim
+
+" Quit with :Q
+command -nargs=0 Quit :qa!
+
+
+"for neo complete
+"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 2
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplete#close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+" For cursor moving in insert mode(Not recommended)
+"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+" Or set this.
+"let g:neocomplete#enable_cursor_hold_i = 1
+" Or set this.
+"let g:neocomplete#enable_insert_char_pre = 1
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+"for neo snippet
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
+" For vim-go
+au FileType go nmap <leader>i <Plug>(go-info)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+au FileType go nmap <leader>dg <Plug>(go-def)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+let g:go_fmt_command = "gofmt"
+let g:go_snippet_engine = "neosnippet"
+
