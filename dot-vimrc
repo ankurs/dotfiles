@@ -74,6 +74,7 @@ endif
 
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 nmap <leader>rt :TagbarToggle<CR>
+nmap <leader>tn :tabn<CR>
 " Automatic formatting
 autocmd BufWritePre *.rb :%s/\s\+$//e
 autocmd BufWritePre *.go :%s/\s\+$//e
