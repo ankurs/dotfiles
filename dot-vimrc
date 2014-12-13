@@ -2,11 +2,11 @@ set nocompatible
 syntax on
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#rc()
 
 " Let Vundle manage Vundle
-Bundle 'gmarik/vundle'
+Bundle 'gmarik/Vundle.vim'
 
 " My Bundles
 Bundle 'tpope/vim-sensible'
@@ -18,12 +18,14 @@ Bundle 'nanotech/jellybeans.vim'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
+Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
 Bundle 'rking/ag.vim'
 Bundle 'kana/vim-textobj-user'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'slim-template/vim-slim'
 Plugin 'nsf/gocode', {'rtp': 'vim/'}
+"Bundle 'davidhalter/jedi-vim'
 
 Bundle 'majutsushi/tagbar'
 "Bundle 'ervandew/supertab'
@@ -34,7 +36,18 @@ Bundle 'Shougo/neocomplete.vim'
 Bundle 'Shougo/neosnippet'
 Bundle 'Shougo/neosnippet-snippets'
 
+Bundle 'osyo-manga/vim-over'
+Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
+
+Plugin 'Yggdroot/indentLine'
+Plugin 'kien/tabman.vim' " Tab management
+"Plugin 'szw/vim-ctrlspace'
+"Plugin 'Bling/vim-airline'
+
+Plugin 'elzr/vim-json'
+Plugin 'Lokaltog/powerline'
+Plugin 'TaskList.vim'
 
 filetype plugin indent on
 
@@ -74,7 +87,6 @@ endif
 
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 nmap <leader>rt :TagbarToggle<CR>
-nmap <leader>tn :tabn<CR>
 " Automatic formatting
 autocmd BufWritePre *.rb :%s/\s\+$//e
 autocmd BufWritePre *.go :%s/\s\+$//e
@@ -86,8 +98,14 @@ autocmd BufWritePre *.slim :%s/\s\+$//e
 au BufNewFile * set noeol
 au BufRead,BufNewFile *.go set filetype=go
 
+" Markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+
 " No show command
 autocmd VimEnter * set nosc
+
+" indent tabs
+set list lcs=tab:\|\ 
 
 " Quick ESC
 imap jj <ESC>
@@ -122,9 +140,18 @@ if bufwinnr(1)
 endif
 
 " NERDTree
-nmap <leader>n :NERDTreeToggle<CR>
+nmap <leader>n :NERDTreeTabsToggle<CR>
 let NERDTreeHighlightCursorline=1
-let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
+"let g:nerdtree_tabs_open_on_console_startup=1
+
+" TaskList
+nmap <leader>tl :TaskList<CR>
+let g:tlWindowPosition=1
+
+"json
+let g:vim_json_syntax_conceal=0
+let g:indentLine_noConcealCursor=""
+let g:vim_json_warnings=1
 
 " Syntastic
 let g:syntastic_mode_map = { 'mode': 'passive' }
@@ -143,7 +170,6 @@ let g:ctrlp_max_depth = 5
 " Quit with :Q
 command -nargs=0 Quit :qa!
 
-
 "for neo complete
 "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
@@ -153,7 +179,7 @@ let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
 let g:neocomplete#enable_smart_case = 1
 " Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 2
+let g:neocomplete#sources#syntax#min_keyword_length = 1
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 " Define dictionary.
@@ -264,3 +290,19 @@ au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 let g:go_fmt_command = "gofmt"
 let g:go_snippet_engine = "neosnippet"
 
+" code searches
+" The Silver Searcher
+" https://github.com/ggreer/the_silver_searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+
+  " bind K to grep word under cursor
+  nnoremap <Leader>k :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+endif
