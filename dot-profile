@@ -1,17 +1,8 @@
-# Finished adapting your PATH environment variable for use with MacPorts.
 export GOPATH="/Users/ankur/code/go"
 export GOBIN="$GOPATH/bin/"
 export PATH="$GOBIN:$PATH"
-export PATH="$PATH:/Users/ankur/Desktop/adt-bundle-mac-x86_64-20140702/sdk/platform-tools"
+export PATH="$PATH:/Users/ankur/code/adt-bundle-mac-x86_64-20140702/sdk/platform-tools"
 export EDITOR="vim"
-
-##
-# Your previous /Users/ankur/.profile file was backed up as /Users/ankur/.profile.macports-saved_2014-10-18_at_13:11:16
-##
-
-# MacPorts Installer addition on 2014-10-18_at_13:11:16: adding an appropriate PATH variable for use with MacPorts.
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# Finished adapting your PATH environment variable for use with MacPorts.
 
 export LC_CTYPE='C'
 export LC_ALL='C'
