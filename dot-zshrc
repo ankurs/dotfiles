@@ -89,3 +89,5 @@ source ~/.profile
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 bindkey '^R' history-incremental-pattern-search-backward
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

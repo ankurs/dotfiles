@@ -49,6 +49,10 @@ Plugin 'elzr/vim-json'
 Plugin 'Lokaltog/powerline'
 Plugin 'TaskList.vim'
 
+Plugin 'Raimondi/delimitMate'
+
+let delimitMate_expand_cr = 1
+
 filetype plugin indent on
 
 let mapleader="\\"
@@ -198,6 +202,21 @@ let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 " Plugin key-mappings.
 inoremap <expr><C-g>     neocomplete#undo_completion()
 inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Eclim
+" Search for the javadocs of the element under the cursor with
+nnoremap <leader>d :JavaDocSearch -x declarations<cr>
+" Import the class under the cursor
+nnoremap <leader>i :JavaImport<cr>
+" Perform a context sensitive search of the element under the cursor
+nnoremap <leader>cs :JavaSearchContext<cr>
+
+" neo complete exception for java
+if !exists('g:neocomplete#force_omni_input_patterns')                                                                                                  
+    let g:neocomplete#force_omni_input_patterns = {}                                                                                                   
+endif                                                                                                                                                  
+let g:neocomplete#force_omni_input_patterns.java =                                                                                                     
+    \ '\%(\h\w*\|)\)\.\w*'
 
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
