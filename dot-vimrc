@@ -20,12 +20,14 @@ Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'kien/ctrlp.vim'
+Bundle 'tacahiroy/ctrlp-funky'
 Bundle 'rking/ag.vim'
 Bundle 'kana/vim-textobj-user'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'slim-template/vim-slim'
 Plugin 'nsf/gocode', {'rtp': 'vim/'}
 "Bundle 'davidhalter/jedi-vim'
+Bundle "Raimondi/delimitMate"
 
 Bundle 'majutsushi/tagbar'
 "Bundle 'ervandew/supertab'
@@ -33,8 +35,11 @@ Bundle 'bronson/vim-trailing-whitespace'
 
 Bundle 'fatih/vim-go'
 Bundle 'Shougo/neocomplete.vim'
+"Plugin 'Valloric/YouCompleteMe'
 Bundle 'Shougo/neosnippet'
 Bundle 'Shougo/neosnippet-snippets'
+
+Bundle 'scrooloose/nerdcommenter'
 
 Bundle 'osyo-manga/vim-over'
 Plugin 'tpope/vim-markdown'
@@ -49,10 +54,6 @@ Plugin 'elzr/vim-json'
 Plugin 'Lokaltog/powerline'
 Plugin 'TaskList.vim'
 
-Plugin 'Raimondi/delimitMate'
-
-let delimitMate_expand_cr = 1
-
 filetype plugin indent on
 
 let mapleader="\\"
@@ -62,12 +63,12 @@ colorscheme apprentice
 set cursorline
 set expandtab
 set modelines=0
-set shiftwidth=2
+set shiftwidth=4
 set clipboard=unnamed
 set synmaxcol=128
 set ttyscroll=10
 set encoding=utf-8
-set tabstop=2
+set tabstop=4
 set nowrap
 set number
 set expandtab
@@ -166,7 +167,9 @@ nnoremap <silent> t :CtrlP<cr>
 let g:ctrlp_working_path_mode = 2
 let g:ctrlp_by_filename = 1
 let g:ctrlp_max_files = 600
-let g:ctrlp_max_depth = 5
+let g:ctrlp_max_depth = 10
+let g:ctrlp_max_files=0
+let g:ctrlp_extensions = ['funky'] 
 
 " Go programming
 "set rtp+=/usr/local/Cellar/go/1.0.3/misc/vim
@@ -199,24 +202,18 @@ if !exists('g:neocomplete#keyword_patterns')
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
+
+"Eclim
+let g:EclimCompletionMethod = 'omnifunc'
+
+if !exists('g:neocomplcache_force_omni_patterns')
+  let g:neocomplcache_force_omni_patterns = {}
+endif
+let g:neocomplcache_force_omni_patterns.java = '\k\.\k*'
+
 " Plugin key-mappings.
 inoremap <expr><C-g>     neocomplete#undo_completion()
 inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Eclim
-" Search for the javadocs of the element under the cursor with
-nnoremap <leader>d :JavaDocSearch -x declarations<cr>
-" Import the class under the cursor
-nnoremap <leader>i :JavaImport<cr>
-" Perform a context sensitive search of the element under the cursor
-nnoremap <leader>cs :JavaSearchContext<cr>
-
-" neo complete exception for java
-if !exists('g:neocomplete#force_omni_input_patterns')                                                                                                  
-    let g:neocomplete#force_omni_input_patterns = {}                                                                                                   
-endif                                                                                                                                                  
-let g:neocomplete#force_omni_input_patterns.java =                                                                                                     
-    \ '\%(\h\w*\|)\)\.\w*'
 
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -345,4 +342,11 @@ if executable('ag')
 endif
 
 " set go path
-let $GOPATH = '/Users/ankur/code/go'
+let $GOPATH = '/Users/ankur.s/code/go'
+
+"eclim
+nnoremap <leader>d :JavaSearch<cr>
+let g:SuperTabDefaultCompletionType = 'context'
+
+"delimitMate
+let delimitMate_expand_cr = 1
