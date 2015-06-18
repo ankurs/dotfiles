@@ -39,6 +39,10 @@ Plugin 'Valloric/YouCompleteMe'
 Bundle 'Shougo/neosnippet'
 Bundle 'Shougo/neosnippet-snippets'
 
+"Plugin 'StanAngeloff/php.vim' " PHP
+"Plugin 'spf13/PIV'
+"let g:DisableAutoPHPFolding = 1
+
 Bundle 'scrooloose/nerdcommenter'
 
 Bundle 'osyo-manga/vim-over'
@@ -49,6 +53,7 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'kien/tabman.vim' " Tab management
 "Plugin 'szw/vim-ctrlspace'
 "Plugin 'Bling/vim-airline'
+Plugin 'vim-scripts/cSyntaxAfter'
 
 Plugin 'elzr/vim-json'
 Plugin 'Lokaltog/powerline'
@@ -65,7 +70,7 @@ set expandtab
 set modelines=0
 set shiftwidth=4
 set clipboard=unnamed
-set synmaxcol=128
+set synmaxcol=250 " for those insanly long lines
 set ttyscroll=10
 set encoding=utf-8
 set tabstop=4
@@ -179,6 +184,10 @@ command -nargs=0 Quit :qa!
 
 "Eclim
 let g:EclimCompletionMethod = 'omnifunc'
+let g:EclimJavaCallHierarchyDefaultAction = "tabe"
+let g:EclimJavaNewOpenAction = "tabe"
+let g:EclimJavaSearchSingleResult = "tabe"
+let g:EclimLoggingDisabled = 1
 
 if !exists('g:neocomplcache_force_omni_patterns')
   let g:neocomplcache_force_omni_patterns = {}
@@ -268,3 +277,6 @@ let delimitMate_expand_cr = 1
 
 "YouCompleteMe
 let g:ycm_autoclose_preview_window_after_insertion = 1
+
+"cSyntaxAfter
+autocmd! FileType c,cpp,java call CSyntaxAfter()
