@@ -59,11 +59,17 @@ Plugin 'elzr/vim-json'
 Plugin 'Lokaltog/powerline'
 Plugin 'TaskList.vim'
 
+Bundle 'cespare/vim-toml'
+
+"for bas16 theme
+Plugin 'chriskempson/base16-vim'
+
 filetype plugin indent on
 
 let mapleader="\\"
 
 colorscheme apprentice
+"colorscheme Tomorrow-Night
 
 set cursorline
 set expandtab
@@ -74,7 +80,7 @@ set synmaxcol=250 " for those insanly long lines
 set ttyscroll=10
 set encoding=utf-8
 set tabstop=4
-set nowrap
+set wrap
 set number
 set expandtab
 set nowritebackup
@@ -91,6 +97,10 @@ if has("gui_running")
     "remove menu and toolbar
    set guioptions-=m
    set guioptions-=T
+   set guioptions-=l
+   set guioptions-=L
+   set guioptions-=r
+   set guioptions-=R
    set columns=95
    set lines=35
 endif
@@ -172,7 +182,7 @@ nnoremap <silent> t :CtrlP<cr>
 let g:ctrlp_working_path_mode = 2
 let g:ctrlp_by_filename = 1
 let g:ctrlp_max_files = 600
-let g:ctrlp_max_depth = 10
+let g:ctrlp_max_depth = 15
 let g:ctrlp_max_files=0
 let g:ctrlp_extensions = ['funky']
 
@@ -280,3 +290,11 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "cSyntaxAfter
 autocmd! FileType c,cpp,java call CSyntaxAfter()
+
+" Enable mouse in iterm
+"set mouse=a
+
+" give us 256 color schemes!
+"set term=screen-256color
+"set list
+"set listchars=tab:▸\ ,eol:¬
