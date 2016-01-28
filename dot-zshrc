@@ -53,12 +53,12 @@ ZSH_THEME="muse"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow git-extras osx github common-aliases macports vi-mode mvn brew tmux)
+plugins=(git git-flow git-extras osx github common-aliases macports vi-mode mvn brew tmux rvm)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Users/ankur/code/go/bin/:/Users/ankur/Desktop/adt-bundle-mac-x86_64-20140702/sdk/platform-tools"
+export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin"
 
 source ~/.profile
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -90,4 +90,10 @@ source ~/.profile
 
 bindkey '^R' history-incremental-pattern-search-backward
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+#. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+#
+# reduce delay
+export KEYTIMEOUT=1
+
+# for rvm
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"

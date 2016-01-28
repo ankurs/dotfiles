@@ -24,6 +24,7 @@ Bundle 'tacahiroy/ctrlp-funky'
 Bundle 'rking/ag.vim'
 Bundle 'kana/vim-textobj-user'
 Bundle 'nelstrom/vim-textobj-rubyblock'
+Plugin 'vim-ruby/vim-ruby'
 Bundle 'slim-template/vim-slim'
 Plugin 'nsf/gocode', {'rtp': 'vim/'}
 "Bundle 'davidhalter/jedi-vim'
@@ -45,18 +46,18 @@ Bundle 'Shougo/neosnippet-snippets'
 
 Bundle 'scrooloose/nerdcommenter'
 
-Bundle 'osyo-manga/vim-over'
+"bundle 'osyo-manga/vim-over'
 Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
 
 Plugin 'Yggdroot/indentLine'
 Plugin 'kien/tabman.vim' " Tab management
-"Plugin 'szw/vim-ctrlspace'
+Plugin 'szw/vim-ctrlspace'
 "Plugin 'Bling/vim-airline'
 Plugin 'vim-scripts/cSyntaxAfter'
 
 Plugin 'elzr/vim-json'
-Plugin 'Lokaltog/powerline'
+"Plugin 'Lokaltog/powerline'
 Plugin 'TaskList.vim'
 
 Bundle 'cespare/vim-toml'
@@ -237,11 +238,6 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \ "\<Plug>(neosnippet_expand_or_jump)"
 \: "\<TAB>"
 
-" For snippet_complete marker.
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-endif
-
 " For vim-go
 au FileType go nmap <leader>i <Plug>(go-info)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
@@ -293,6 +289,9 @@ autocmd! FileType c,cpp,java call CSyntaxAfter()
 
 " Enable mouse in iterm
 "set mouse=a
+
+" ruby
+au FileType ruby set nocursorline " disable cursor line for ruby files
 
 " give us 256 color schemes!
 "set term=screen-256color
