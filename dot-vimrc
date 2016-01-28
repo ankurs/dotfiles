@@ -1,4 +1,5 @@
 set nocompatible
+set hidden
 syntax on
 filetype off
 
