@@ -254,6 +254,9 @@ au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 let g:go_fmt_command = "gofmt"
 let g:go_snippet_engine = "neosnippet"
+let g:go_bin_path = expand("~/.gotools")
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 " code searches
 " The Silver Searcher
@@ -273,7 +276,7 @@ if executable('ag')
 endif
 
 " set go path
-let $GOPATH = '/Users/ankur.s/code/go'
+let $GOPATH = expand ("~/code/go")
 
 "eclim
 nnoremap <leader>d :JavaSearch<cr>
