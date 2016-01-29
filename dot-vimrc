@@ -36,6 +36,7 @@ Bundle 'majutsushi/tagbar'
 Bundle 'bronson/vim-trailing-whitespace'
 
 Bundle 'fatih/vim-go'
+Bundle 'garyburd/go-explorer'
 "Bundle 'Shougo/neocomplete.vim'
 Plugin 'Valloric/YouCompleteMe'
 Bundle 'Shougo/neosnippet'
