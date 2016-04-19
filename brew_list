@@ -5,7 +5,6 @@ ascii
 astyle
 autoconf
 automake
-boot2docker
 brew-cask
 c-ares
 cloog
@@ -18,10 +17,7 @@ curl
 d-bus
 dex2jar
 docker
-docker-compose
-docker-machine
 ecj
-fig
 freetype
 gawk
 gcc
