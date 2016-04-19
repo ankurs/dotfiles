@@ -7,6 +7,7 @@ autoconf
 automake
 boot2docker
 brew-cask
+c-ares
 cloog
 cloog018
 cmake
@@ -14,6 +15,7 @@ cscope
 csshx
 ctags
 curl
+d-bus
 dex2jar
 docker
 docker-compose
@@ -24,22 +26,29 @@ freetype
 gawk
 gcc
 gdbm
+geoip
 gettext
 git
+glib
 gmp
 gmp4
+gnutls
 go
+godep
 gradle
 groovy
 isl
 isl011
 libcouchbase
 libevent
+libffi
+libgcrypt
 libgpg-error
 libksba
 libmpc
 libmpc08
 libpng
+libtasn1
 libtool
 libyaml
 lua
@@ -50,6 +59,7 @@ mercurial
 mpfr
 mpfr2
 mysql-connector-c
+nettle
 nmap
 node
 openssl
@@ -66,8 +76,9 @@ the_silver_searcher
 tmux
 tokyo-cabinet
 tree
-vim
+vim --override-system-vi --with-client-server --with-lua --with-luajit
 wget
+wireshark
 xz
 zlib
 zsh
