@@ -33,6 +33,7 @@ go
 godep
 gradle
 groovy
+hugo
 isl
 isl011
 libcouchbase
