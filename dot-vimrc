@@ -1,4 +1,6 @@
-set nocompatible
+if !has('nvim')
+    set nocompatible
+endif
 set hidden
 syntax on
 filetype off
@@ -36,8 +38,8 @@ Bundle 'majutsushi/tagbar'
 Bundle 'bronson/vim-trailing-whitespace'
 
 Bundle 'fatih/vim-go'
-Bundle 'garyburd/go-explorer'
-"Bundle 'Shougo/neocomplete.vim'
+"Bundle 'garyburd/go-explorer'
+Bundle 'Shougo/neocomplete.vim'
 Plugin 'Valloric/YouCompleteMe'
 Bundle 'Shougo/neosnippet'
 Bundle 'Shougo/neosnippet-snippets'
@@ -80,7 +82,9 @@ set modelines=0
 set shiftwidth=4
 set clipboard=unnamed
 set synmaxcol=250 " for those insanly long lines
-set ttyscroll=10
+if !has('nvim')
+    set ttyscroll=11
+endif
 set encoding=utf-8
 set tabstop=4
 set wrap
@@ -290,13 +294,20 @@ let delimitMate_expand_cr = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "cSyntaxAfter
-autocmd! FileType c,cpp,java call CSyntaxAfter()
+autocmd! FileType c,cpp,java,go call CSyntaxAfter()
 
 " Enable mouse in iterm
 "set mouse=a
 
 " ruby
 au FileType ruby set nocursorline " disable cursor line for ruby files
+
+"
+
+if has('nvim')
+    set clipboard+=unnamedplus
+    noremap <leader>nt :tabe term://zsh<cr>
+endif
 
 " give us 256 color schemes!
 "set term=screen-256color
