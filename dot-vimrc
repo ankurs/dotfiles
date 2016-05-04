@@ -18,7 +18,9 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-rake'
 Bundle 'nanotech/jellybeans.vim'
-Bundle 'Lokaltog/vim-powerline'
+"Bundle 'Lokaltog/vim-powerline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Bundle 'scrooloose/syntastic'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
@@ -89,7 +91,6 @@ set encoding=utf-8
 set tabstop=4
 set wrap
 set number
-set expandtab
 set nowritebackup
 set noswapfile
 set nobackup
@@ -308,6 +309,10 @@ if has('nvim')
     set clipboard+=unnamedplus
     noremap <leader>nt :tabe term://zsh<cr>
 endif
+
+"airline
+let g:airline_powerline_fonts = 1
+let g:airline_theme='tomorrow'
 
 " give us 256 color schemes!
 "set term=screen-256color
