@@ -71,6 +71,8 @@ Bundle 'cespare/vim-toml'
 "for bas16 theme
 Plugin 'chriskempson/base16-vim'
 
+Plugin 'airblade/vim-gitgutter'
+
 filetype plugin indent on
 
 let mapleader="\\"
@@ -295,7 +297,7 @@ let delimitMate_expand_cr = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "cSyntaxAfter
-autocmd! FileType c,cpp,java,go call CSyntaxAfter()
+autocmd! FileType c,cpp,java,go,php call CSyntaxAfter()
 
 " Enable mouse in iterm
 "set mouse=a
