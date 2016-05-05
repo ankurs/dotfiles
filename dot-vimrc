@@ -265,6 +265,13 @@ let g:go_snippet_engine = "neosnippet"
 let g:go_bin_path = expand("~/.gotools")
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+" syntax highlighting
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_interfaces = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 
 " code searches
 " The Silver Searcher
@@ -297,7 +304,7 @@ let delimitMate_expand_cr = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "cSyntaxAfter
-autocmd! FileType c,cpp,java,go,php call CSyntaxAfter()
+autocmd! FileType c,cpp,java,php call CSyntaxAfter()
 
 " Enable mouse in iterm
 "set mouse=a
@@ -310,6 +317,9 @@ au FileType ruby set nocursorline " disable cursor line for ruby files
 if has('nvim')
     set clipboard+=unnamedplus
     noremap <leader>nt :tabe term://zsh<cr>
+    " vim-go
+    let g:go_term_mode = "split"
+    let g:go_term_enabled = 1
 endif
 
 "airline
@@ -318,5 +328,5 @@ let g:airline_theme='tomorrow'
 
 " give us 256 color schemes!
 "set term=screen-256color
-"set list
-"set listchars=tab:▸\ ,eol:¬
+set list
+set listchars=tab:▸\ ,eol:¬
