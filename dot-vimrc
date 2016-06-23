@@ -304,7 +304,7 @@ let delimitMate_expand_cr = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 "cSyntaxAfter
-autocmd! FileType c,cpp,java,php call CSyntaxAfter()
+autocmd! FileType c,cpp,java,php,python,go call CSyntaxAfter()
 
 " Enable mouse in iterm
 "set mouse=a

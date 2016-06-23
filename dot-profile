@@ -29,3 +29,5 @@ export PATH="$HOME/code/phabricator/arcanist/bin":$PATH
 #powerline
 export PATH="/usr/local/lib/python2.7/site-packages:/usr/local/share/python:$PATH"
 
+# Postgres.app
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
