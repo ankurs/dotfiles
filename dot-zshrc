@@ -14,6 +14,7 @@ ZSH_THEME="muse"
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="af-magic"
 #ZSH_THEME="gentoo"
+#ZSH_THEME="bullet-train"
 #
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -53,7 +54,7 @@ ZSH_THEME="muse"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow git-extras osx github common-aliases macports vi-mode mvn brew tmux rvm)
+plugins=(git git-flow git-extras osx github common-aliases macports vi-mode mvn brew tmux rvm pip python)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -97,3 +98,6 @@ export KEYTIMEOUT=1
 
 # for rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+
+#for powerline
+#PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
