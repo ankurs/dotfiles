@@ -73,7 +73,12 @@ Plugin 'TaskList.vim'
 Bundle 'cespare/vim-toml'
 
 "for bas16 theme
-Plugin 'chriskempson/base16-vim'
+"Plugin 'chriskempson/base16-vim'
+"Bundle 'YorickPeterse/Autumn.vim'
+"Bundle 'juanedi/predawn.vim'
+Bundle 'scwood/vim-hybrid'
+Bundle 'jacoborus/tender.vim'
+
 
 Plugin 'airblade/vim-gitgutter'
 
@@ -81,8 +86,10 @@ filetype plugin indent on
 
 let mapleader="\\"
 
+"colorscheme 'tender_contrast'
 colorscheme apprentice
 "colorscheme Tomorrow-Night
+"colorscheme hybrid_material
 
 set cursorline
 set expandtab
