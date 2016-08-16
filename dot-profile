@@ -2,6 +2,8 @@ export GOPATH="$HOME/code/go"
 export GOBIN="$GOPATH/bin"
 export PATH="$GOBIN:$PATH"
 export PATH="$HOME/.gotools:$PATH"
+#gcloud bin
+export PATH="/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH"
 export PATH="/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH"
 #export PATH="$PATH:$HOME/code/adt-bundle-mac-x86_64-20140702/sdk/platform-tools"
 export EDITOR="nvim"
@@ -31,3 +33,12 @@ export PATH="/usr/local/lib/python2.7/site-packages:/usr/local/share/python:$PAT
 
 # Postgres.app
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
+
+alias gcloudac='gcloud config set compute/zone asia-east1-c'
+alias gcloudab='gcloud config set compute/zone asia-east1-b'
+alias gcloudaa='gcloud config set compute/zone asia-east1-a'
+
+if [ -f ~/.secret.rc ]
+then
+    source ~/.secret.rc
+fi
