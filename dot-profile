@@ -37,6 +37,7 @@ export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 alias gcloudac='gcloud config set compute/zone asia-east1-c'
 alias gcloudab='gcloud config set compute/zone asia-east1-b'
 alias gcloudaa='gcloud config set compute/zone asia-east1-a'
+alias dock='eval $(docker-machine env default)'
 
 if [ -f ~/.secret.rc ]
 then
