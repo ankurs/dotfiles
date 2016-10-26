@@ -3,3 +3,6 @@
 	url = git@github.com:ankurs/tmux-powerline.git
 [submodule]
 	tmux-powerline = master
+[submodule "antigen"]
+	path = antigen
+	url = https://github.com/zsh-users/antigen.git

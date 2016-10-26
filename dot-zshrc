@@ -1,5 +1,35 @@
+source $HOME/code/dotfiles/antigen/antigen.zsh
+
+antigen use oh-my-zsh
+
+antigen bundle git
+antigen bundle git-flow
+
+antigen bundle git-extras
+antigen bundle osx
+antigen bundle github
+antigen bundle common-aliases
+antigen bundle macports
+antigen bundle vi-mode
+antigen bundle mvn
+antigen bundle brew
+antigen bundle tmux
+antigen bundle pip
+antigen bundle python
+antigen bundle kubectl
+antigen bundle lein
+antigen bundle docker
+
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen theme muse
+
+antigen apply
+
+### Below for OHmyzsh for reference
+
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+#export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -54,9 +84,9 @@ ZSH_THEME="muse"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow git-extras osx github common-aliases macports vi-mode mvn brew tmux rvm pip python)
+##plugins=(git git-flow git-extras osx github common-aliases macports vi-mode mvn brew tmux rvm pip python kubectl)
 
-source $ZSH/oh-my-zsh.sh
+##source $ZSH/oh-my-zsh.sh
 
 # User configuration
 export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin"
