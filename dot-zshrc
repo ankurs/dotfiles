@@ -4,7 +4,6 @@ antigen use oh-my-zsh
 
 antigen bundle git
 antigen bundle git-flow
-
 antigen bundle git-extras
 antigen bundle osx
 antigen bundle github

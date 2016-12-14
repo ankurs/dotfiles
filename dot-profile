@@ -25,6 +25,9 @@ alias j1.7='export JAVA_HOME=`/usr/libexec/java_home -v 1.7`'
 alias j1.8='export JAVA_HOME=`/usr/libexec/java_home -v 1.8`'
 alias c='cd ~/code/fk/chore'
 
+#switch vim to nvim :)
+alias vim='nvim'
+
 #flipkart
 export PATH="$HOME/code/phabricator/arcanist/bin":$PATH
 
@@ -43,3 +46,7 @@ if [ -f ~/.secret.rc ]
 then
     source ~/.secret.rc
 fi
+
+alias watch_kube="watch -n 30 'kubectl get hpa ; kubectl get deployment main-app; kubectl get deployment chat-app; kubectl get no | grep gke | wc -l'"
+
+alias web='csshx 10.240.0.87 10.240.0.85 10.240.0.88 10.240.0.89 10.240.0.194 10.240.0.90 10.240.0.86 10.240.0.80 10.240.0.79'
