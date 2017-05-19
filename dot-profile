@@ -47,6 +47,7 @@ then
     source ~/.secret.rc
 fi
 
-alias watch_kube="watch -n 30 'kubectl get hpa ; kubectl get deployment main-app; kubectl get deployment chat-app; kubectl get no | grep gke | wc -l'"
+alias watch_kube="watch -n 30 'kubectl get hpa ; kubectl get deployment main-app; kubectl get deployment chat-app; kubectl get deployment search-app; kubectl get no | grep gke | wc -l'"
 
+alias gro='cd $GOPATH/src/github.com/carousell/groups/'
 alias web='csshx 10.240.0.87 10.240.0.85 10.240.0.88 10.240.0.89 10.240.0.194 10.240.0.90 10.240.0.86 10.240.0.80 10.240.0.79'

@@ -9,40 +9,40 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#rc()
 
 " Let Vundle manage Vundle
-Bundle 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
-" My Bundles
+" My Plugins
 if !has('nvim')
-    Bundle 'tpope/vim-sensible'
+    Plugin 'tpope/vim-sensible'
 endif
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-rake'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-rake'
 Plugin 'nsf/gocode', {'rtp': 'vim/'}
-Bundle 'nanotech/jellybeans.vim'
+Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Bundle 'scrooloose/syntastic'
-Bundle 'scrooloose/nerdtree'
-Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'ctrlpvim/ctrlp.vim'
-Bundle 'tacahiroy/ctrlp-funky'
-Bundle 'rking/ag.vim'
-Bundle 'kana/vim-textobj-user'
-Bundle 'nelstrom/vim-textobj-rubyblock'
+Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'tacahiroy/ctrlp-funky'
+Plugin 'rking/ag.vim'
+Plugin 'kana/vim-textobj-user'
+Plugin 'nelstrom/vim-textobj-rubyblock'
 Plugin 'vim-ruby/vim-ruby'
-Bundle 'slim-template/vim-slim'
-"Bundle 'davidhalter/jedi-vim'
-Bundle "Raimondi/delimitMate"
-Bundle 'majutsushi/tagbar'
-Bundle 'bronson/vim-trailing-whitespace'
-Bundle 'fatih/vim-go'
-Bundle 'Shougo/neocomplete.vim'
+Plugin 'slim-template/vim-slim'
+Plugin 'Raimondi/delimitMate'
+Plugin 'majutsushi/tagbar'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'fatih/vim-go'
+Plugin 'jodosha/vim-godebug'
+Plugin 'Shougo/neocomplete.vim'
 Plugin 'Valloric/YouCompleteMe'
-Bundle 'Shougo/neosnippet'
-Bundle 'Shougo/neosnippet-snippets'
-Bundle 'scrooloose/nerdcommenter'
+Plugin 'Shougo/neosnippet'
+Plugin 'Shougo/neosnippet-snippets'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'jacoborus/tender'
@@ -53,7 +53,7 @@ Plugin 'szw/vim-ctrlspace'
 Plugin 'vim-scripts/cSyntaxAfter'
 Plugin 'elzr/vim-json'
 Plugin 'TaskList.vim'
-Bundle 'cespare/vim-toml'
+Plugin 'cespare/vim-toml'
 Plugin 'airblade/vim-gitgutter'
 "for slat
 Plugin 'saltstack/salt-vim'
@@ -61,6 +61,7 @@ Plugin 'saltstack/salt-vim'
 Plugin 'stephpy/vim-yaml'
 "for supervisor
 Plugin 'thiderman/vim-supervisor'
+"Plugin 'davidhalter/jedi-vim'
 
 filetype plugin indent on
 
@@ -285,6 +286,8 @@ endif
 
 " set go path
 let $GOPATH = expand ("~/code/go")
+set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
+"autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
 
 "eclim
 nnoremap <leader>jd :JavaSearch<cr>
@@ -300,7 +303,7 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 autocmd! FileType c,cpp,java,php,python,go call CSyntaxAfter()
 
 " Enable mouse in iterm
-"set mouse=a
+set mouse=a
 
 " ruby
 au FileType ruby set nocursorline " disable cursor line for ruby files
