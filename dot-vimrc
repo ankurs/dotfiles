@@ -55,6 +55,7 @@ Plugin 'elzr/vim-json'
 Plugin 'TaskList.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'mileszs/ack.vim'
 "for slat
 Plugin 'saltstack/salt-vim'
 " for yaml
@@ -190,6 +191,11 @@ let g:ctrlp_extensions = ['funky']
 " Quit with :Q
 command -nargs=0 Quit :qa!
 
+" for ack.vim
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 "Eclim
 let g:EclimCompletionMethod = 'omnifunc'
 let g:EclimJavaCallHierarchyDefaultAction = "tabe"
@@ -254,6 +260,8 @@ let g:go_bin_path = expand("~/.gotools")
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_list_type = "quickfix"
+let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_auto_type_info = 1
 " syntax highlighting
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
@@ -261,11 +269,16 @@ let g:go_highlight_structs = 1
 let g:go_highlight_interfaces = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_extra_types = 1
 " This trigger takes advantage of the fact that the quickfix window can be
 " easily distinguished by its file-type, qf. The wincmd J command is
 " equivalent to the Ctrl+W, Shift+J shortcut telling Vim to move a window to
 " the very bottom (see :help :wincmd and :help ^WJ).
 autocmd FileType qf wincmd J
+" https://github.com/fatih/vim-go/issues/145
+set synmaxcol=192
 
 " code searches
 " The Silver Searcher
