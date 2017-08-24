@@ -1,4 +1,5 @@
 caskroom/cask
+go-delve/delve
 homebrew/core
 homebrew/dupes
 homebrew/versions

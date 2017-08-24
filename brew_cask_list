@@ -1,6 +1,8 @@
 android-file-transfer
+android-platform-tools
 android-studio
 atom
+caffeine
 docker-toolbox
 eclipse-java
 firefox
@@ -13,6 +15,7 @@ intellij-idea
 iterm2
 java
 mactex
+minikube
 postico
 skype
 slack
@@ -24,4 +27,5 @@ virtualbox
 vlc
 vnc-viewer
 wireshark
+wireshark-chmodbpf
 xquartz
