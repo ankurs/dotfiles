@@ -11,5 +11,9 @@ python ~/.vim/bundle/YouCompleteMe/install.py
 brew cask install java
 cat ./brew_tap | xargs -n 1 brew tap
 cat ./brew_list | xargs -n 1 brew install
-cat ./brew_cask_list | xrags -n 1 brew cask install
-vim +GoUpdateBinaries
+cat ./brew_cask_list | xargs -n 1 brew cask install
+vim +GoUpdateBinaries +qall
+pip install neovim
+pip install bashate
+mkdir -p ~/.config/nvim/
+ln ~/.vimrc ~/.config/nvim/init.vim 
