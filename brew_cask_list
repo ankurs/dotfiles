@@ -1,12 +1,10 @@
 android-file-transfer
 android-platform-tools
 android-studio
-atom
 caffeine
 docker-toolbox
 eclipse-java
 firefox
-genymotion
 google-chrome
 google-cloud-sdk
 google-drive
@@ -16,7 +14,6 @@ iterm2
 java
 mactex
 minikube
-postico
 skype
 slack
 spotify
@@ -27,5 +24,4 @@ virtualbox
 vlc
 vnc-viewer
 wireshark
-wireshark-chmodbpf
 xquartz

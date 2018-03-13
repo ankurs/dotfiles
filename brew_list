@@ -5,6 +5,7 @@ ascii
 astyle
 autoconf
 automake
+bazaar
 bc
 beanstalkd
 boost
@@ -18,6 +19,7 @@ cscope
 csshx
 ctags
 curl
+cython
 dbus
 delve
 dex2jar
@@ -44,6 +46,8 @@ gradle
 graphviz
 grep
 groovy
+haproxy
+httpie
 hugo
 icu4c
 ircii
@@ -62,6 +66,7 @@ libevent
 libffi
 libgcrypt
 libgpg-error
+libidn2
 libksba
 libmpc
 libmpc08
@@ -97,18 +102,20 @@ p11-kit
 pandoc
 parallel
 pcre
+perl
 pgbadger
 pkg-config
-postgresql
 protobuf
 pypy
 python
 python3
+python@2
 readline
 reattach-to-user-namespace
 redis
 rsync
 ruby
+solr
 spdylay
 sqlite
 sysdig
@@ -124,5 +131,6 @@ webp
 wget
 wireshark
 xz
+yarn
 zlib
 zsh

@@ -65,6 +65,8 @@ Plugin 'stephpy/vim-yaml'
 Plugin 'thiderman/vim-supervisor'
 "Plugin 'davidhalter/jedi-vim'
 
+Plugin 'sbdchd/neoformat'
+
 filetype plugin indent on
 
 let mapleader="\\"
@@ -177,8 +179,19 @@ let g:indentLine_noConcealCursor=""
 let g:vim_json_warnings=1
 
 " Syntastic
-let g:syntastic_mode_map = { 'mode': 'passive' }
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"" install pip install bashate -- for bash support
 
 " CtrlP
 nnoremap <silent> t :CtrlP<cr>
@@ -258,8 +271,6 @@ au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 let g:go_fmt_command = "goimports"
 let g:go_snippet_engine = "neosnippet"
 let g:go_bin_path = expand("~/.gotools")
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_list_type = "quickfix"
 let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 let g:go_auto_type_info = 1

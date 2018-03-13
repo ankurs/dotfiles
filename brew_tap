@@ -2,5 +2,6 @@ caskroom/cask
 go-delve/delve
 homebrew/core
 homebrew/dupes
+homebrew/services
 homebrew/versions
 neovim/neovim
