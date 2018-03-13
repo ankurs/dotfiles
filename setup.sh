@@ -1,4 +1,7 @@
 #!/bin/bash
+git submodule init
+git submodule update
+bash fonts/install.sh
 PWD=`pwd`
 ln -s $PWD/dot-profile ~/.profile
 ln -s $PWD/dot-tmux.conf ~/.tmux.conf
@@ -18,3 +21,4 @@ cat ./brew_cask_list | xargs -n 1 brew cask install
 vim +GoUpdateBinaries +qall
 pip install neovim
 pip install bashate
+
