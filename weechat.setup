@@ -1,0 +1,48 @@
+#bash
+brew install aspell
+brew install weechat --with-python@2 --with-perl
+mkdir -p ~/.weechat/python/autoload
+wget https://raw.githubusercontent.com/wee-slack/wee-slack/master/wee_slack.py -P ~/.weechat/python/autoload
+chmod +x ~/.weechat/python/autoload/wee_slack.py
+
+
+# weechat
+/slack register
+/slack register [CODE_FROM_URL]
+/python reload slack
+
+/set weechat.bar.input.size 0
+/set weechat.bar.input.size_max 30
+/set weechat.look.mouse on
+
+/set plugins.var.python.slack.server_aliases "carousell:car"
+/set plugins.var.python.slack.show_reaction_nicks on
+/set weechat.bar.status.items [buffer_count],[buffer_plugin],buffer_number+:+buffer_name+{buffer_nicklist_count}+buffer_filter,[hotlist],completion,scroll,slack_typing_notice
+/set weechat.look.hotlist_names_level 14
+
+
+# bash
+wget https://weechat.org/files/temp/theme/theme.py -P ~/.weechat/python
+wget https://weechat.org/files/themes/fbesser.theme -P ~/.weechat/themes
+
+#weechat
+/script load theme.py
+/theme installfile ~/.weechat/themes/fbesser.theme
+/script install go.py
+
+/key bind meta-n /bar toggle nicklist
+/key bind meta-g /go
+
+/script install buffers.pl
+/set weechat.bar.buflist.hidden true
+
+/set irc.look.server_buffer independent
+/set weechat.bar.buffers.position left
+/set buffers.color.number white
+/set buffers.look.hotlist_counter on
+/set buffers.name_size_max 20
+/set buffers.look.name_size_max 24
+/set buffers.color.current_bg default
+/set buffers.color.current_fg lightcyan
+/set buffers.color.hotlist_message_bg default
+/set buffers.color.hotlist_message_fg yellow
