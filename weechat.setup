@@ -49,3 +49,11 @@ wget https://weechat.org/files/themes/fbesser.theme -P ~/.weechat/themes
 
 /script install highmon.pl
 /set plugins.var.perl.highmon.alignment "nchannel"
+
+/server add freenode chat.freenode.net
+/set irc.server.freenode.nicks "ankurs"
+/set irc.server.freenode.command "/msg nickserv identify <password>"
+/set irc.server.freenode.addresses "chat.freenode.net/7000"
+/set irc.server.freenode.ssl on
+/set irc.server.freenode.autoconnect on
+/set irc.server.freenode.autojoin "#go-nuts,#docker,##infra-talks,##linux,#vim"
