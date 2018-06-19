@@ -4,6 +4,7 @@ brew install weechat --with-python@2 --with-perl
 
 # weechat
 /script install slack.py
+# if you see error, you need to install `pip install websocket-client`
 /slack register
 /slack register [CODE_FROM_URL]
 /python reload slack
