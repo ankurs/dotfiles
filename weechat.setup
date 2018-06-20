@@ -1,6 +1,6 @@
 #bash
 brew install aspell
-brew install weechat --with-python@2 --with-perl
+brew install weechat --with-python@2 --with-perl --with-aspell
 
 # weechat
 /script install slack.py
