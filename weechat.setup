@@ -56,4 +56,9 @@ wget https://weechat.org/files/themes/fbesser.theme -P ~/.weechat/themes
 /set irc.server.freenode.addresses "chat.freenode.net/7000"
 /set irc.server.freenode.ssl on
 /set irc.server.freenode.autoconnect on
-/set irc.server.freenode.autojoin "#go-nuts,#docker,##infra-talks,##linux,#vim"
+/set irc.server.freenode.autojoin "#go-nuts,#docker,#linux,#vim"
+
+#irc filter https://weechat.org/blog/post/2008/10/25/Smart-IRC-join-part-quit-message-filter
+/set irc.look.smart_filter on
+/filter add irc_smart * irc_smart_filter *
+/set irc.look.smart_filter_delay 5
