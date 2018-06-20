@@ -13,9 +13,14 @@ brew install weechat --with-python@2 --with-perl
 /set weechat.bar.input.size_max 30
 /set weechat.look.mouse on
 
+/aspell enable
+/set aspell.check.default_dict en
+/set aspell.check.suggestions 3
+/set aspell.check.word_min_length 2
+
 /set plugins.var.python.slack.server_aliases "carousell:car"
 /set plugins.var.python.slack.show_reaction_nicks on
-/set weechat.bar.status.items [buffer_count],[buffer_plugin],buffer_number+:+buffer_name+{buffer_nicklist_count}+buffer_filter,[hotlist],completion,scroll,slack_typing_notice
+/set weechat.bar.status.items [buffer_count],[buffer_plugin],buffer_number+:+buffer_name+{buffer_nicklist_count}+buffer_filter,completion,scroll,|aspell_suggest|,slack_typing_notice,[hotlist]
 /set weechat.look.hotlist_names_level 14
 
 /set irc.server_default.nicks "ankur,ankurs"
