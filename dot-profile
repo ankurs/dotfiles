@@ -24,7 +24,6 @@ export GROOVY_HOME=/usr/local/opt/groovy/libexec
 alias j1.6='export JAVA_HOME=`/usr/libexec/java_home -v 1.6`'
 alias j1.7='export JAVA_HOME=`/usr/libexec/java_home -v 1.7`'
 alias j1.8='export JAVA_HOME=`/usr/libexec/java_home -v 1.8`'
-alias c='cd ~/code/fk/chore'
 
 #switch vim to nvim :)
 alias vim='nvim'
@@ -38,9 +37,6 @@ export PATH="/usr/local/lib/python2.7/site-packages:/usr/local/share/python:$PAT
 # Postgres.app
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 
-alias gcloudac='gcloud config set compute/zone asia-east1-c'
-alias gcloudab='gcloud config set compute/zone asia-east1-b'
-alias gcloudaa='gcloud config set compute/zone asia-east1-a'
 alias dock='eval $(docker-machine env default)'
 
 if [ -f ~/.secret.rc ]
@@ -48,9 +44,57 @@ then
     source ~/.secret.rc
 fi
 
-PROD_CTX='--context gke_thecarousell.com:api-project-11554775814_asia-east1_carousell-k-18'
-MS_CTX='--context gke_thecarousell.com:api-project-11554775814_asia-east1_ms-k8s-prod'
-alias watch_kube="watch -n 30 'kubectl $PROD_CTX get hpa ; kubectl $PROD_CTX get deployment main-app; kubectl $PROD_CTX get deployment chat-app; kubectl $PROD_CTX get deployment search-app; kubectl $PROD_CTX get no | grep gke | wc -l; kubectl $MS_CTX get hpa ; kubectl $MS_CTX get deployment; kubectl $MS_CTX get no | grep gke | wc -l '"
+alias gro='cd $GOPATH/src/github.com/carousell/'
 
-alias gro='cd $GOPATH/src/github.com/carousell/groups/'
-alias web='csshx 10.240.0.87 10.240.0.85 10.240.0.88 10.240.0.89 10.240.0.194 10.240.0.90 10.240.0.86 10.240.0.80 10.240.0.79'
+if command -v most > /dev/null 2>&1; then
+    export PAGER="most"
+fi
+
+DEPLOPYMENT_COLUMNS="custom-columns=NAME:.metadata.name,DESIRED:spec.replicas,CURRENT:status.replicas,UP-TO-DATE:status.updatedReplicas,AVAILABLE:status.availableReplicas"
+HPA_COLUMNS="custom-columns=NAME:.metadata.name,CURRENT-CPU:status.currentCPUUtilizationPercentage,TARGET-CPU:spec.targetCPUUtilizationPercentage,MINPODS:spec.minReplicas,MAXPODS:spec.maxReplicas,CURRENT:status.currentReplicas"
+MS_CONTEXT="gke_thecarousell.com:api-project-11554775814_asia-east1_ms-k8s-prod"
+A_CONTEXT="gke_thecarousell.com:api-project-11554775814_asia-east1-a_carousell-a-k-19"
+B_CONTEXT="gke_thecarousell.com:api-project-11554775814_asia-east1-b_carousell-b-k-19"
+C_CONTEXT="gke_thecarousell.com:api-project-11554775814_asia-east1-c_carousell-c-k-19"
+function show_kube () {
+    show_zone $1
+    show_ms $1
+}
+
+function show_zone () {
+    CLUSTER=$1
+    if [[ "${CLUSTER}" == "HPA" ]]; then
+        echo "---------------------- Zone A ----------------------"
+        echo "Number of NODES: $(kubectl --context ${A_CONTEXT} get no | grep -v 'NAME' | wc -l)"
+        kubectl --context ${A_CONTEXT} get hpa -o $HPA_COLUMNS
+        echo "---------------------- Zone B ----------------------"
+        echo "Number of NODES: $(kubectl --context ${B_CONTEXT} get no | grep -v 'NAME' | wc -l)"
+        kubectl --context ${B_CONTEXT} get hpa -o $HPA_COLUMNS
+        echo "---------------------- Zone C ----------------------"
+        echo "Number of NODES: $(kubectl --context ${C_CONTEXT} get no | grep -v 'NAME' | wc -l)"
+        kubectl --context ${C_CONTEXT} get hpa -o $HPA_COLUMNS
+        echo "----------------------------------------------------"
+    else
+        echo "---------------------- Zone A ----------------------"
+        kubectl --context ${A_CONTEXT} get deployment -o $DEPLOPYMENT_COLUMNS -l track=stable
+        echo "---------------------- Zone B ----------------------"
+        kubectl --context ${B_CONTEXT} get deployment -o $DEPLOPYMENT_COLUMNS -l track=stable
+        echo "---------------------- Zone C ----------------------"
+        kubectl --context ${C_CONTEXT} get deployment -o $DEPLOPYMENT_COLUMNS -l track=stable
+        echo "----------------------------------------------------"
+    fi
+}
+
+function show_ms () {
+    CLUSTER=$1
+    if [[ "${CLUSTER}" == "HPA" ]]; then
+        echo "--------------------MS Cluster----------------------"
+        echo "Number of MS NODES: $(kubectl --context ${MS_CONTEXT} get no | grep -v 'NAME' | wc -l)"
+        kubectl --context ${MS_CONTEXT} get hpa -o $HPA_COLUMNS
+        echo "----------------------------------------------------"
+    else
+        echo "--------------------MS Cluster----------------------"
+        kubectl --context ${MS_CONTEXT} get deployment -o $DEPLOPYMENT_COLUMNS -l track=stable
+        echo "----------------------------------------------------"
+    fi
+}

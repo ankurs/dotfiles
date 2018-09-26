@@ -19,7 +19,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-rake'
-Plugin 'nsf/gocode', {'rtp': 'vim/'}
+Plugin 'mdempsky/gocode', {'rtp': 'vim/'}
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -36,11 +36,17 @@ Plugin 'slim-template/vim-slim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'majutsushi/tagbar'
 Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'fatih/vim-go'
+Plugin 'fatih/vim-go' , { 'do': ':GoUpdateBinaries' }
 "Plugin 'jodosha/vim-godebug'
 Plugin 'sebdah/vim-delve'
 Plugin 'Shougo/neocomplete.vim'
 Plugin 'Valloric/YouCompleteMe'
+
+Plugin 'Shougo/deoplete.nvim'
+if !has('nvim')
+  Plugin 'roxma/nvim-yarp'
+  Plugin 'roxma/vim-hug-neovim-rpc'
+endif
 Plugin 'Shougo/neosnippet'
 Plugin 'Shougo/neosnippet-snippets'
 Plugin 'scrooloose/nerdcommenter'
@@ -57,6 +63,7 @@ Plugin 'TaskList.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'mileszs/ack.vim'
+Plugin 'justinmk/vim-sneak'
 "for slat
 Plugin 'saltstack/salt-vim'
 " for yaml
@@ -66,6 +73,9 @@ Plugin 'thiderman/vim-supervisor'
 "Plugin 'davidhalter/jedi-vim'
 
 Plugin 'sbdchd/neoformat'
+
+" for javascript :|
+Plugin 'pangloss/vim-javascript'
 
 filetype plugin indent on
 
@@ -149,6 +159,9 @@ nmap <leader>s<left>   :leftabove  vnew<cr>
 nmap <leader>s<right>  :rightbelow vnew<cr>
 nmap <leader>s<up>     :leftabove  new<cr>
 nmap <leader>s<down>   :rightbelow new<cr>
+
+" save file from command
+nmap <leader>w   :w <cr>
 
 " Tab between buffers
 noremap <tab> <c-w><c-w>
@@ -247,14 +260,6 @@ imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
 " For vim-go
 au FileType go nmap <leader>i <Plug>(go-info)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
@@ -349,6 +354,10 @@ let g:airline_theme='tomorrow'
 
 " conceal
 set conceallevel=0
+
+" jedi
+"let g:jedi#use_tabs_not_buffers = 1
+"let g:jedi#popup_on_dot = 1
 
 " give us 256 color schemes!
 "set term=screen-256color
