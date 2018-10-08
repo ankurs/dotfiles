@@ -38,17 +38,23 @@ Plugin 'majutsushi/tagbar'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'fatih/vim-go' , { 'do': ':GoUpdateBinaries' }
 "Plugin 'jodosha/vim-godebug'
+Plugin 'SirVer/ultisnips'
 Plugin 'sebdah/vim-delve'
-Plugin 'Shougo/neocomplete.vim'
 Plugin 'Valloric/YouCompleteMe'
 
-Plugin 'Shougo/deoplete.nvim'
-if !has('nvim')
+if has('nvim')
+  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plugin 'Shougo/deoplete.nvim'
   Plugin 'roxma/nvim-yarp'
   Plugin 'roxma/vim-hug-neovim-rpc'
 endif
-Plugin 'Shougo/neosnippet'
-Plugin 'Shougo/neosnippet-snippets'
+"Plugin 'zchee/deoplete-go', { 'do': 'make'}
+let g:deoplete#enable_at_startup = 1
+let g:python3_host_skip_check = 1
+
+"Plugin 'Shougo/neosnippet'
+"Plugin 'Shougo/neosnippet-snippets'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
@@ -63,7 +69,7 @@ Plugin 'TaskList.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'mileszs/ack.vim'
-Plugin 'justinmk/vim-sneak'
+"Plugin 'justinmk/vim-sneak'
 "for slat
 Plugin 'saltstack/salt-vim'
 " for yaml
@@ -72,7 +78,7 @@ Plugin 'stephpy/vim-yaml'
 Plugin 'thiderman/vim-supervisor'
 "Plugin 'davidhalter/jedi-vim'
 
-Plugin 'sbdchd/neoformat'
+"Plugin 'sbdchd/neoformat'
 
 " for javascript :|
 Plugin 'pangloss/vim-javascript'
@@ -235,19 +241,13 @@ if !exists('g:neocomplcache_force_omni_patterns')
 endif
 let g:neocomplcache_force_omni_patterns.java = '\k\.\k*'
 
-
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
 " SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
+"imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+"\ "\<Plug>(neosnippet_expand_or_jump)"
+"\: pumvisible() ? "\<C-n>" : "\<TAB>"
+"smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+"\ "\<Plug>(neosnippet_expand_or_jump)"
+"\: "\<TAB>"
 
 " For snippet_complete marker.
 if has('conceal')
@@ -256,9 +256,9 @@ endif
 
 "for neo snippet
 " Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
+"imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+"smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+"xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " For vim-go
 au FileType go nmap <leader>i <Plug>(go-info)
@@ -274,7 +274,7 @@ au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 let g:go_fmt_command = "goimports"
-let g:go_snippet_engine = "neosnippet"
+"let g:go_snippet_engine = "neosnippet"
 let g:go_bin_path = expand("~/.gotools")
 let g:go_list_type = "quickfix"
 let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
@@ -296,6 +296,12 @@ let g:go_highlight_extra_types = 1
 autocmd FileType qf wincmd J
 " https://github.com/fatih/vim-go/issues/145
 set synmaxcol=192
+nnoremap <leader>mr :!./reinstall.sh<cr>
+"
+" UltiSnips triggering
+let g:UltiSnipsExpandTrigger = '<C-j>'
+let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 
 " code searches
 " The Silver Searcher
@@ -321,13 +327,14 @@ set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
 
 "eclim
 nnoremap <leader>jd :JavaSearch<cr>
-let g:SuperTabDefaultCompletionType = 'context'
+"let g:SuperTabDefaultCompletionType = 'context'
 
 "delimitMate
 let delimitMate_expand_cr = 1
 
 "YouCompleteMe
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_min_num_of_chars_for_completion = 0
 
 "cSyntaxAfter
 autocmd! FileType c,cpp,java,php,python,go call CSyntaxAfter()
@@ -347,7 +354,6 @@ if has('nvim')
     let g:go_term_mode = "split"
     let g:go_term_enabled = 1
 endif
-
 "airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme='tomorrow'

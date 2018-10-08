@@ -28,15 +28,10 @@ alias j1.8='export JAVA_HOME=`/usr/libexec/java_home -v 1.8`'
 #switch vim to nvim :)
 alias vim='nvim'
 
-#flipkart
-export PATH="$HOME/code/phabricator/arcanist/bin":$PATH
-
 #powerline
 export PATH="/usr/local/lib/python2.7/site-packages:/usr/local/share/python:$PATH"
 
-# Postgres.app
-export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
-
+export DOTFILES="$HOME/code/dotfiles"
 alias dock='eval $(docker-machine env default)'
 
 if [ -f ~/.secret.rc ]
@@ -49,6 +44,13 @@ alias gro='cd $GOPATH/src/github.com/carousell/'
 if command -v most > /dev/null 2>&1; then
     export PAGER="most"
 fi
+
+# tmuxifier
+export TMUXIFIER_LAYOUT_PATH="$DOTFILES/tmuxifier-layouts"
+export PATH="$DOTFILES/tmuxifier/bin:$PATH"
+function code() {
+ SVC=$1 tmuxifier w code
+}
 
 DEPLOPYMENT_COLUMNS="custom-columns=NAME:.metadata.name,DESIRED:spec.replicas,CURRENT:status.replicas,UP-TO-DATE:status.updatedReplicas,AVAILABLE:status.availableReplicas"
 HPA_COLUMNS="custom-columns=NAME:.metadata.name,CURRENT-CPU:status.currentCPUUtilizationPercentage,TARGET-CPU:spec.targetCPUUtilizationPercentage,MINPODS:spec.minReplicas,MAXPODS:spec.maxReplicas,CURRENT:status.currentReplicas"

@@ -9,3 +9,6 @@
 [submodule "fonts"]
 	path = fonts
 	url = https://github.com/powerline/fonts.git
+[submodule "tmuxifier"]
+	path = tmuxifier
+	url = git@github.com:jimeh/tmuxifier.git
