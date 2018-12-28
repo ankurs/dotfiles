@@ -23,7 +23,6 @@ Plugin 'mdempsky/gocode', {'rtp': 'vim/'}
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -37,27 +36,36 @@ Plugin 'Raimondi/delimitMate'
 Plugin 'majutsushi/tagbar'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'fatih/vim-go' , { 'do': ':GoUpdateBinaries' }
-"Plugin 'jodosha/vim-godebug'
+Plugin 'jodosha/vim-godebug'
 Plugin 'SirVer/ultisnips'
 Plugin 'sebdah/vim-delve'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'xolox/vim-notes'
+Plugin 'xolox/vim-misc'
 
-if has('nvim')
-  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plugin 'Shougo/deoplete.nvim'
-  Plugin 'roxma/nvim-yarp'
-  Plugin 'roxma/vim-hug-neovim-rpc'
-endif
+Plugin 'hashivim/vim-terraform'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'juliosueiras/vim-terraform-completion'
+
+Plugin 'w0rp/ale'
+Plugin 'rust-lang/rust.vim'
+"if has('nvim')
+"  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+"  Plugin 'Shougo/deoplete.nvim'
+"  Plugin 'roxma/nvim-yarp'
+"  Plugin 'roxma/vim-hug-neovim-rpc'
+"endif
 "Plugin 'zchee/deoplete-go', { 'do': 'make'}
-let g:deoplete#enable_at_startup = 1
-let g:python3_host_skip_check = 1
+"let g:deoplete#enable_at_startup = 1
+"let g:python3_host_skip_check = 1
 
 "Plugin 'Shougo/neosnippet'
 "Plugin 'Shougo/neosnippet-snippets'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'Nequo/vim-allomancer'
 Plugin 'jacoborus/tender'
 Plugin 'jnurmine/Zenburn'
 Plugin 'Yggdroot/indentLine'
@@ -87,9 +95,11 @@ filetype plugin indent on
 
 let mapleader="\\"
 
-colorscheme apprentice
+set termguicolors
+"colorscheme apprentice
 "colorscheme zenburn
 "colorscheme Tomorrow-Night
+colo allomancer
 
 set cursorline
 set expandtab
@@ -127,7 +137,38 @@ if has("gui_running")
 endif
 
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
+" tagbar
 nmap <leader>rt :TagbarToggle<CR>
+" auto open tagbar
+autocmd VimEnter * nested :call tagbar#autoopen(1)
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
 " Automatic formatting
 autocmd BufWritePre *.rb :%s/\s\+$//e
 autocmd BufWritePre *.go :%s/\s\+$//e
@@ -297,7 +338,10 @@ autocmd FileType qf wincmd J
 " https://github.com/fatih/vim-go/issues/145
 set synmaxcol=192
 nnoremap <leader>mr :!./reinstall.sh<cr>
-"
+
+" https://github.com/fatih/vim-go/blob/master/doc/vim-go.txt#L1626
+let g:go_gocode_propose_source = 0
+
 " UltiSnips triggering
 let g:UltiSnipsExpandTrigger = '<C-j>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
@@ -332,9 +376,12 @@ nnoremap <leader>jd :JavaSearch<cr>
 "delimitMate
 let delimitMate_expand_cr = 1
 
+" rust
+let g:rustfmt_autosave = 1
+
 "YouCompleteMe
 let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_min_num_of_chars_for_completion = 0
+let g:ycm_min_num_of_chars_for_completion = 1
 
 "cSyntaxAfter
 autocmd! FileType c,cpp,java,php,python,go call CSyntaxAfter()
@@ -344,6 +391,14 @@ set mouse=a
 
 " ruby
 au FileType ruby set nocursorline " disable cursor line for ruby files
+
+" terraform
+" Enable terraform plan to be include in filter
+let g:syntastic_terraform_tffilter_plan = 1
+" enable(1)/disable(0) plugin's keymapping
+let g:terraform_completion_keys = 1
+" enable(1)/disable(0) terraform module registry completion
+let g:terraform_registry_module_completion = 0
 
 "
 set clipboard=unnamed
