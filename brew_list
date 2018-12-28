@@ -150,7 +150,7 @@ vault
 vim --override-system-vi --with-client-server --with-lua
 watch
 webp
-weechat
+weechat --with-perl --with-aspell --with-python@2
 wget
 wireshark
 wxmac
