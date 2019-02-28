@@ -147,7 +147,7 @@ tree
 unibilium
 utf8proc
 vault
-vim --override-system-vi --with-client-server --with-lua
+vim
 watch
 webp
 weechat --with-perl --with-aspell --with-python@2

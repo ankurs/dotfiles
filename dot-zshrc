@@ -19,6 +19,7 @@ antigen bundle kubectl
 antigen bundle lein
 antigen bundle docker
 antigen bundle mvn
+antigen bundle osx
 
 antigen bundle zsh-users/zsh-syntax-highlighting
 

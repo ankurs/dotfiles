@@ -14,7 +14,7 @@ mkdir -p ~/.vim/bundle
 ln -s ~/.vimrc ~/.config/nvim/init.vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall
-python ~/.vim/bundle/YouCompleteMe/install.py
+python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer
 brew cask install java
 cat ./brew_tap | xargs -n 1 brew tap
 cat ./brew_list | xargs -n 1 brew install
