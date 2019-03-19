@@ -7,7 +7,7 @@ select_pane 1
 split_v 20
 split_h 50
 
-run_cmd "dock" 1
-run_cmd "dock" 2
-run_cmd "dock" 3
-run_cmd "dock" 4
+run_cmd "dock; enl_venv" 1
+run_cmd "dock; enl_venv" 2
+run_cmd "dock; enl_venv" 3
+run_cmd "dock; enl_venv" 4

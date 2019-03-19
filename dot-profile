@@ -52,6 +52,13 @@ function code() {
  SVC=$1 tmuxifier w code
 }
 
+function enl_venv() {
+    if [ -d ".venv" ]
+    then
+        source .venv/bin/activate
+    fi
+}
+
 DEPLOPYMENT_COLUMNS="custom-columns=NAME:.metadata.name,DESIRED:spec.replicas,CURRENT:status.replicas,UP-TO-DATE:status.updatedReplicas,AVAILABLE:status.availableReplicas"
 HPA_COLUMNS="custom-columns=NAME:.metadata.name,CURRENT-CPU:status.currentCPUUtilizationPercentage,TARGET-CPU:spec.targetCPUUtilizationPercentage,MINPODS:spec.minReplicas,MAXPODS:spec.maxReplicas,CURRENT:status.currentReplicas"
 MS_CONTEXT="gke_thecarousell.com:api-project-11554775814_asia-east1_ms-k8s-prod"

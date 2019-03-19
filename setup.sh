@@ -10,6 +10,7 @@ ln -s $PWD/dot-zshrc ~/.zshrc
 ln -s $PWD/dot-tmux-powerlinerc ~/.tmux-powerlinerc
 ln -s $PWD/dot-mostrc ~/.mostrc
 ln -s $PWD/dotgitconfig ~/.gitconfig
+ln -s $PWD/dot-gitignore ~/.gitignore
 mkdir -p ~/.config/nvim/
 mkdir -p ~/.vim/bundle
 ln -s ~/.vimrc ~/.config/nvim/init.vim
