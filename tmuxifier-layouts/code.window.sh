@@ -1,4 +1,4 @@
-window_root "~/code/go/src/github.com/carousell/$SVC"
+window_root "~/code/ss/$SVC"
 
 new_window "code"
 
