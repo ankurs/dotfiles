@@ -88,6 +88,8 @@ Plugin 'davidhalter/jedi-vim'
 
 "Plugin 'sbdchd/neoformat'
 
+Plugin 'dansomething/vim-eclim'
+
 " for javascript :|
 Plugin 'pangloss/vim-javascript'
 
