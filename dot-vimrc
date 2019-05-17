@@ -40,14 +40,18 @@ Plugin 'jodosha/vim-godebug'
 Plugin 'SirVer/ultisnips'
 Plugin 'sebdah/vim-delve'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'xolox/vim-notes'
-Plugin 'xolox/vim-misc'
-
+Plugin 'vimwiki/vimwiki'
 Plugin 'hashivim/vim-terraform'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'juliosueiras/vim-terraform-completion'
 
 Plugin 'w0rp/ale'
+Plugin 'uber/prototool', { 'rtp':'vim/prototool' }
+let g:ale_linters = {
+\   'go': ['golint'],
+\   'proto': ['prototool-lint'],
+\}
+let g:ale_lint_on_text_changed = 'never'
 Plugin 'rust-lang/rust.vim'
 "if has('nvim')
 "  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -171,6 +175,18 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
 \ }
 
+let g:tagbar_type_xslt = {
+  \ 'ctagstype' : 'xslt',
+  \ 'kinds' : [
+    \ 'v:variables',
+    \ 't:templates'
+  \ ]
+\}
+
+" use markdown with vimwiki and let it sync across devices
+let g:vimwiki_list = [{'path': '~/GoogleDrive/My Drive/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
 " Automatic formatting
 autocmd BufWritePre *.rb :%s/\s\+$//e
 autocmd BufWritePre *.go :%s/\s\+$//e
@@ -227,7 +243,7 @@ if bufwinnr(1)
 endif
 
 " NERDTree
-nmap <leader>n :NERDTreeTabsToggle<CR>
+nnoremap <leader>n :NERDTreeTabsToggle<CR>
 let NERDTreeHighlightCursorline=1
 let g:nerdtree_tabs_open_on_console_startup=0
 
@@ -276,9 +292,9 @@ endif
 
 "Eclim
 let g:EclimCompletionMethod = 'omnifunc'
-let g:EclimJavaCallHierarchyDefaultAction = "tabe"
-let g:EclimJavaNewOpenAction = "tabe"
-let g:EclimJavaSearchSingleResult = "tabe"
+let g:EclimJavaCallHierarchyDefaultAction = "edit"
+let g:EclimJavaNewOpenAction = "edit"
+let g:EclimJavaSearchSingleResult = "edit"
 let g:EclimLoggingDisabled = 1
 
 if !exists('g:neocomplcache_force_omni_patterns')
@@ -422,7 +438,7 @@ set conceallevel=0
 
 " jedi
 "let g:jedi#use_tabs_not_buffers = 1
-"let g:jedi#popup_on_dot = 1
+let g:jedi#popup_on_dot = 1
 
 " give us 256 color schemes!
 "set term=screen-256color
