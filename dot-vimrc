@@ -10,7 +10,6 @@ call vundle#rc()
 
 " Let Vundle manage Vundle
 Plugin 'VundleVim/Vundle.vim'
-
 " My Plugins
 if !has('nvim')
     Plugin 'tpope/vim-sensible'
@@ -50,6 +49,7 @@ Plugin 'uber/prototool', { 'rtp':'vim/prototool' }
 let g:ale_linters = {
 \   'go': ['golint'],
 \   'proto': ['prototool-lint'],
+\   'java': [''],
 \}
 let g:ale_lint_on_text_changed = 'never'
 Plugin 'rust-lang/rust.vim'
@@ -81,16 +81,10 @@ Plugin 'TaskList.vim'
 Plugin 'cespare/vim-toml'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'mileszs/ack.vim'
-"Plugin 'justinmk/vim-sneak'
-"for slat
-Plugin 'saltstack/salt-vim'
-" for yaml
-Plugin 'stephpy/vim-yaml'
-"for supervisor
-Plugin 'thiderman/vim-supervisor'
+Plugin 'saltstack/salt-vim' "for slat
+Plugin 'stephpy/vim-yaml' " for yaml
+Plugin 'thiderman/vim-supervisor' "for supervisor
 Plugin 'davidhalter/jedi-vim'
-
-"Plugin 'sbdchd/neoformat'
 
 Plugin 'dansomething/vim-eclim'
 
