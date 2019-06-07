@@ -1,6 +1,6 @@
-window_root "~/code/ss/$SVC"
+window_root "$SVC"
 
-new_window "code"
+new_window "$WIN_NAME"
 
 split_h 20
 select_pane 1

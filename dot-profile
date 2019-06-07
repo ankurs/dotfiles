@@ -41,7 +41,7 @@ then
     source ~/.secret.rc
 fi
 
-alias gro='cd $GOPATH/src/github.com/carousell/'
+alias gro='cd $GOPATH/src/github.com/'
 
 if command -v most > /dev/null 2>&1; then
     export PAGER="most"
@@ -50,8 +50,25 @@ fi
 # tmuxifier
 export TMUXIFIER_LAYOUT_PATH="$DOTFILES/tmuxifier-layouts"
 export PATH="$DOTFILES/tmuxifier/bin:$PATH"
+
 function code() {
- SVC=$1 tmuxifier w code
+    SVC=$1
+    if [[ ! -z $SVC"" ]] then
+        # find the service
+        for base in "" "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/go/src/github.com/carousell/"
+        do
+            if [[ -d $base$SVC ]] then
+                tmux_code $base/$SVC $(basename $SVC)
+                return
+            fi
+        done
+    fi
+    echo "Could NOT find '$SVC' starting in ~/code"
+    tmux_code ~/code code
+}
+
+function tmux_code() {
+    SVC=$1 WIN_NAME=$2 tmuxifier w code
 }
 
 function enl_venv() {
