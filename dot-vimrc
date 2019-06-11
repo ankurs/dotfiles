@@ -96,10 +96,10 @@ filetype plugin indent on
 let mapleader="\\"
 
 set termguicolors
-"colorscheme apprentice
+colorscheme apprentice
 "colorscheme zenburn
 "colorscheme Tomorrow-Night
-colo allomancer
+"colo allomancer
 
 set cursorline
 set expandtab
