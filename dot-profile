@@ -133,3 +133,7 @@ function newjava() {
 }
 
 export PATH="$HOME/.cargo/bin:$PATH"
+
+
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"

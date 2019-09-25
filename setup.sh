@@ -24,4 +24,5 @@ cat ./brew_cask_list | xargs -n 1 brew cask install
 vim +GoUpdateBinaries +qall
 pip install neovim
 pip install bashate
-
+## install java 1.8
+jabba install zulu@1.8
