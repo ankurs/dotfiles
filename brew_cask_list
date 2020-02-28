@@ -3,8 +3,10 @@ android-file-transfer
 android-platform-tools
 android-studio
 atom
+authy
 brave-browser
 caffeine
+cubicsdr
 eclipse-java
 evernote
 firefox
@@ -18,11 +20,12 @@ java
 mactex
 minikube
 nordvpn
-notion
 oracle-jdk
 osxfuse
 pycharm
 skype
+soapui
+soundflower
 spotify
 steam
 transmission
@@ -31,4 +34,6 @@ vagrant
 virtualbox
 vlc
 vnc-viewer
+wechat
+whatsapp
 wireshark
