@@ -54,11 +54,13 @@ export PATH="$DOTFILES/tmuxifier/bin:$PATH"
 
 function code() {
     SVC=$1
-    if [[ ! -z $SVC"" ]] then
+    if [[ ! -z $SVC"" ]]
+    then
         # find the service
         for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/go/src/github.com/carousell/" ""
         do
-            if [[ -d $base$SVC ]] then
+            if [[ -d $base$SVC ]]
+            then
                 tmux_code $base/$SVC $(basename $SVC)
                 return
             fi
