@@ -38,7 +38,7 @@ function setup_fedora() {
 
     cat ./snap_list | xargs -L 1 sudo snap install
     cat ./dnf_list | xargs -L 1 sudo dnf install -y
-    bash fedora_systemctl_setup.sh
+    bash -e fedora_post_setup.sh
 }
 
 function do_setup() {
