@@ -11,7 +11,7 @@ function setup_mac() {
     echo "setting up mac"
     brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
-    cat ./brew_list | xargs -L 1 brew install %
+    cat ./brew_list | xargs -L 1 brew install
     cat ./brew_cask_list | xargs -L 1 brew cask install
 }
 
