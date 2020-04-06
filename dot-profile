@@ -1,37 +1,40 @@
+function set_path() {
+    if [[ -d $1 ]]
+    then
+        export PATH="$1:$PATH"
+    fi
+}
+
 export GOPATH="$HOME/code/go"
 export GOBIN="$GOPATH/bin"
-export PATH="$GOBIN:$PATH"
-export PATH="$HOME/.gotools:$PATH"
-#gcloud bin
-export PATH="/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH"
-export PATH="/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH"
-export PATH="/Users/Ankur/code/FlameGraph:$PATH"
-export PATH="/Library/TeX/texbin:$PATH"
-export PATH="/var/lib/snapd/snap/bin:$PATH"
-export EDITOR="nvim"
+
+set_path "$GOBIN"
+set_path "$HOME/.gotools"
+
+#gcloud bin on mac
+set_path "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+set_path "/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+
+set_path "/Library/TeX/texbin"
+set_path "/var/lib/snapd/snap/bin"
+
+#powerline
+set_path "/usr/local/lib/python2.7/site-packages:/usr/local/share/python"
+
+set_path "$HOME/.cargo/bin"
+set_path "$HOME/.jenv/bin"
 
 export LC_CTYPE='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 #export LC_ALL='C'
 #export LANG='C'
 
-# setup java
-#export JAVA_HOME=`/usr/libexec/java_home`
-#export PATH=$JAVA_HOME/bin:$PATH
-alias cdgo='cd $GOPATH'
 alias wiki='nvim +VimwikiIndex'
-export GROOVY_HOME=/usr/local/opt/groovy/libexec
-
-# voltdb
-alias j1.6='export JAVA_HOME=`/usr/libexec/java_home -v 1.6`'
-alias j1.7='export JAVA_HOME=`/usr/libexec/java_home -v 1.7`'
-alias j1.8='export JAVA_HOME=`/usr/libexec/java_home -v 1.8`'
 
 #switch vim to nvim :)
+export EDITOR="nvim"
 alias vim='nvim'
 
-#powerline
-export PATH="/usr/local/lib/python2.7/site-packages:/usr/local/share/python:$PATH"
 
 export DOTFILES="$HOME/code/dotfiles"
 alias dock='eval $(docker-machine env default)'
@@ -41,15 +44,13 @@ then
     source ~/.secret.rc
 fi
 
-alias gro='cd $GOPATH/src/github.com/'
-
 if command -v most > /dev/null 2>&1; then
     export PAGER="most"
 fi
 
 # tmuxifier
 export TMUXIFIER_LAYOUT_PATH="$DOTFILES/tmuxifier-layouts"
-export PATH="$DOTFILES/tmuxifier/bin:$PATH"
+set_path "$DOTFILES/tmuxifier/bin"
 
 function code() {
     SVC=$1
@@ -80,10 +81,10 @@ function enl_venv() {
     fi
 }
 
-export PATH="$HOME/.cargo/bin:$PATH"
-
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
+if [[ -f $(command -v jenv) ]]
+then
+    eval "$(jenv init -)"
+fi
 
 #opam
 test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
