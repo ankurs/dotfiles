@@ -22,22 +22,21 @@ function setup_fedora() {
         sudo systemctl enable sshd
         sudo systemctl start sshd
         echo "setting up RPM Fusion"
-        sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-        sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+        sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
+        sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
     fi
     sudo dnf update-minimal -y
     echo "setting up Development Tools"
     sudo dnf groupinstall "Development Tools" -y
-    sudo dnf install cmake make python-devel zsh gcc-c++ -y
+    sudo dnf install cmake make python-devel vim zsh gcc-c++ -y
     echo "installing snap"
     sudo dnf install -y snapd
     if [[ -z $UPDATE ]]
     then
         sudo ln -s /var/lib/snapd/snap /snap
     fi
-
-    cat ./snap_list | xargs -L 1 sudo snap install
     cat ./dnf_list | xargs -L 1 sudo dnf install -y
+    cat ./snap_list | xargs -L 1 sudo snap install
     bash -e fedora_post_setup.sh
 }
 
@@ -79,13 +78,13 @@ then
     mkdir -p ~/.vim/bundle
     ln -s ~/.vimrc ~/.config/nvim/init.vim
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-    vim +PluginInstall +qall
 else
     echo "Update requested skipping initial setup"
 fi
 
 do_setup
 
+vim +PluginInstall +qall
 python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer
 vim +GoUpdateBinaries +qall
 pip install neovim --user

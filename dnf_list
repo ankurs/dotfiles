@@ -1,3 +1,4 @@
+sysstat
 gnome-tweak-tool
 docker
 docker-compose
@@ -11,5 +12,7 @@ steam
 ghostwriter
 xournalpp
 most
-refind
 broadcom-wl
+terminator
+neovim
+hugo
