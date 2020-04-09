@@ -16,3 +16,4 @@ broadcom-wl
 terminator
 neovim
 hugo
+rsyslog fail2ban sendmail

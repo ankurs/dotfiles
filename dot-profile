@@ -23,6 +23,7 @@ set_path "/usr/local/lib/python2.7/site-packages:/usr/local/share/python"
 
 set_path "$HOME/.cargo/bin"
 set_path "$HOME/.jenv/bin"
+set_path "/var/lib/snapd/snap/bin"
 
 export LC_CTYPE='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
