@@ -68,18 +68,21 @@ if [[ -z $UPDATE ]]
 then
     bash fonts/install.sh
     PWD=`pwd`
-    ln -s $PWD/dot-profile ~/.profile
-    ln -s $PWD/dot-tmux.conf ~/.tmux.conf
-    ln -s $PWD/dot-vimrc ~/.vimrc
-    ln -s $PWD/dot-zshrc ~/.zshrc
-    ln -s $PWD/dot-tmux-powerlinerc ~/.tmux-powerlinerc
-    ln -s $PWD/dot-mostrc ~/.mostrc
-    ln -s $PWD/dotgitconfig ~/.gitconfig
-    ln -s $PWD/dot-gitignore ~/.gitignore
+    ln -s -i $PWD/dot-profile ~/.profile
+    ln -s -i $PWD/dot-tmux.conf ~/.tmux.conf
+    ln -s -i $PWD/dot-vimrc ~/.vimrc
+    ln -s -i $PWD/dot-zshrc ~/.zshrc
+    ln -s -i $PWD/dot-tmux-powerlinerc ~/.tmux-powerlinerc
+    ln -s -i $PWD/dot-mostrc ~/.mostrc
+    ln -s -i $PWD/dotgitconfig ~/.gitconfig
+    ln -s -i $PWD/dot-gitignore ~/.gitignore
     mkdir -p ~/.config/nvim/
     mkdir -p ~/.vim/bundle
-    ln -s ~/.vimrc ~/.config/nvim/init.vim
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    ln -s -i ~/.vimrc ~/.config/nvim/init.vim
+    if [[ ! -d ~/.vim/bundle/Vundle.vim ]]
+    then
+        git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    fi
 else
     echo "Update requested skipping initial setup"
 fi

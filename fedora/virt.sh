@@ -1,5 +1,5 @@
 #!/bin/bash -e
-sudo dnf group install --with-optional virtualization
+sudo dnf group install --with-optional virtualization -y
 sudo systemctl start libvirtd
 sudo systemctl enable libvirtd
 
