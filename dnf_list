@@ -18,3 +18,8 @@ neovim
 hugo
 rsyslog fail2ban sendmail
 util-linux-user
+telegram-desktop
+setools-gui
+setroubleshoot
+protobuf
+protobuf-compiler

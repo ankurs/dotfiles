@@ -33,7 +33,7 @@ function setup_fedora() {
     sudo dnf install -y snapd
     if [[ -z $UPDATE ]]
     then
-        sudo ln -s /var/lib/snapd/snap /snap
+        sudo ln -s -i /var/lib/snapd/snap /snap
     fi
     cat ./dnf_list | xargs -L 5 sudo dnf install -y
     echo "waiting for snap to seed"
