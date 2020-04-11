@@ -13,7 +13,7 @@ read -p "Do you wish to install google-chrome ? [y/N]? " chrome
 if [[ x$chrome == xy || x$chrome == xY ]]
 then
     sudo dnf install fedora-workstation-repositories -y
-    sudo dnf config-manager --set-enabled
+    sudo dnf config-manager --set-enabled google-chrome
     sudo dnf install google-chrome-stable -y
 fi
 

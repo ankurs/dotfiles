@@ -13,6 +13,7 @@ ghostwriter
 xournalpp
 most
 broadcom-wl
+b43-tools
 terminator
 neovim
 hugo
