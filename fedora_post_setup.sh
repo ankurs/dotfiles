@@ -47,8 +47,7 @@ then
     opam depext google-drive-ocamlfuse
     opam install google-drive-ocamlfuse
     mkdir -p ~/GoogleDrive/My\ Drive
-    google-drive-ocamlfuse
-    echo "please mount the volume by using 'gdrive' alias"
+    echo "please run 'google-drive-ocamlfuse' for setup and then mount the volume by using 'gdrive' alias"
 fi
 
 ##########  USER ##############
@@ -68,5 +67,9 @@ then
     bash -e fedora/virt.sh
 fi
 
-
+read -p "Do you wish to install laptop power management tools [y/N]? " lap
+if [[ x$lap == xy || x$lap == xY ]]
+then
+    bash -e fedora/laptop.sh
+fi
 
