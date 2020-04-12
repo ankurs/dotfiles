@@ -18,7 +18,7 @@ then
 fi
 
 echo "setting up fail2ban"
-sudo cp -n ./fedora/fail2ban/jail.d/99-local.conf /etc/fail2ban/jail.d/
+sudo cp -i ./fedora/fail2ban/jail.d/99-local.conf /etc/fail2ban/jail.d/
 sudo systemctl enable rsyslog
 sudo systemctl start rsyslog
 sudo systemctl restart fail2ban
@@ -26,7 +26,7 @@ sudo systemctl enable fail2ban
 sudo fail2ban-client status
 
 echo "setting up sysctl options"
-sudo cp -n ./fedora/sysctl.d/90-ankur.conf /etc/sysctl.d/90-ankur.conf
+sudo cp -i ./fedora/sysctl.d/90-ankur.conf /etc/sysctl.d/90-ankur.conf
 sudo sysctl --system
 
 echo "setting up systemctl"
@@ -38,6 +38,19 @@ sudo systemctl enable docker
 # setup noatime for ssd ?
 #lsblk -d -o name,rota,type | grep disk
 
+read -p "Do you wish to set up google drive fuse ?[y/N]? " drive
+if [[ x$drive == xy || x$drive == xY ]]
+then
+    opam init
+    opam update
+    opam install depext
+    opam depext google-drive-ocamlfuse
+    opam install google-drive-ocamlfuse
+    mkdir -p ~/GoogleDrive/My\ Drive
+    google-drive-ocamlfuse
+    echo "please mount the volume by using 'gdrive' alias"
+fi
+
 ##########  USER ##############
 echo "add $USER to docker group"
 sudo usermod -aG docker $USER
@@ -45,9 +58,15 @@ sudo usermod -aG docker $USER
 echo "updating shell to zsh"
 chsh -s $(which zsh)
 
+mkdir -p ~/.config/variety
+cp -i ./variety.conf ~/.config/variety/variety.conf
+
 ########## EXTRA #############
 read -p "Do you wish to install Virtulization tools ? [y/N]? " virt
 if [[ x$virt == xy || x$virt == xY ]]
 then
     bash -e fedora/virt.sh
 fi
+
+
+
