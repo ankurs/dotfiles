@@ -14,6 +14,8 @@ ghostwriter
 xournalpp
 most
 broadcom-wl
+b43-tools
+akmod-wl
 terminator
 neovim
 hugo
@@ -24,3 +26,4 @@ setools-gui
 setroubleshoot
 protobuf
 protobuf-compiler
+vlc
