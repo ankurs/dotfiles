@@ -43,6 +43,7 @@ Plugin 'vimwiki/vimwiki'
 Plugin 'hashivim/vim-terraform'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'juliosueiras/vim-terraform-completion'
+Plugin 'tbastos/vim-lua'
 
 Plugin 'w0rp/ale'
 Plugin 'uber/prototool', { 'rtp':'vim/prototool' }

@@ -39,6 +39,10 @@ function setup_fedora() {
     echo "waiting for snap to seed"
     sudo snap wait system seed.loaded
     cat ./snap_list | xargs -L 1 sudo snap install
+    if [[ ! -d ~/.config/awesome ]]
+    then
+        git clone --recursive git@github.com:ankurs/awesome-copycats.git ~/.config/awesome
+    fi
     bash -e fedora_post_setup.sh
 }
 
