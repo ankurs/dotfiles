@@ -16,7 +16,6 @@ most
 broadcom-wl
 b43-tools
 akmod-wl
-terminator
 neovim
 hugo
 rsyslog fail2ban sendmail
