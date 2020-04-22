@@ -43,6 +43,7 @@ function setup_fedora() {
     echo "setting up awesome wm"
     sudo cp ./fedora/sp /usr/local/bin/
     ln -s -i `pwd`/awesome ~/.config/awesome
+    ln -s -i `pwd`/fedora/dot-Xresources ~/.Xresources
     bash -e fedora_post_setup.sh
 }
 
