@@ -70,6 +70,7 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
+"Plugin 'morhetz/gruvbox'
 Plugin 'Nequo/vim-allomancer'
 Plugin 'jacoborus/tender'
 Plugin 'jnurmine/Zenburn'
@@ -101,6 +102,8 @@ colorscheme apprentice
 "colorscheme zenburn
 "colorscheme Tomorrow-Night
 "colo allomancer
+"colorscheme gruvbox
+"let g:gruvbox_contrast_dark="light"
 
 set cursorline
 set expandtab
