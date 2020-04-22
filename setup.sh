@@ -94,9 +94,9 @@ fi
 
 do_setup
 
-vim +PluginInstall +qall
+nvim +PluginInstall +qall
 python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer
-vim +GoUpdateBinaries +qall
+nvim +GoUpdateBinaries +qall
 pip install neovim --user
 pip install bashate --user
 ## install java 1.8
