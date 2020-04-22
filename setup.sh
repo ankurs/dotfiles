@@ -41,6 +41,7 @@ function setup_fedora() {
     cat ./snap_list | xargs -L 1 sudo snap install
 
     echo "setting up awesome wm"
+    sudo cp ./fedora/sp /usr/local/bin/
     ln -s -i `pwd`/awesome ~/.config/awesome
     bash -e fedora_post_setup.sh
 }
