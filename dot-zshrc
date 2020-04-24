@@ -19,11 +19,11 @@ antigen bundle kubectl
 antigen bundle lein
 antigen bundle docker
 antigen bundle mvn
-antigen bundle osx
+antigen bundle fedora
 
 antigen bundle zsh-users/zsh-syntax-highlighting
 
-antigen theme muse
+antigen theme gentoo
 
 antigen apply
 
@@ -36,7 +36,7 @@ antigen apply
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="muse"
+#ZSH_THEME="muse"
 #ZSH_THEME="amuse"
 #ZSH_THEME="dstufft"
 #ZSH_THEME="avit"
@@ -46,6 +46,7 @@ ZSH_THEME="muse"
 #ZSH_THEME="af-magic"
 #ZSH_THEME="gentoo"
 #ZSH_THEME="bullet-train"
+#ZSH_THEME="dieter"
 #
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -54,7 +55,7 @@ ZSH_THEME="muse"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+#export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -90,8 +91,9 @@ ZSH_THEME="muse"
 ##source $ZSH/oh-my-zsh.sh
 
 # User configuration
-export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin"
+#export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin"
 
+## All PATHs are set by profile
 source ~/.profile
 # export MANPATH="/usr/local/man:$MANPATH"
 

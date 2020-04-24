@@ -25,6 +25,16 @@ set_path "/usr/local/lib/python2.7/site-packages:/usr/local/share/python"
 set_path "$HOME/.cargo/bin"
 set_path "$HOME/.jenv/bin"
 
+set_path "/usr/local/go/bin"
+set_path "/sbin"
+set_path "/usr/sbin"
+set_path "/bin"
+set_path "/usr/bin"
+set_path "/usr/local/bin"
+set_path "/usr/local/sbin"
+set_path "/opt/local/bin"
+set_path "opt/local/sbin"
+
 export LC_CTYPE='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 #export LC_ALL='C'
