@@ -28,8 +28,11 @@ protobuf-compiler
 vlc
 variety
 awesome
-slock
 rofi
 android-tools
 android-file-transfer
 lxappearance
+NetworkManager-tui
+light
+xlockmore
+xautolock
