@@ -34,6 +34,8 @@ sudo systemctl enable sshd
 sudo systemctl start sshd
 sudo systemctl start docker
 sudo systemctl enable docker
+sudo systemctl start netdata
+sudo systemctl enable netdata
 
 # setup noatime for ssd ?
 #lsblk -d -o name,rota,type | grep disk
