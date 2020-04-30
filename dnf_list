@@ -40,3 +40,8 @@ pavucontrol
 xclip
 netdata
 blueman
+wireguard-tools
+bcc
+bcc-tools
+bcc-doc
+bpftrace
