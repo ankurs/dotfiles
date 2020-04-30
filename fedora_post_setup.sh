@@ -17,6 +17,9 @@ then
     sudo dnf install google-chrome-stable -y
 fi
 
+echo "setting up flathub"
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
 echo "setting up fail2ban"
 sudo cp -i ./fedora/fail2ban/jail.d/99-local.conf /etc/fail2ban/jail.d/
 sudo systemctl enable rsyslog
@@ -61,6 +64,9 @@ chsh -s $(which zsh)
 
 mkdir -p ~/.config/variety
 cp -i ./variety.conf ~/.config/variety/variety.conf
+
+mkdir -p ~/.config/rofi
+ln -s -i `pwd`/fedora/config.rasi ~/.config/rofi/config.rasi
 
 ########## EXTRA #############
 read -p "Do you wish to install Virtulization tools ? [y/N]? " virt
