@@ -65,6 +65,9 @@ chsh -s $(which zsh)
 mkdir -p ~/.config/variety
 cp -i ./variety.conf ~/.config/variety/variety.conf
 
+mkdir -p ~/.config/rofi
+ln -s -i `pwd`/fedora/config.rasi ~/.config/rofi/config.rasi
+
 ########## EXTRA #############
 read -p "Do you wish to install Virtulization tools ? [y/N]? " virt
 if [[ x$virt == xy || x$virt == xY ]]
