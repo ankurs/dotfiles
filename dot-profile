@@ -89,6 +89,9 @@ function enl_venv() {
     if [ -d ".venv" ]
     then
         source .venv/bin/activate
+    elif [ -d "venv" ]
+    then
+        source venv/bin/activate
     fi
 }
 

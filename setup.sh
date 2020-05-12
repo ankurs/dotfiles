@@ -35,7 +35,7 @@ function setup_fedora() {
     then
         sudo ln -s -i /var/lib/snapd/snap /snap
     fi
-    cat ./dnf_list | xargs -L 5 sudo dnf install -y
+    cat ./dnf_list | xargs -L 10 sudo dnf install -y
     echo "waiting for snap to seed"
     sudo snap wait system seed.loaded
     cat ./snap_list | xargs -L 1 sudo snap install
