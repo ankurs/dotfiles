@@ -46,3 +46,5 @@ bcc-tools
 bcc-doc
 bpftrace
 iotop
+btrfs-progs
+btrfs-heatmap
