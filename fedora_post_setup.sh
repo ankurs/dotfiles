@@ -81,3 +81,9 @@ then
     bash -e fedora/laptop.sh
 fi
 
+read -p "Do you wish to install OpenZFS [y/N]? " zfs
+if [[ x$zfs == xy || x$zfs == xY ]]
+then
+    bash -e fedora/openzfs.sh
+fi
+
