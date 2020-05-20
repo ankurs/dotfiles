@@ -183,8 +183,40 @@ let g:tagbar_type_xslt = {
 \}
 
 " use markdown with vimwiki and let it sync across devices
-let g:vimwiki_list = [{'path': '~/GoogleDrive/My Drive/vimwiki/',
-                      \ 'syntax': 'markdown', 'ext': '.md'}]
+" set wiki for work
+let accom_wiki = {}
+let accom_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss'
+let accom_wiki.syntax = 'markdown'
+let accom_wiki.ext = '.md'
+
+let ss_wiki = {}
+let ss_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss/accom'
+let ss_wiki.syntax = 'markdown'
+let ss_wiki.ext = '.md'
+
+" set wiki for personal
+let my_wiki = {}
+let my_wiki.path = '~/GoogleDrive/My Drive/vimwiki/my'
+let my_wiki.syntax = 'markdown'
+let my_wiki.ext = '.md'
+
+let g:vimwiki_list = [accom_wiki, ss_wiki, my_wiki]
+let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+" https://vimwiki.github.io/vimwikiwiki/Tips%20and%20Snips.html Find
+" Incomplete Tasks
+function! VimwikiFindIncompleteTasks()
+  lvimgrep /\[ \]/ %:p
+  lopen
+endfunction
+
+function! VimwikiFindAllIncompleteTasks()
+  VimwikiSearch /\[ \]/
+  lopen
+endfunction
+
+nmap <Leader>wa :call VimwikiFindAllIncompleteTasks()<CR>
+nmap <Leader>wx :call VimwikiFindIncompleteTasks()<CR>
+
 
 " insert date
 nmap <F3>f i<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
@@ -443,7 +475,7 @@ set conceallevel=0
 " jedi
 "let g:jedi#use_tabs_not_buffers = 1
 let g:jedi#popup_on_dot = 1
-
+let g:jedi#usages_command = "<leader>u"
 " give us 256 color schemes!
 "set term=screen-256color
 set list
