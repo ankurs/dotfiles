@@ -185,12 +185,12 @@ let g:tagbar_type_xslt = {
 " use markdown with vimwiki and let it sync across devices
 " set wiki for work
 let accom_wiki = {}
-let accom_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss'
+let accom_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss/Accom'
 let accom_wiki.syntax = 'markdown'
 let accom_wiki.ext = '.md'
 
 let ss_wiki = {}
-let ss_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss/accom'
+let ss_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss'
 let ss_wiki.syntax = 'markdown'
 let ss_wiki.ext = '.md'
 
@@ -200,7 +200,7 @@ let my_wiki.path = '~/GoogleDrive/My Drive/vimwiki/my'
 let my_wiki.syntax = 'markdown'
 let my_wiki.ext = '.md'
 
-let g:vimwiki_list = [accom_wiki, ss_wiki, my_wiki]
+let g:vimwiki_list = [ss_wiki, accom_wiki, my_wiki]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 " https://vimwiki.github.io/vimwikiwiki/Tips%20and%20Snips.html Find
 " Incomplete Tasks
