@@ -102,5 +102,6 @@ fi
 
 #opam
 test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-alias gdrive='google-drive-ocamlfuse ~/GoogleDrive/My\ Drive -o nonempty'
+#alias gdrive='google-drive-ocamlfuse ~/GoogleDrive/My\ Drive -o nonempty'
+alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
