@@ -73,6 +73,8 @@ read -p "Do you wish to install Virtulization tools ? [y/N]? " virt
 if [[ x$virt == xy || x$virt == xY ]]
 then
     bash -e fedora/virt.sh
+    echo "adding $USER to kvm group"
+    sudo usermod -aG kvm $USER
 fi
 
 read -p "Do you wish to install laptop power management tools [y/N]? " lap
