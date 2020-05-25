@@ -101,7 +101,7 @@ fi
 do_setup
 
 nvim +PluginInstall +qall
-python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer
+python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer --js-completer --ts-completer
 nvim +GoUpdateBinaries +qall
 pip install neovim --user
 pip install bashate --user

@@ -37,6 +37,7 @@ Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'fatih/vim-go' , { 'do': ':GoUpdateBinaries' }
 Plugin 'jodosha/vim-godebug'
 Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 Plugin 'sebdah/vim-delve'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'vimwiki/vimwiki'
@@ -59,19 +60,21 @@ let g:ale_fixers = {
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 
-Plugin 'rust-lang/rust.vim'
-if has('nvim')
-  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plugin 'Shougo/deoplete.nvim'
-  Plugin 'roxma/nvim-yarp'
-  Plugin 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-let g:python3_host_skip_check = 1
+"if has('nvim')
+"  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+"  Plugin 'Shougo/deoplete.nvim'
+"  Plugin 'roxma/nvim-yarp'
+"  Plugin 'roxma/vim-hug-neovim-rpc'
+"endif
+"let g:deoplete#enable_at_startup = 1
+"let g:python3_host_skip_check = 1
+" deoplete tab-complete
+"inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
-Plugin 'Shougo/neosnippet'
-Plugin 'Shougo/neosnippet-snippets'
+"Plugin 'Shougo/neosnippet'
+"Plugin 'Shougo/neosnippet-snippets'
+Plugin 'rust-lang/rust.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
@@ -434,11 +437,9 @@ endif
 " set go path
 let $GOPATH = expand ("~/code/go")
 set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
-"autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
 
 "eclim
 nnoremap <leader>jd :JavaSearch<cr>
-"let g:SuperTabDefaultCompletionType = 'context'
 
 "delimitMate
 let delimitMate_expand_cr = 1
@@ -479,9 +480,6 @@ endif
 "airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme='tomorrow'
-
-" conceal
-set conceallevel=0
 
 " jedi
 "let g:jedi#use_tabs_not_buffers = 1

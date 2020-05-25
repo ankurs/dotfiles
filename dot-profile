@@ -108,3 +108,6 @@ fi
 alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
 alias npm-setup='npm install eslint jslint; npm install -g esctags'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
