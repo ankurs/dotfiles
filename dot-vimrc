@@ -100,8 +100,6 @@ Plugin 'dansomething/vim-eclim'
 
 " for javascript :|
 Plugin 'pangloss/vim-javascript'
-Plugin 'hushicai/tagbar-javascript.vim' " needs npm install -g esctags
-
 " huge language pack
 Plugin 'sheerun/vim-polyglot'
 
