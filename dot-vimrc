@@ -45,35 +45,40 @@ Plugin 'vim-syntastic/syntastic'
 Plugin 'juliosueiras/vim-terraform-completion'
 Plugin 'tbastos/vim-lua'
 
-Plugin 'w0rp/ale'
 Plugin 'uber/prototool', { 'rtp':'vim/prototool' }
+Plugin 'dense-analysis/ale'
 let g:ale_linters = {
 \   'go': ['golint'],
 \   'proto': ['prototool-lint'],
 \   'java': [''],
 \}
 let g:ale_lint_on_text_changed = 'never'
-Plugin 'rust-lang/rust.vim'
-"if has('nvim')
-"  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"else
-"  Plugin 'Shougo/deoplete.nvim'
-"  Plugin 'roxma/nvim-yarp'
-"  Plugin 'roxma/vim-hug-neovim-rpc'
-"endif
-"Plugin 'zchee/deoplete-go', { 'do': 'make'}
-"let g:deoplete#enable_at_startup = 1
-"let g:python3_host_skip_check = 1
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace']
+\}
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
 
-"Plugin 'Shougo/neosnippet'
-"Plugin 'Shougo/neosnippet-snippets'
+Plugin 'rust-lang/rust.vim'
+if has('nvim')
+  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plugin 'Shougo/deoplete.nvim'
+  Plugin 'roxma/nvim-yarp'
+  Plugin 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+let g:python3_host_skip_check = 1
+
+Plugin 'Shougo/neosnippet'
+Plugin 'Shougo/neosnippet-snippets'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-markdown'
 Plugin 'flazz/vim-colorschemes'
 "Plugin 'morhetz/gruvbox'
 Plugin 'Nequo/vim-allomancer'
-Plugin 'jacoborus/tender'
-Plugin 'jnurmine/Zenburn'
+"Plugin 'jacoborus/tender'
+"Plugin 'jnurmine/Zenburn'
 Plugin 'Yggdroot/indentLine'
 Plugin 'kien/tabman.vim' " Tab management
 Plugin 'szw/vim-ctrlspace'
@@ -92,6 +97,11 @@ Plugin 'dansomething/vim-eclim'
 
 " for javascript :|
 Plugin 'pangloss/vim-javascript'
+Plugin 'hushicai/tagbar-javascript.vim' " needs npm install -g esctags
+
+" huge language pack
+Plugin 'sheerun/vim-polyglot'
+
 
 filetype plugin indent on
 

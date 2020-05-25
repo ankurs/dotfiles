@@ -5,13 +5,6 @@ function set_path() {
     fi
 }
 
-export GOPATH="$HOME/code/go"
-export GOBIN="$GOPATH/bin"
-
-set_path "$HOME/.local/bin"
-set_path "$GOBIN"
-set_path "$HOME/.gotools"
-
 #gcloud bin on mac
 set_path "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
 set_path "/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
@@ -21,9 +14,6 @@ set_path "/var/lib/snapd/snap/bin"
 
 #powerline
 set_path "/usr/local/lib/python2.7/site-packages:/usr/local/share/python"
-
-set_path "$HOME/.cargo/bin"
-set_path "$HOME/.jenv/bin"
 
 set_path "/usr/local/go/bin"
 set_path "/sbin"
@@ -35,6 +25,19 @@ set_path "/usr/local/sbin"
 set_path "/opt/local/bin"
 set_path "opt/local/sbin"
 
+export GOPATH="$HOME/code/go"
+export GOBIN="$GOPATH/bin"
+
+set_path "$HOME/.local/bin"
+set_path "$GOBIN"
+set_path "$HOME/.gotools"
+set_path "$HOME/.cargo/bin"
+set_path "$HOME/.jenv/bin"
+set_path "$HOME/.node/bin"
+
+export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
+export MANPATH="$HOME/.node/share/man:$MANPATH"
+
 export LC_CTYPE='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 #export LC_ALL='C'
@@ -45,7 +48,6 @@ alias wiki='nvim +VimwikiIndex'
 #switch vim to nvim :)
 export EDITOR="nvim"
 alias vim='nvim'
-
 
 export DOTFILES="$HOME/code/dotfiles"
 alias dock='eval $(docker-machine env default)'
@@ -101,7 +103,8 @@ then
 fi
 
 #opam
-test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+#test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 #alias gdrive='google-drive-ocamlfuse ~/GoogleDrive/My\ Drive -o nonempty'
 alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
+alias npm-setup='npm install eslint jslint; npm install -g esctags'

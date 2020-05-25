@@ -43,17 +43,11 @@ sudo systemctl enable netdata
 # setup noatime for ssd ?
 #lsblk -d -o name,rota,type | grep disk
 
-#read -p "Do you wish to set up google drive fuse ?[y/N]? " drive
-#if [[ x$drive == xy || x$drive == xY ]]
-#then
-#    opam init
-#    opam update
-#    opam install depext
-#    opam depext google-drive-ocamlfuse
-#    opam install google-drive-ocamlfuse
-#    mkdir -p ~/GoogleDrive/My\ Drive
-#    echo "please run 'google-drive-ocamlfuse' for setup and then mount the volume by using 'gdrive' alias"
-#fi
+echo "setting up nodejs :("
+mkdir -p ~/.node
+echo "prefix = ~/.node" > ~/.npmrc
+sudo dnf install nodejs npm
+npm install -g esctags
 
 ##########  USER ##############
 echo "add $USER to docker group"
