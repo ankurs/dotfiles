@@ -88,22 +88,23 @@ then
     ln -s -i $PWD/dotgitconfig ~/.gitconfig
     ln -s -i $PWD/dot-gitignore ~/.gitignore
     mkdir -p ~/.config/nvim/
-    mkdir -p ~/.vim/bundle
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     ln -s -i ~/.vimrc ~/.config/nvim/init.vim
-    if [[ ! -d ~/.vim/bundle/Vundle.vim ]]
-    then
-        git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-    fi
 else
     echo "Update requested skipping initial setup"
 fi
 
 do_setup
 
-nvim +PluginInstall +qall
-python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer --js-completer --ts-completer
-nvim +GoUpdateBinaries +qall
+nvim +PlugInstall +qall
+#python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer --js-completer --ts-completer
 pip install neovim --user
 pip install bashate --user
 ## install java 1.8
 #jabba install zulu@1.8
+if [[ ! -z $UPDATE ]]
+then
+    nvim '+PlugClean!' +PlugUpdate +PlugUpgrade +qall
+fi
