@@ -490,7 +490,7 @@ call deoplete#custom#option({
 " Always draw sign column. Prevent buffer moving when adding/deleting sign.
 set signcolumn=yes
 "" Language server
-" pip i python-language-server[all]
+" pip install python-language-server[all]
 " npm i -g javascript-typescript-langserver
 " npm i -g bash-language-server
 " pip install vim-vint
@@ -505,9 +505,11 @@ let g:LanguageClient_serverCommands = {
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'go': ['gopls'],
+    \ 'python' : ['pyls'],
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>
+nnoremap <leader>df :call LanguageClient_textDocument_definition()<CR>
 nnoremap <leader>rf :call LanguageClient_textDocument_references()<CR>
 nnoremap <leader>im :call LanguageClient_textDocument_implementation()<CR>
 nnoremap <leader>fx :call LanguageClient_textDocument_codeAction()<CR>
