@@ -102,6 +102,7 @@ Plug 'fszymanski/deoplete-emoji'
 Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " -- interesting idea
 "doesn't work well
 
@@ -493,6 +494,8 @@ set signcolumn=yes
 " npm i -g javascript-typescript-langserver
 " npm i -g bash-language-server
 " pip install vim-vint
+" go get -u golang.org/x/tools/...
+" go get -u github.com/stamblerre/gocode
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
@@ -501,6 +504,7 @@ let g:LanguageClient_serverCommands = {
     \ 'typescript.tsx': ['javascript-typescript-stdio'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
+    \ 'go': ['gopls'],
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>
@@ -509,4 +513,6 @@ nnoremap <leader>im :call LanguageClient_textDocument_implementation()<CR>
 nnoremap <leader>fx :call LanguageClient_textDocument_codeAction()<CR>
 nnoremap <leader>ex :call LanguageClient#explainErrorAtPoint()<CR>
 
+" Run gofmt on save
+autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 " }}}
