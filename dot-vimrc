@@ -76,7 +76,7 @@ Plug 'sheerun/vim-polyglot' " Huge language pack
 Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
 
 " Auto complete / Lint
-Plug 'vim-syntastic/syntastic'
+"Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'SirVer/ultisnips'
@@ -99,6 +99,9 @@ endif
 Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'deoplete-plugins/deoplete-docker'
 Plug 'fszymanski/deoplete-emoji'
+Plug 'deoplete-plugins/deoplete-zsh'
+"Plug 'ujihisa/neco-look'
+Plug 'Shougo/neco-syntax'
 "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " -- interesting idea
 "doesn't work well
 
@@ -311,20 +314,20 @@ let g:vim_json_warnings=1
 "}}}
 
 "{{{ Syntastic
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-"let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+""let g:syntastic_ruby_exec = '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
-let g:syntastic_python_python_exec = 'python3'
-let g:syntastic_quiet_messages = { "type": "style" }
+"let g:syntastic_python_python_exec = 'python3'
+"let g:syntastic_quiet_messages = { "type": "style" }
 "" install pip install bashate -- for bash support
 ""}}}
 
@@ -450,9 +453,7 @@ let g:jedi#usages_command = "<leader>u"
 
 "{{{ ALE
 let g:ale_linters = {
-\   'go': ['golint'],
 \   'proto': ['prototool-lint'],
-\   'java': [''],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
@@ -462,54 +463,50 @@ let g:ale_completion_tsserver_autoimport = 1
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_completion_enabled = 0
-"let g:ale_linters_explicit = 1
+let g:ale_linters_explicit = 0
 "}}}
 
 "{{{ fzf
 nnoremap <silent> t :Files<cr>
 "}}}
 
-" =========== UNTESTED ================
-
-" {{{ Language Server
-" Always draw sign column. Prevent buffer moving when adding/deleting sign.
-set signcolumn=no
-"" Language server
-" pip install python-language-server[all]
-" npm install -g javascript-typescript-langserver
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
-    \ }
-nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
-" }}}
-
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)"
-\: "\<TAB>"
-
-" For snippet_complete marker.
-"if has('conceal')
-  "set conceallevel=2 concealcursor=i
-"endif
-
+" {{{ Deoplete
 let g:deoplete#enable_at_startup = 1
 let g:python3_host_skip_check = 1
 " deoplete tab-complete
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr><Tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-call deoplete#custom#source(
-\ '_', 'min_pattern_length', 1)
+call deoplete#custom#source('_', 'min_pattern_length', 1)
+call deoplete#custom#source('file', 'rank', 550)
+call deoplete#custom#option({
+    \ 'auto_complete_delay': 100,
+    \ 'smart_case': v:true,
+    \ })
+" }}}
 
-"for neo snippet
-" Plugin key-mappings.
-"imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-"smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-"xmap <C-k>     <Plug>(neosnippet_expand_target)
+" {{{ Language Server
+" Always draw sign column. Prevent buffer moving when adding/deleting sign.
+set signcolumn=yes
+"" Language server
+" pip i python-language-server[all]
+" npm i -g javascript-typescript-langserver
+" npm i -g bash-language-server
+" pip install vim-vint
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'typescript.tsx': ['javascript-typescript-stdio'],
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ 'sh': ['bash-language-server', 'start'],
+    \ }
+nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
+nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>
+nnoremap <leader>rf :call LanguageClient_textDocument_references()<CR>
+nnoremap <leader>im :call LanguageClient_textDocument_implementation()<CR>
+nnoremap <leader>fx :call LanguageClient_textDocument_codeAction()<CR>
+nnoremap <leader>ex :call LanguageClient#explainErrorAtPoint()<CR>
+
+" }}}
