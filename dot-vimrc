@@ -491,17 +491,19 @@ call deoplete#custom#option({
 set signcolumn=yes
 "" Language server
 " pip install python-language-server[all]
-" npm i -g javascript-typescript-langserver
+" npm i -g typescript-language-server
 " npm i -g bash-language-server
 " pip install vim-vint
 " go get -u golang.org/x/tools/...
 " go get -u github.com/stamblerre/gocode
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'typescript.tsx': ['javascript-typescript-stdio'],
+    \ 'javascript': ['typescript-language-server', '--stdio'],
+    \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
+    \ 'javascriptreact': ['typescript-language-server', '--stdio'],
+    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
+    \ 'typescriptreact': ['typescript-language-server', '--stdio'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'go': ['gopls'],
