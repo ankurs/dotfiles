@@ -98,10 +98,9 @@ fi
 
 do_setup
 
+bash ./setup_lang_server.sh
+
 nvim +PlugInstall +qall
-#python ~/.vim/bundle/YouCompleteMe/install.py  --rust-completer --clang-completer --js-completer --ts-completer
-pip install neovim --user
-pip install bashate --user
 ## install java 1.8
 #jabba install zulu@1.8
 if [[ ! -z $UPDATE ]]
