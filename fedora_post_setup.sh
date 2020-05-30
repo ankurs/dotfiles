@@ -83,3 +83,9 @@ then
     bash -e fedora/openzfs.sh
 fi
 
+read -p "Do you wish to install Minikube [y/N]? " kube
+if [[ x$kube == xy || x$kube == xY ]]
+then
+    bash -e fedora/minikube.sh
+fi
+
