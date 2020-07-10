@@ -53,3 +53,4 @@ rclone
 iftop
 polkit-gnome
 kubernetes
+bridge-utils
