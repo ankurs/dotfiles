@@ -3,4 +3,5 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest
 sudo rpm -ivh minikube-latest.x86_64.rpm
 rm -rf minikube-latest.x86_64.rpm
 minikube config set driver kvm2
+sudo usermod --append --groups libvirt $USER
 #minikube start --driver=kvm2

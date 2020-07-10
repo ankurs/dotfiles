@@ -41,7 +41,7 @@ Plug 'majutsushi/tagbar'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'preservim/nerdcommenter'
 Plug 'Yggdroot/indentLine'
-Plug 'kien/tabman.vim' " Tab management
+"Plug 'kien/tabman.vim' " Tab management
 Plug 'szw/vim-ctrlspace'
 Plug 'vim-scripts/cSyntaxAfter'
 Plug 'airblade/vim-gitgutter'
@@ -57,23 +57,15 @@ Plug 'flazz/vim-colorschemes'
 " language
 Plug 'mdempsky/gocode', {'rtp': 'vim/'}
 Plug 'fatih/vim-go' , { 'do': ':GoUpdateBinaries' }
-Plug 'vim-ruby/vim-ruby'
 Plug 'jodosha/vim-godebug'
 Plug 'sebdah/vim-delve'
-Plug 'hashivim/vim-terraform'
 Plug 'juliosueiras/vim-terraform-completion'
-Plug 'tbastos/vim-lua'
-Plug 'rust-lang/rust.vim'
-Plug 'tpope/vim-markdown'
-Plug 'elzr/vim-json'
-Plug 'cespare/vim-toml'
 Plug 'saltstack/salt-vim' "for slat
-Plug 'stephpy/vim-yaml' " for yaml
 Plug 'thiderman/vim-supervisor' "for supervisor
 Plug 'davidhalter/jedi-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot' " Huge language pack
-Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
+"Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
 
 " Auto complete / Lint
 "Plug 'vim-syntastic/syntastic'
@@ -103,8 +95,7 @@ Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
 Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
-"Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " -- interesting idea
-"doesn't work well
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " -- interesting idea doesn't work well
 
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -169,8 +160,8 @@ endif
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
 " insert date
-nmap <F3>f i<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
-nmap <F3> i<C-R>=strftime("%Y-%m-%d")<CR><Esc>
+nmap <F3>f a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
+nmap <F3> a<C-R>=strftime("%Y-%m-%d")<CR><Esc>
 imap <F3> <C-R>=strftime("%Y-%m-%d")<CR>
 
 " Automatic formatting
@@ -454,7 +445,7 @@ let g:jedi#usages_command = "<leader>u"
 
 "{{{ ALE
 let g:ale_linters = {
-\   'proto': ['prototool-lint'],
+\   'java': [''],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
@@ -498,16 +489,17 @@ set signcolumn=yes
 " go get -u github.com/stamblerre/gocode
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'javascript': ['typescript-language-server', '--stdio'],
-    \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
-    \ 'javascriptreact': ['typescript-language-server', '--stdio'],
-    \ 'typescript': ['typescript-language-server', '--stdio'],
-    \ 'typescript.tsx': ['typescript-language-server', '--stdio'],
-    \ 'typescriptreact': ['typescript-language-server', '--stdio'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ 'javascriptreact': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'typescript.tsx': ['javascript-typescript-stdio'],
+    \ 'typescriptreact': ['javascript-typescript-stdio'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'go': ['gopls'],
     \ 'python' : ['pyls'],
+    \ 'java' : ['~/code/java-lang/run.sh'],
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>
