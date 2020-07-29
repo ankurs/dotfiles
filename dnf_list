@@ -53,6 +53,7 @@ rclone
 iftop
 polkit-gnome
 kubernetes
+bridge-utils
 texlive
 lxrandr
 arandr
