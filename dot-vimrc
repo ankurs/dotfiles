@@ -96,7 +96,8 @@ Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
 Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
-Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' } " -- interesting idea doesn't work well
+Plug 'racer-rust/vim-racer'
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -144,10 +145,10 @@ set hlsearch
 set ignorecase
 set smartcase
 set guifont=Monaco:h12
-set bg=dark
+set background=dark
 set t_Co=256
 " for GVIM  -- but havent used in ages
-if has("gui_running")
+if has('gui_running')
     "remove menu and toolbar
    set guioptions-=m
    set guioptions-=T
@@ -302,7 +303,7 @@ let NERDTreeShowHidden=1
 
 "{{{ JSON
 let g:vim_json_syntax_conceal=0
-let g:indentLine_noConcealCursor=""
+let g:indentLine_noConcealCursor=''
 let g:vim_json_warnings=1
 "}}}
 
@@ -332,9 +333,9 @@ endif
 
 "{{{ Eclim
 let g:EclimCompletionMethod = 'omnifunc'
-let g:EclimJavaCallHierarchyDefaultAction = "edit"
-let g:EclimJavaNewOpenAction = "edit"
-let g:EclimJavaSearchSingleResult = "edit"
+let g:EclimJavaCallHierarchyDefaultAction = 'edit'
+let g:EclimJavaNewOpenAction = 'edit'
+let g:EclimJavaSearchSingleResult = 'edit'
 let g:EclimLoggingDisabled = 1
 nnoremap <leader>jd :JavaSearch<cr>
 "}}}
@@ -352,10 +353,10 @@ au FileType go nmap <leader>dg <Plug>(go-def)
 au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-let g:go_fmt_command = "goimports"
-"let g:go_snippet_engine = "neosnippet"
-let g:go_bin_path = expand("~/.gotools")
-let g:go_list_type = "quickfix"
+let g:go_fmt_command = 'goimports'
+"let g:go_snippet_engine = 'neosnippet'
+let g:go_bin_path = expand('~/.gotools')
+let g:go_list_type = 'quickfix'
 let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
 let g:go_auto_type_info = 1
 " syntax highlighting
@@ -381,11 +382,11 @@ nnoremap <leader>mr :!./reinstall.sh<cr>
 let g:go_gocode_propose_source = 0
 
 " set go path
-let $GOPATH = expand ("~/code/go")
-set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
+let $GOPATH = expand ('~/code/go')
+set runtimepath+=$GOPATH/src/github.com/golang/lint/misc/vim
 
 if has('nvim')
-    let g:go_term_mode = "split"
+    let g:go_term_mode = 'split'
     let g:go_term_enabled = 1
 endif
 "}}}
@@ -413,6 +414,8 @@ let delimitMate_expand_cr = 1
 
 "{{{ rust
 let g:rustfmt_autosave = 1
+let g:racer_cmd = expand('~/.cargo/bin/racer')
+let g:racer_experimental_completer = 1
 "}}}
 
 "{{{ YouCompleteMe
@@ -441,16 +444,18 @@ let g:airline_theme='tomorrow'
 "{{{ jedi
 "let g:jedi#use_tabs_not_buffers = 1
 let g:jedi#popup_on_dot = 1
-let g:jedi#usages_command = "<leader>u"
+let g:jedi#usages_command = '<leader>u'
 "}}}
 
 "{{{ ALE
 let g:ale_linters = {
 \   'java': [''],
+\   'rust': ['rls'],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace']
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'rust': ['rustfmt'],
 \}
 let g:ale_completion_tsserver_autoimport = 1
 let g:ale_sign_error = '❌'
@@ -471,7 +476,10 @@ inoremap <expr><Tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 call deoplete#custom#source('_', 'min_pattern_length', 1)
+call deoplete#custom#source('tabnine', 'rank', 80)
 call deoplete#custom#source('file', 'rank', 550)
+call deoplete#custom#source('LanguageClientSource', 'rank', 998)
+call deoplete#custom#source('ultisnips', 'rank', 999)
 call deoplete#custom#option({
     \ 'auto_complete_delay': 100,
     \ 'smart_case': v:true,
@@ -489,7 +497,7 @@ set signcolumn=yes
 " go get -u golang.org/x/tools/...
 " go get -u github.com/stamblerre/gocode
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'javascriptreact': ['javascript-typescript-stdio'],
@@ -509,6 +517,8 @@ nnoremap <leader>rf :call LanguageClient_textDocument_references()<CR>
 nnoremap <leader>im :call LanguageClient_textDocument_implementation()<CR>
 nnoremap <leader>fx :call LanguageClient_textDocument_codeAction()<CR>
 nnoremap <leader>ex :call LanguageClient#explainErrorAtPoint()<CR>
+
+let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
 
 " Run gofmt on save
 autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
