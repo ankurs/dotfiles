@@ -65,6 +65,7 @@ Plug 'thiderman/vim-supervisor' "for supervisor
 Plug 'davidhalter/jedi-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot' " Huge language pack
+Plug 'rust-lang/rust.vim'
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
 
 " Auto complete / Lint
