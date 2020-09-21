@@ -9,9 +9,9 @@ consul
 consul-template
 cscope
 csshx
+ctags
 curl
 cython
-ctags
 erlang
 gawk
 gcc
@@ -30,6 +30,7 @@ graphviz
 grep
 groovy
 haproxy
+helm
 hexyl
 httpie
 hugo
@@ -43,6 +44,7 @@ jq
 kafkacat
 kibana
 kubernetes-cli
+leiningen
 libcouchbase
 libevent
 libffi
