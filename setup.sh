@@ -9,7 +9,11 @@ fi
 
 function setup_mac() {
     echo "setting up mac"
-    brew cask install java
+    if [[ ! -x $(which brew) ]]
+    then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    fi
+    #brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
     cat ./brew_list | xargs -L 1 brew install
     cat ./brew_cask_list | xargs -L 1 brew cask install
@@ -87,6 +91,8 @@ then
     ln -s -i $PWD/dot-mostrc ~/.mostrc
     ln -s -i $PWD/dotgitconfig ~/.gitconfig
     ln -s -i $PWD/dot-gitignore ~/.gitignore
+    mkdir -p ~/.cargo/
+    ln -s -i $PWD/cargo-config ~/.cargo/config
     mkdir -p ~/.config/nvim/
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \

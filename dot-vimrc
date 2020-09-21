@@ -67,7 +67,8 @@ Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot' " Huge language pack
 Plug 'rust-lang/rust.vim'
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
-
+Plug 'guns/vim-clojure-static'
+Plug 'tpope/vim-fireplace'
 " Auto complete / Lint
 "Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
@@ -260,6 +261,14 @@ let g:tagbar_type_xslt = {
 "{{{ VimWiki
 " use markdown with vimwiki and let it sync across devices
 " set wiki for work
+augroup filetypedetect
+  au! BufRead,BufNewFile */vimwiki/*        set filetype=vimwiki
+augroup END
+let jek_wiki = {}
+let jek_wiki.path = '~/GoogleDrive/My Drive/vimwiki/jek'
+let jek_wiki.syntax = 'markdown'
+let jek_wiki.ext = '.md'
+
 let accom_wiki = {}
 let accom_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss/Accom'
 let accom_wiki.syntax = 'markdown'
@@ -276,7 +285,7 @@ let my_wiki.path = '~/GoogleDrive/My Drive/vimwiki/my'
 let my_wiki.syntax = 'markdown'
 let my_wiki.ext = '.md'
 
-let g:vimwiki_list = [ss_wiki, accom_wiki, my_wiki]
+let g:vimwiki_list = [jek_wiki, ss_wiki, accom_wiki, my_wiki]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 " https://vimwiki.github.io/vimwikiwiki/Tips%20and%20Snips.html Find
 " Incomplete Tasks

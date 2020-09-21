@@ -5,13 +5,13 @@ astyle
 awscli
 bc
 cmake
-cockroach
 consul
 consul-template
 cscope
 csshx
 curl
 cython
+ctags
 erlang
 gawk
 gcc
@@ -109,7 +109,6 @@ the_silver_searcher
 tmux
 tree
 unbound
-universal-ctags
 vault
 vim
 watch
