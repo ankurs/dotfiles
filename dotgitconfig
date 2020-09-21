@@ -7,3 +7,5 @@
         insteadOf = https://source.golabs.io
 [core]
     excludesfile = "$HOME/.gitignore"
+[pull]
+	rebase = false
