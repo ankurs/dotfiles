@@ -69,6 +69,8 @@ Plug 'rust-lang/rust.vim'
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
 Plug 'guns/vim-clojure-static'
 Plug 'tpope/vim-fireplace'
+Plug 'derekwyatt/vim-scala'
+"
 " Auto complete / Lint
 "Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
