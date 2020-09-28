@@ -15,8 +15,8 @@ function setup_mac() {
     fi
     #brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
-    cat ./brew_list | xargs -L 1 brew install
-    cat ./brew_cask_list | xargs -L 1 brew cask install
+    #cat ./brew_list | xargs -L 1 brew install
+    #cat ./brew_cask_list | xargs -L 1 brew cask install
 }
 
 function setup_fedora() {
@@ -41,10 +41,7 @@ function setup_fedora() {
     sudo dnf install cmake make python-devel vim zsh gcc-c++ -y
     echo "installing snap"
     sudo dnf install -y snapd
-    if [[ -z $UPDATE ]]
-    then
-        sudo ln -s -i /var/lib/snapd/snap /snap
-    fi
+    sudo ln -s -i /var/lib/snapd/snap /snap
     cat ./dnf_list | xargs -L 10 sudo dnf install -y
     echo "waiting for snap to seed"
     sudo snap wait system seed.loaded
@@ -106,10 +103,9 @@ do_setup
 
 bash ./setup_lang_server.sh
 
+npm i -g neovim --upgrade
+gem install neovim
 nvim +PlugInstall +qall
 ## install java 1.8
 #jabba install zulu@1.8
-if [[ ! -z $UPDATE ]]
-then
-    nvim '+PlugClean!' +PlugUpdate +PlugUpgrade +qall
-fi
+nvim '+PlugClean!' +PlugUpdate +PlugUpgrade +qall
