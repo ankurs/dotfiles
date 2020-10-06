@@ -105,6 +105,7 @@ Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
 " Data set
 Plug 'vimwiki/vimwiki'
@@ -497,6 +498,10 @@ call deoplete#custom#option({
     \ })
 "close the preview window after completion is done.
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+" }}}
+"
+" {{{ InstantMarkdown
+let g:instant_markdown_autostart = 0
 " }}}
 
 " {{{ Language Server
