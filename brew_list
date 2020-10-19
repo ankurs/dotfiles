@@ -23,6 +23,7 @@ git
 glib
 glide
 gnutls
+gnu-sed
 go
 gradle
 graphite2

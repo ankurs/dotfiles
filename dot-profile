@@ -24,6 +24,7 @@ set_path "/usr/local/bin"
 set_path "/usr/local/sbin"
 set_path "/opt/local/bin"
 set_path "opt/local/sbin"
+set_path "/usr/local/opt/gnu-sed/libexec/gnubin"
 
 export GOPATH="$HOME/code/go"
 export GOBIN="$GOPATH/bin"
