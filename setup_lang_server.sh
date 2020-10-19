@@ -30,3 +30,5 @@ gem install neovim
 pip install neovim --user --upgrade
 pip3 install neovim --user --upgrade
 python3 -m pip install neovim --user --upgrade
+
+brew install borkdude/brew/clj-kondo

@@ -46,6 +46,8 @@ Plug 'szw/vim-ctrlspace'
 Plug 'vim-scripts/cSyntaxAfter'
 Plug 'airblade/vim-gitgutter'
 Plug 'mileszs/ack.vim'
+Plug 'kien/rainbow_parentheses.vim'
+"Plug 'easymotion/vim-easymotion'
 
 " colorschemes
 Plug 'flazz/vim-colorschemes'
@@ -67,8 +69,10 @@ Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot' " Huge language pack
 Plug 'rust-lang/rust.vim'
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
-Plug 'guns/vim-clojure-static'
-Plug 'tpope/vim-fireplace'
+"Plug 'guns/vim-clojure-static'
+"Plug 'tpope/vim-fireplace' , { 'for': 'clojure' }
+"Plug 'tpope/vim-salve' , { 'for': 'clojure' }
+Plug 'Olical/conjure', {'tag': 'v4.7.0'}
 Plug 'derekwyatt/vim-scala'
 "
 " Auto complete / Lint
@@ -101,6 +105,7 @@ Plug 'Shougo/neco-syntax'
 Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'racer-rust/vim-racer'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+"Plug 'clojure-vim/async-clj-omni'
 
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -463,6 +468,7 @@ let g:jedi#usages_command = '<leader>u'
 let g:ale_linters = {
 \   'java': [''],
 \   'rust': ['rls'],
+\ 'clojure': ['clj-kondo', 'joker'],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
