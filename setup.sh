@@ -88,6 +88,7 @@ then
     ln -s -i $PWD/dot-mostrc ~/.mostrc
     ln -s -i $PWD/dotgitconfig ~/.gitconfig
     ln -s -i $PWD/dot-gitignore ~/.gitignore
+    ln -s -i $PWD/dot-todo.cfg ~/.todo.cfg
     mkdir -p ~/.cargo/
     ln -s -i $PWD/cargo-config ~/.cargo/config
     mkdir -p ~/.config/nvim/

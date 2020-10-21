@@ -108,6 +108,7 @@ fi
 #alias gdrive='google-drive-ocamlfuse ~/GoogleDrive/My\ Drive -o nonempty'
 alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
+alias t='todo.sh'
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
