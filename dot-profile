@@ -36,6 +36,8 @@ set_path "$HOME/.cargo/bin"
 set_path "$HOME/.jenv/bin"
 set_path "$HOME/.node/bin"
 
+set_path "$HOME/.vim/plugged/vim-iced/bin"
+
 export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
 export MANPATH="$HOME/.node/share/man:$MANPATH"
 
@@ -109,6 +111,6 @@ fi
 alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
 alias t='todo.sh'
-
+alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

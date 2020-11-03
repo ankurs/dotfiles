@@ -30,11 +30,13 @@ function setup_fedora() {
         sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
     fi
 
+    set +e
     grep -q -F 'fastestmirror=True' /etc/dnf/dnf.conf
     if [[ $? -ne 0 ]]
     then
       echo 'fastestmirror=True' | sudo sudo tee --append /etc/dnf/dnf.conf
     fi
+    set -e
     sudo dnf update-minimal -y
     echo "setting up Development Tools"
     sudo dnf groupinstall "Development Tools" -y
