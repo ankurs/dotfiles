@@ -573,11 +573,12 @@ function RB()
 endfunction
 
 " start rainbow_parentheses on clojure files
-autocmd BufRead,BufNewFile *.clj call RB()
-au FileType clojure nmap <Leader>gd :IcedDefJump<CR>
+autocmd BufRead,BufNewFile * call RB()
 " }}}
+"
 " {{{ vim-iced
 let g:iced_enable_default_key_mappings = v:true
 let g:iced_enable_clj_kondo_analysis = v:true
+au FileType clojure nmap <Leader>gd :IcedDefJump<CR>
 "let g:iced#debug#debugger = 'fern'
 " }}}
