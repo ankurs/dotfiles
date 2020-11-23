@@ -25,6 +25,8 @@ set_path "/usr/local/sbin"
 set_path "/opt/local/bin"
 set_path "opt/local/sbin"
 
+set_path "~/code/k8s/istio-1.7.0/bin"
+
 export GOPATH="$HOME/code/go"
 export GOBIN="$GOPATH/bin"
 
