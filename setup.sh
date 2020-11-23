@@ -9,10 +9,14 @@ fi
 
 function setup_mac() {
     echo "setting up mac"
-    brew cask install java
+    if [[ ! -x $(which brew) ]]
+    then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    fi
+    #brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
-    cat ./brew_list | xargs -L 1 brew install
-    cat ./brew_cask_list | xargs -L 1 brew cask install
+    #cat ./brew_list | xargs -L 1 brew install
+    #cat ./brew_cask_list | xargs -L 1 brew cask install
 }
 
 function setup_fedora() {
@@ -26,21 +30,20 @@ function setup_fedora() {
         sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
     fi
 
+    set +e
     grep -q -F 'fastestmirror=True' /etc/dnf/dnf.conf
     if [[ $? -ne 0 ]]
     then
       echo 'fastestmirror=True' | sudo sudo tee --append /etc/dnf/dnf.conf
     fi
+    set -e
     sudo dnf update-minimal -y
     echo "setting up Development Tools"
     sudo dnf groupinstall "Development Tools" -y
     sudo dnf install cmake make python-devel vim zsh gcc-c++ -y
     echo "installing snap"
     sudo dnf install -y snapd
-    if [[ -z $UPDATE ]]
-    then
-        sudo ln -s -i /var/lib/snapd/snap /snap
-    fi
+    sudo ln -s -i /var/lib/snapd/snap /snap
     cat ./dnf_list | xargs -L 10 sudo dnf install -y
     echo "waiting for snap to seed"
     sudo snap wait system seed.loaded
@@ -87,6 +90,9 @@ then
     ln -s -i $PWD/dot-mostrc ~/.mostrc
     ln -s -i $PWD/dotgitconfig ~/.gitconfig
     ln -s -i $PWD/dot-gitignore ~/.gitignore
+    ln -s -i $PWD/dot-todo.cfg ~/.todo.cfg
+    mkdir -p ~/.cargo/
+    ln -s -i $PWD/cargo-config ~/.cargo/config
     mkdir -p ~/.config/nvim/
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -100,10 +106,9 @@ do_setup
 
 bash ./setup_lang_server.sh
 
+npm i -g neovim --upgrade
+gem install neovim
 nvim +PlugInstall +qall
 ## install java 1.8
 #jabba install zulu@1.8
-if [[ ! -z $UPDATE ]]
-then
-    nvim '+PlugClean!' +PlugUpdate +PlugUpgrade +qall
-fi
+nvim '+PlugClean!' +PlugUpdate +PlugUpgrade +qall

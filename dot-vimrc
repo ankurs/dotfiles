@@ -27,6 +27,10 @@ if !has('nvim')
     Plug 'tpope/vim-sensible'
 endif
 
+if has('nvim')
+    Plug 'antoinemadec/FixCursorHold.nvim'
+endif
+
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
@@ -46,6 +50,10 @@ Plug 'szw/vim-ctrlspace'
 Plug 'vim-scripts/cSyntaxAfter'
 Plug 'airblade/vim-gitgutter'
 Plug 'mileszs/ack.vim'
+Plug 'kien/rainbow_parentheses.vim'
+"Plug 'easymotion/vim-easymotion'
+Plug 'dbeniamine/todo.txt-vim'
+Plug 'kshenoy/vim-signature'
 
 " colorschemes
 Plug 'flazz/vim-colorschemes'
@@ -68,8 +76,18 @@ Plug 'sheerun/vim-polyglot' " Huge language pack
 Plug 'rust-lang/rust.vim'
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
 Plug 'derekwyatt/vim-scala'
-
-" Auto complete / Lint
+"Plug 'guns/vim-clojure-static'
+"Plug 'tpope/vim-fireplace' , { 'for': 'clojure' }
+"Plug 'tpope/vim-salve' , { 'for': 'clojure' }
+"Plug 'dgrnbrg/vim-redl', { 'for': 'clojure' }
+"Plug 'Olical/conjure', {'tag': 'v4.7.0'}
+"Plug 'bhurlow/vim-parinfer'
+Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
+Plug 'guns/vim-sexp',    {'for': 'clojure'}
+"Plug 'lambdalisue/fern.vim'
+Plug 'liquidz/vim-iced', {'for': 'clojure'}"
+Plug 'liquidz/vim-iced-function-list', {'for': 'clojure', 'on': 'IcedBrowseFunction'}
+"Plug 'liquidz/vim-iced-fern-debugger', {'for': 'clojure'}
 "Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
@@ -103,6 +121,7 @@ Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
 " Data set
 Plug 'vimwiki/vimwiki'
@@ -148,6 +167,7 @@ set smartcase
 set guifont=Monaco:h12
 set background=dark
 set t_Co=256
+set mmp=5000
 " for GVIM  -- but havent used in ages
 if has('gui_running')
     "remove menu and toolbar
@@ -220,7 +240,6 @@ set listchars=tab:▸\ ,eol:¬
 "{{{ tagbar
 nmap <leader>rt :TagbarToggle<CR>
 " auto open tagbar
-autocmd VimEnter * nested :call tagbar#autoopen(1)
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -261,6 +280,14 @@ let g:tagbar_type_xslt = {
 "{{{ VimWiki
 " use markdown with vimwiki and let it sync across devices
 " set wiki for work
+augroup filetypedetect
+  au! BufRead,BufNewFile */vimwiki/*        set filetype=vimwiki
+augroup END
+let jek_wiki = {}
+let jek_wiki.path = '~/GoogleDrive/My Drive/vimwiki/jek'
+let jek_wiki.syntax = 'markdown'
+let jek_wiki.ext = '.md'
+
 let accom_wiki = {}
 let accom_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss/Accom'
 let accom_wiki.syntax = 'markdown'
@@ -277,7 +304,7 @@ let my_wiki.path = '~/GoogleDrive/My Drive/vimwiki/my'
 let my_wiki.syntax = 'markdown'
 let my_wiki.ext = '.md'
 
-let g:vimwiki_list = [ss_wiki, accom_wiki, my_wiki]
+let g:vimwiki_list = [jek_wiki, ss_wiki, accom_wiki, my_wiki]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 " https://vimwiki.github.io/vimwikiwiki/Tips%20and%20Snips.html Find
 " Incomplete Tasks
@@ -452,6 +479,7 @@ let g:jedi#usages_command = '<leader>u'
 let g:ale_linters = {
 \   'java': [''],
 \   'rust': ['rls'],
+\ 'clojure': ['clj-kondo', 'joker'],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
@@ -483,8 +511,15 @@ call deoplete#custom#source('LanguageClientSource', 'rank', 998)
 call deoplete#custom#source('ultisnips', 'rank', 999)
 call deoplete#custom#option({
     \ 'auto_complete_delay': 100,
-    \ 'smart_case': v:true,
+    \ 'smart_case': v:false,
     \ })
+call deoplete#custom#option('omni_patterns', {'clojure': '[\w!$%&*+/:<=>?@\^_~\-\.#]*'})
+"close the preview window after completion is done.
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+" }}}
+"
+" {{{ InstantMarkdown
+let g:instant_markdown_autostart = 0
 " }}}
 
 " {{{ Language Server
@@ -523,4 +558,27 @@ let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
 
 " Run gofmt on save
 autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+" }}}
+"
+" {{{ todo.txt
+let g:Todo_txt_prefix_creation_date=1
+" }}}
+
+" {{{ Rainbow
+"
+function RB()
+    :RainbowParenthesesLoadRound
+    :RainbowParenthesesLoadBraces
+    :RainbowParenthesesActivate
+endfunction
+
+" start rainbow_parentheses on clojure files
+autocmd BufRead,BufNewFile * call RB()
+" }}}
+"
+" {{{ vim-iced
+let g:iced_enable_default_key_mappings = v:true
+let g:iced_enable_clj_kondo_analysis = v:true
+au FileType clojure nmap <Leader>gd :IcedDefJump<CR>
+"let g:iced#debug#debugger = 'fern'
 " }}}

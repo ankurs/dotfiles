@@ -57,3 +57,5 @@ bridge-utils
 texlive
 lxrandr
 arandr
+ruby-devel
+rubygems

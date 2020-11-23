@@ -7,6 +7,7 @@ authy
 brave-browser
 caffeine
 cubicsdr
+docker
 eclipse-java
 evernote
 firefox
@@ -16,15 +17,13 @@ google-drive-file-stream
 google-hangouts
 intellij-idea
 iterm2
-java
+krisp
 mactex
-minikube
 nordvpn
 oracle-jdk
 osxfuse
 pycharm
 skype
-soapui
 soundflower
 spotify
 steam
@@ -38,3 +37,4 @@ wechat
 whatsapp
 wireshark
 vmware-fusion
+amethyst
