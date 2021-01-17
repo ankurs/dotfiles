@@ -90,7 +90,7 @@ Plug 'liquidz/vim-iced-function-list', {'for': 'clojure', 'on': 'IcedBrowseFunct
 "Plug 'liquidz/vim-iced-fern-debugger', {'for': 'clojure'}
 "Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
-Plug 'uber/prototool', { 'rtp':'vim/prototool' }
+Plug 'bufbuild/vim-buf'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "Plug 'Valloric/YouCompleteMe' " -- use deoplete instead
@@ -406,12 +406,9 @@ autocmd FileType qf wincmd J
 set synmaxcol=192
 nnoremap <leader>mr :!./reinstall.sh<cr>
 
-" https://github.com/fatih/vim-go/blob/master/doc/vim-go.txt#L1626
-let g:go_gocode_propose_source = 0
-
 " set go path
 let $GOPATH = expand ('~/code/go')
-set runtimepath+=$GOPATH/src/github.com/golang/lint/misc/vim
+set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim
 
 if has('nvim')
     let g:go_term_mode = 'split'
@@ -479,7 +476,8 @@ let g:jedi#usages_command = '<leader>u'
 let g:ale_linters = {
 \   'java': [''],
 \   'rust': ['rls'],
-\ 'clojure': ['clj-kondo', 'joker'],
+\   'clojure': ['clj-kondo', 'joker'],
+\   'proto': ['buf-check-lint',],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
@@ -489,8 +487,8 @@ let g:ale_fixers = {
 let g:ale_completion_tsserver_autoimport = 1
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
-let g:ale_completion_enabled = 0
-let g:ale_linters_explicit = 0
+let g:ale_completion_enabled = 1
+let g:ale_linters_explicit = 1
 "}}}
 
 "{{{ fzf
