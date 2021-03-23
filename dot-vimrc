@@ -150,7 +150,7 @@ set cursorline
 set expandtab
 set modelines=0
 set shiftwidth=4
-set clipboard=unnamedplus
+set clipboard^=unnamed,unnamedplus
 set synmaxcol=250 " for those insanly long lines
 if !has('nvim')
     set ttyscroll=11
