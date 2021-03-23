@@ -73,7 +73,7 @@ function code() {
     if [[ ! -z $SVC"" ]]
     then
         # find the service
-        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/go/src/github.com/carousell/" ""
+        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/jek/" ""
         do
             if [[ -d $base$SVC ]]
             then
@@ -114,3 +114,7 @@ alias t='todo.sh'
 alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
+
+alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
