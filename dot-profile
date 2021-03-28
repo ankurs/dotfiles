@@ -75,7 +75,7 @@ function code() {
     if [[ ! -z $SVC"" ]]
     then
         # find the service
-        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/go/src/github.com/carousell/" ""
+        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/jek/" ""
         do
             if [[ -d $base$SVC ]]
             then
@@ -119,3 +119,5 @@ export NVM_DIR="$HOME/.nvm"
 
 CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 source "$HOME/.cargo/env"
+
+alias doroutes='sh $HOME/code/jek/vpn-tun.sh'

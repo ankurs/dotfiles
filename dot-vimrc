@@ -144,6 +144,7 @@ set termguicolors
 "colorscheme gruvbox
 "let g:gruvbox_contrast_dark="light"
 colorscheme OceanicNext
+"colorscheme deus
 
 set cursorline
 set expandtab
@@ -464,6 +465,7 @@ let g:terraform_registry_module_completion = 0
 "{{{ airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme='tomorrow'
+""let g:airline_theme='deus'
 ""}}}
 
 "{{{ jedi
