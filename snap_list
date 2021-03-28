@@ -3,3 +3,4 @@ slack --classic
 google-cloud-sdk --classic
 aws-cli --classic
 drawio
+bitwarden

@@ -118,3 +118,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
+source "$HOME/.cargo/env"
