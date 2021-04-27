@@ -114,7 +114,7 @@ Plug 'fszymanski/deoplete-emoji'
 Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
-Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+"Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'racer-rust/vim-racer'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
@@ -423,7 +423,7 @@ endif
 "}}}
 "
 "{{{ UltiSnips triggering
-let g:UltiSnipsExpandTrigger = '<C-j>'
+let g:UltiSnipsExpandTrigger = '<C-y>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 "}}}
@@ -515,7 +515,7 @@ call deoplete#custom#source('file', 'rank', 550)
 call deoplete#custom#source('LanguageClientSource', 'rank', 998)
 call deoplete#custom#source('ultisnips', 'rank', 999)
 call deoplete#custom#option({
-    \ 'auto_complete_delay': 100,
+    \ 'auto_complete_delay': 50,
     \ 'smart_case': v:false,
     \ })
 call deoplete#custom#option('omni_patterns', {'clojure': '[\w!$%&*+/:<=>?@\^_~\-\.#]*'})
@@ -547,9 +547,9 @@ let g:LanguageClient_serverCommands = {
     \ 'typescriptreact': ['javascript-typescript-stdio'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
-    \ 'go': ['gopls'],
     \ 'python' : ['pyls'],
     \ 'java' : ['~/code/java-lang/run.sh'],
+    \ 'go': ['gopls'],
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>
