@@ -118,6 +118,11 @@ Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'racer-rust/vim-racer'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 
+" UML
+Plug 'tyru/open-browser.vim'
+Plug 'aklt/plantuml-syntax'
+Plug 'weirongxu/plantuml-previewer.vim'
+
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
