@@ -67,7 +67,6 @@ Plug 'mdempsky/gocode', {'rtp': 'vim/'}
 Plug 'fatih/vim-go' , { 'do': ':GoUpdateBinaries' }
 Plug 'jodosha/vim-godebug'
 Plug 'sebdah/vim-delve'
-Plug 'juliosueiras/vim-terraform-completion'
 Plug 'saltstack/salt-vim' "for slat
 Plug 'thiderman/vim-supervisor' "for supervisor
 Plug 'davidhalter/jedi-vim'
@@ -110,7 +109,6 @@ endif
 " deoplete completers
 Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'deoplete-plugins/deoplete-docker'
-Plug 'fszymanski/deoplete-emoji'
 Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
@@ -537,7 +535,7 @@ set signcolumn=yes
 " npm i -g bash-language-server
 " pip install vim-vint
 " go get -u golang.org/x/tools/...
-" go get -u github.com/stamblerre/gocode
+" go get golang.org/x/tools/gopls@latest
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
@@ -551,6 +549,7 @@ let g:LanguageClient_serverCommands = {
     \ 'python' : ['pyls'],
     \ 'java' : ['~/code/java-lang/run.sh'],
     \ 'go': ['gopls'],
+    \ 'terraform': ['terraform-ls']
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>

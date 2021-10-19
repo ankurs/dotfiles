@@ -121,3 +121,11 @@ CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 source "$HOME/.cargo/env"
 
 alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
+
+function kill_falcon() {
+    ps aux | grep falcon.Agent | grep root | awk '{print $2}' | xargs sudo kill -9
+}
+
+function kill_falcon_always() {
+    sudo /bin/bash -c "while true; do ps aux | grep falcon.Agent | grep -v grep |grep root | awk '{print \$2}' | xargs kill -9 ; sleep 5; done"
+}
