@@ -154,7 +154,7 @@ set expandtab
 set modelines=0
 set shiftwidth=4
 set clipboard^=unnamed,unnamedplus
-set synmaxcol=250 " for those insanly long lines
+set synmaxcol=450 " for those insanly long lines
 if !has('nvim')
     set ttyscroll=11
 endif
@@ -549,6 +549,7 @@ let g:LanguageClient_serverCommands = {
     \ 'python' : ['pyls'],
     \ 'java' : ['~/code/java-lang/run.sh'],
     \ 'go': ['gopls'],
+    \ 'clojure': ['clojure-lsp'],
     \ 'terraform': ['terraform-ls']
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>

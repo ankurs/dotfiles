@@ -13,6 +13,8 @@ function setup_mac() {
     then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     fi
+    echo "disabling lowpri_throttle to speed up tasks like timemachine backup"
+    sudo sysctl debug.lowpri_throttle_enabled=0
     #brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
     cat ./brew_list | xargs -L 1 brew install

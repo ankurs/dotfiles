@@ -102,10 +102,10 @@ function enl_venv() {
     fi
 }
 
-if [[ -f $(command -v jenv) ]]
-then
-    eval "$(jenv init -)"
-fi
+#if [[ -f $(command -v jenv) ]]
+#then
+    #eval "$(jenv init -)"
+#fi
 
 #opam
 #test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
