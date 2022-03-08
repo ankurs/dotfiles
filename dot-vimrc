@@ -108,7 +108,7 @@ endif
 
 " deoplete completers
 Plug 'deoplete-plugins/deoplete-jedi'
-Plug 'deoplete-plugins/deoplete-docker'
+"Plug 'deoplete-plugins/deoplete-docker'
 Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'

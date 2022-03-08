@@ -8,6 +8,7 @@ cmake
 consul
 consul-template
 coreutils
+colima
 cscope
 csshx
 curl
