@@ -75,6 +75,7 @@ Plug 'sheerun/vim-polyglot' " Huge language pack
 Plug 'rust-lang/rust.vim'
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
 Plug 'derekwyatt/vim-scala'
+Plug 'dart-lang/dart-vim-plugin'
 "Plug 'guns/vim-clojure-static'
 "Plug 'tpope/vim-fireplace' , { 'for': 'clojure' }
 "Plug 'tpope/vim-salve' , { 'for': 'clojure' }

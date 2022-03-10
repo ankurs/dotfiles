@@ -43,6 +43,7 @@ jemalloc
 jenv
 jpeg
 jq
+k9s
 kafkacat
 kibana
 kubernetes-cli
