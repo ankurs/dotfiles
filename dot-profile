@@ -22,9 +22,11 @@ set_path "/bin"
 set_path "/usr/bin"
 set_path "/usr/local/bin"
 set_path "/usr/local/sbin"
-set_path "/opt/local/bin"
-set_path "opt/local/sbin"
+set_path "/opt/homebrew/bin"
+set_path "opt/homebrew/sbin"
 set_path "/usr/local/opt/gnu-sed/libexec/gnubin"
+
+set_path "~/code/k8s/istio-1.7.0/bin"
 
 export GOPATH="$HOME/code/go"
 export GOBIN="$GOPATH/bin"
@@ -35,6 +37,8 @@ set_path "$HOME/.gotools"
 set_path "$HOME/.cargo/bin"
 set_path "$HOME/.jenv/bin"
 set_path "$HOME/.node/bin"
+
+set_path "$HOME/.vim/plugged/vim-iced/bin"
 
 export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
 export MANPATH="$HOME/.node/share/man:$MANPATH"
@@ -71,7 +75,7 @@ function code() {
     if [[ ! -z $SVC"" ]]
     then
         # find the service
-        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/go/src/github.com/carousell/" ""
+        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/jek/" ""
         do
             if [[ -d $base$SVC ]]
             then
@@ -98,10 +102,10 @@ function enl_venv() {
     fi
 }
 
-if [[ -f $(command -v jenv) ]]
-then
-    eval "$(jenv init -)"
-fi
+#if [[ -f $(command -v jenv) ]]
+#then
+    #eval "$(jenv init -)"
+#fi
 
 #opam
 #test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
@@ -109,6 +113,19 @@ fi
 alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
 alias t='todo.sh'
-
+alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
+source "$HOME/.cargo/env"
+
+alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
+
+function kill_falcon() {
+    ps aux | grep falcon.Agent | grep root | awk '{print $2}' | xargs sudo kill -9
+}
+
+function kill_falcon_always() {
+    sudo /bin/bash -c "while true; do ps aux | grep falcon.Agent | grep -v grep |grep root | awk '{print \$2}' | xargs kill -9 ; sleep 5; done"
+}

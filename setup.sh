@@ -13,10 +13,13 @@ function setup_mac() {
     then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     fi
+    echo "disabling lowpri_throttle to speed up tasks like timemachine backup"
+    sudo sysctl debug.lowpri_throttle_enabled=0
     #brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
-    #cat ./brew_list | xargs -L 1 brew install
-    #cat ./brew_cask_list | xargs -L 1 brew cask install
+    cat ./brew_list | xargs -L 1 brew install
+    brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+    cat ./brew_cask_list | xargs -L 1 brew install
 }
 
 function setup_fedora() {
@@ -30,11 +33,13 @@ function setup_fedora() {
         sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
     fi
 
+    set +e
     grep -q -F 'fastestmirror=True' /etc/dnf/dnf.conf
     if [[ $? -ne 0 ]]
     then
       echo 'fastestmirror=True' | sudo sudo tee --append /etc/dnf/dnf.conf
     fi
+    set -e
     sudo dnf update-minimal -y
     echo "setting up Development Tools"
     sudo dnf groupinstall "Development Tools" -y

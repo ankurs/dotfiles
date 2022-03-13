@@ -4,8 +4,10 @@
 [url "git@github.com:"]
         insteadOf = https://github.com/
 [url "git@source.golabs.io:"]
-        insteadOf = https://source.golabs.io/
+        insteadOf = https://source.golabs.io
 [core]
     excludesfile = "$HOME/.gitignore"
 [pull]
 	rebase = false
+[init]
+	defaultBranch = main

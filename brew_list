@@ -7,9 +7,10 @@ bc
 cmake
 consul
 consul-template
+coreutils
+colima
 cscope
 csshx
-ctags
 curl
 cython
 erlang
@@ -42,6 +43,7 @@ jemalloc
 jenv
 jpeg
 jq
+k9s
 kafkacat
 kibana
 kubernetes-cli
@@ -96,6 +98,7 @@ protobuf
 prototool
 pyenv
 python
+qemu
 rainbarf
 readline
 reattach-to-user-namespace

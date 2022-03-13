@@ -27,6 +27,10 @@ if !has('nvim')
     Plug 'tpope/vim-sensible'
 endif
 
+if has('nvim')
+    Plug 'antoinemadec/FixCursorHold.nvim'
+endif
+
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
@@ -48,6 +52,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mileszs/ack.vim'
 Plug 'kien/rainbow_parentheses.vim'
 "Plug 'easymotion/vim-easymotion'
+Plug 'dbeniamine/todo.txt-vim'
+Plug 'kshenoy/vim-signature'
 
 " colorschemes
 Plug 'flazz/vim-colorschemes'
@@ -61,7 +67,6 @@ Plug 'mdempsky/gocode', {'rtp': 'vim/'}
 Plug 'fatih/vim-go' , { 'do': ':GoUpdateBinaries' }
 Plug 'jodosha/vim-godebug'
 Plug 'sebdah/vim-delve'
-Plug 'juliosueiras/vim-terraform-completion'
 Plug 'saltstack/salt-vim' "for slat
 Plug 'thiderman/vim-supervisor' "for supervisor
 Plug 'davidhalter/jedi-vim'
@@ -69,16 +74,23 @@ Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot' " Huge language pack
 Plug 'rust-lang/rust.vim'
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
+Plug 'derekwyatt/vim-scala'
+Plug 'dart-lang/dart-vim-plugin'
 "Plug 'guns/vim-clojure-static'
 "Plug 'tpope/vim-fireplace' , { 'for': 'clojure' }
 "Plug 'tpope/vim-salve' , { 'for': 'clojure' }
-Plug 'Olical/conjure', {'tag': 'v4.7.0'}
-Plug 'derekwyatt/vim-scala'
-"
-" Auto complete / Lint
+"Plug 'dgrnbrg/vim-redl', { 'for': 'clojure' }
+"Plug 'Olical/conjure', {'tag': 'v4.7.0'}
+"Plug 'bhurlow/vim-parinfer'
+Plug 'tpope/vim-sexp-mappings-for-regular-people', {'for': 'clojure'}
+Plug 'guns/vim-sexp',    {'for': 'clojure'}
+"Plug 'lambdalisue/fern.vim'
+Plug 'liquidz/vim-iced', {'for': 'clojure'}"
+Plug 'liquidz/vim-iced-function-list', {'for': 'clojure', 'on': 'IcedBrowseFunction'}
+"Plug 'liquidz/vim-iced-fern-debugger', {'for': 'clojure'}
 "Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
-Plug 'uber/prototool', { 'rtp':'vim/prototool' }
+Plug 'bufbuild/vim-buf'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 "Plug 'Valloric/YouCompleteMe' " -- use deoplete instead
@@ -97,15 +109,18 @@ endif
 
 " deoplete completers
 Plug 'deoplete-plugins/deoplete-jedi'
-Plug 'deoplete-plugins/deoplete-docker'
-Plug 'fszymanski/deoplete-emoji'
+"Plug 'deoplete-plugins/deoplete-docker'
 Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
-Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+"Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'racer-rust/vim-racer'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-"Plug 'clojure-vim/async-clj-omni'
+
+" UML
+Plug 'tyru/open-browser.vim'
+Plug 'aklt/plantuml-syntax'
+Plug 'weirongxu/plantuml-previewer.vim'
 
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -133,13 +148,14 @@ set termguicolors
 "colorscheme gruvbox
 "let g:gruvbox_contrast_dark="light"
 colorscheme OceanicNext
+"colorscheme deus
 
 set cursorline
 set expandtab
 set modelines=0
 set shiftwidth=4
-set clipboard=unnamedplus
-set synmaxcol=250 " for those insanly long lines
+set clipboard^=unnamed,unnamedplus
+set synmaxcol=450 " for those insanly long lines
 if !has('nvim')
     set ttyscroll=11
 endif
@@ -156,6 +172,7 @@ set smartcase
 set guifont=Monaco:h12
 set background=dark
 set t_Co=256
+set mmp=5000
 " for GVIM  -- but havent used in ages
 if has('gui_running')
     "remove menu and toolbar
@@ -228,7 +245,6 @@ set listchars=tab:▸\ ,eol:¬
 "{{{ tagbar
 nmap <leader>rt :TagbarToggle<CR>
 " auto open tagbar
-autocmd VimEnter * nested :call tagbar#autoopen(1)
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -395,12 +411,9 @@ autocmd FileType qf wincmd J
 set synmaxcol=192
 nnoremap <leader>mr :!./reinstall.sh<cr>
 
-" https://github.com/fatih/vim-go/blob/master/doc/vim-go.txt#L1626
-let g:go_gocode_propose_source = 0
-
 " set go path
 let $GOPATH = expand ('~/code/go')
-set runtimepath+=$GOPATH/src/github.com/golang/lint/misc/vim
+set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim
 
 if has('nvim')
     let g:go_term_mode = 'split'
@@ -409,7 +422,7 @@ endif
 "}}}
 "
 "{{{ UltiSnips triggering
-let g:UltiSnipsExpandTrigger = '<C-j>'
+let g:UltiSnipsExpandTrigger = '<C-y>'
 let g:UltiSnipsJumpForwardTrigger = '<C-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
 "}}}
@@ -456,6 +469,7 @@ let g:terraform_registry_module_completion = 0
 "{{{ airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme='tomorrow'
+""let g:airline_theme='deus'
 ""}}}
 
 "{{{ jedi
@@ -468,7 +482,8 @@ let g:jedi#usages_command = '<leader>u'
 let g:ale_linters = {
 \   'java': [''],
 \   'rust': ['rls'],
-\ 'clojure': ['clj-kondo', 'joker'],
+\   'clojure': ['clj-kondo', 'joker'],
+\   'proto': ['buf-check-lint',],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
@@ -478,12 +493,13 @@ let g:ale_fixers = {
 let g:ale_completion_tsserver_autoimport = 1
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
-let g:ale_completion_enabled = 0
-let g:ale_linters_explicit = 0
+let g:ale_completion_enabled = 1
+let g:ale_linters_explicit = 1
 "}}}
 
 "{{{ fzf
 nnoremap <silent> t :Files<cr>
+nnoremap <silent> bt :BTags<cr>
 "}}}
 
 " {{{ Deoplete
@@ -499,9 +515,10 @@ call deoplete#custom#source('file', 'rank', 550)
 call deoplete#custom#source('LanguageClientSource', 'rank', 998)
 call deoplete#custom#source('ultisnips', 'rank', 999)
 call deoplete#custom#option({
-    \ 'auto_complete_delay': 100,
+    \ 'auto_complete_delay': 50,
     \ 'smart_case': v:false,
     \ })
+call deoplete#custom#option('omni_patterns', {'clojure': '[\w!$%&*+/:<=>?@\^_~\-\.#]*'})
 "close the preview window after completion is done.
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
 " }}}
@@ -519,7 +536,7 @@ set signcolumn=yes
 " npm i -g bash-language-server
 " pip install vim-vint
 " go get -u golang.org/x/tools/...
-" go get -u github.com/stamblerre/gocode
+" go get golang.org/x/tools/gopls@latest
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
@@ -530,9 +547,11 @@ let g:LanguageClient_serverCommands = {
     \ 'typescriptreact': ['javascript-typescript-stdio'],
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
-    \ 'go': ['gopls'],
     \ 'python' : ['pyls'],
     \ 'java' : ['~/code/java-lang/run.sh'],
+    \ 'go': ['gopls'],
+    \ 'clojure': ['clojure-lsp'],
+    \ 'terraform': ['terraform-ls']
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>
@@ -546,4 +565,27 @@ let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
 
 " Run gofmt on save
 autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+" }}}
+"
+" {{{ todo.txt
+let g:Todo_txt_prefix_creation_date=1
+" }}}
+
+" {{{ Rainbow
+"
+function RB()
+    :RainbowParenthesesLoadRound
+    :RainbowParenthesesLoadBraces
+    :RainbowParenthesesActivate
+endfunction
+
+" start rainbow_parentheses on clojure files
+autocmd BufRead,BufNewFile * call RB()
+" }}}
+"
+" {{{ vim-iced
+let g:iced_enable_default_key_mappings = v:true
+let g:iced_enable_clj_kondo_analysis = v:true
+au FileType clojure nmap <Leader>gd :IcedDefJump<CR>
+"let g:iced#debug#debugger = 'fern'
 " }}}

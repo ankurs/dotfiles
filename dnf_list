@@ -9,6 +9,7 @@ xsel
 lshw
 golang
 opam
+freetype-devel
 steam
 ghostwriter
 xournalpp
