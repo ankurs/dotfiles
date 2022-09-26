@@ -8,10 +8,10 @@ then
         easy_install pip
     fi
 fi
-pip install pynvim bashate --user --upgrade
-pip install python-language-server[all] --user --upgrade
+pip3 install pynvim bashate --user --upgrade
+pip3 install python-language-server[all] --user --upgrade
 npm i -g typescript-language-server bash-language-server neovim --upgrade
-pip install vim-vint --user --upgrade
+pip3 install vim-vint --user --upgrade
 go get -u golang.org/x/tools/...
 go get -u github.com/stamblerre/gocode
 
