@@ -31,4 +31,6 @@ pip install neovim --user --upgrade
 pip3 install neovim --user --upgrade
 python3 -m pip install neovim --user --upgrade
 
+npm install vls -g
+npm i -g eslint eslint-plugin-vue
 #brew install borkdude/brew/clj-kondo

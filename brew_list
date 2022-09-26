@@ -9,6 +9,7 @@ consul
 consul-template
 coreutils
 colima
+cookiecutter
 cscope
 csshx
 curl
@@ -84,6 +85,7 @@ nettle
 nghttp2
 nmap
 node
+nvm
 openjdk
 openssl
 pandoc

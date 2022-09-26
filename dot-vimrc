@@ -93,6 +93,8 @@ Plug 'dense-analysis/ale'
 Plug 'bufbuild/vim-buf'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'posva/vim-vue'
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 "Plug 'Valloric/YouCompleteMe' " -- use deoplete instead
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -116,6 +118,7 @@ Plug 'Shougo/neco-syntax'
 "Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'racer-rust/vim-racer'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+Plug 'github/copilot.vim'
 
 " UML
 Plug 'tyru/open-browser.vim'
@@ -282,6 +285,10 @@ let g:tagbar_type_xslt = {
 \}
 "}}}
 
+"{{{
+let g:prettier#config#tab_width = '2'
+"}}}'
+
 "{{{ VimWiki
 " use markdown with vimwiki and let it sync across devices
 " set wiki for work
@@ -390,7 +397,7 @@ let g:go_fmt_command = 'goimports'
 "let g:go_snippet_engine = 'neosnippet'
 let g:go_bin_path = expand('~/.gotools')
 let g:go_list_type = 'quickfix'
-let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'golangci-lint']
 let g:go_auto_type_info = 1
 " syntax highlighting
 let g:go_highlight_functions = 1
@@ -484,6 +491,8 @@ let g:ale_linters = {
 \   'rust': ['rls'],
 \   'clojure': ['clj-kondo', 'joker'],
 \   'proto': ['buf-check-lint',],
+\   'javascript': ['eslint'],
+\   'vue': ['eslint'],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
@@ -551,7 +560,8 @@ let g:LanguageClient_serverCommands = {
     \ 'java' : ['~/code/java-lang/run.sh'],
     \ 'go': ['gopls'],
     \ 'clojure': ['clojure-lsp'],
-    \ 'terraform': ['terraform-ls']
+    \ 'terraform': ['terraform-ls'],
+    \ 'vue': ['vls']
     \ }
 nnoremap <leader>l :call LanguageClient_contextMenu()<CR>
 nnoremap <leader>h :call LanguageClient_textDocument_hover()<CR>
