@@ -42,7 +42,7 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'rking/ag.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
-Plug 'bronson/vim-trailing-whitespace'
+Plug 'ntpeters/vim-better-whitespace'
 Plug 'preservim/nerdcommenter'
 Plug 'Yggdroot/indentLine'
 "Plug 'kien/tabman.vim' " Tab management
@@ -72,7 +72,7 @@ Plug 'thiderman/vim-supervisor' "for supervisor
 Plug 'davidhalter/jedi-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'sheerun/vim-polyglot' " Huge language pack
-Plug 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 "Plug 'dansomething/vim-eclim' " Eclipse - replace with lang server?
 Plug 'derekwyatt/vim-scala'
 Plug 'dart-lang/dart-vim-plugin'
@@ -100,6 +100,11 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
+
+" Language servers
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
+Plug 'neovim/nvim-lspconfig'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -488,7 +493,7 @@ let g:jedi#usages_command = '<leader>u'
 "{{{ ALE
 let g:ale_linters = {
 \   'java': [''],
-\   'rust': ['rls'],
+\   'rust': ['rust-analyzer', "cargo clippy"],
 \   'clojure': ['clj-kondo', 'joker'],
 \   'proto': ['buf-check-lint',],
 \   'javascript': ['eslint'],
@@ -546,8 +551,10 @@ set signcolumn=yes
 " pip install vim-vint
 " go get -u golang.org/x/tools/...
 " go get golang.org/x/tools/gopls@latest
+
+    " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+   \  'rust': ['rust-analyzer'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'javascriptreact': ['javascript-typescript-stdio'],

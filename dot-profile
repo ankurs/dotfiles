@@ -134,3 +134,8 @@ function kill_falcon_always() {
 func set_pkg_config () {
     export PKG_CONFIG_PATH=$(find /opt/homebrew/Cellar -name 'pkgconfig' -type d | grep lib/pkgconfig | tr '\n' ':' | sed s/.$//)
 }
+
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
