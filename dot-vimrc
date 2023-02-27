@@ -106,6 +106,9 @@ Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 
+" code completers
+Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -605,4 +608,17 @@ let g:iced_enable_default_key_mappings = v:true
 let g:iced_enable_clj_kondo_analysis = v:true
 au FileType clojure nmap <Leader>gd :IcedDefJump<CR>
 "let g:iced#debug#debugger = 'fern'
+" }}}
+"
+" {{{ Tab nine
+lua <<EOF
+require('tabnine').setup({
+  disable_auto_comment=true,
+  accept_keymap="<C-[>",
+  dismiss_keymap = "<C-]>",
+  debounce_ms = 800,
+  suggestion_color = {gui = "#FF0000", cterm = 244},
+  exclude_filetypes = {"TelescopePrompt"}
+})
+EOF
 " }}}
