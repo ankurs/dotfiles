@@ -95,11 +95,13 @@ then
     mkdir -p ~/.config/sway
     mkdir -p ~/.config/waybar
     mkdir -p ~/.config/wofi
+    mkdir -p ~/.config/swaylock
     PWD=`pwd`
     ln -s -i $PWD/sway-config ~/.config/sway/config
     ln -s -i $PWD/waybar-config ~/.config/waybar/config
     ln -s -i $PWD/waybar-style.css ~/.config/waybar/style.css
     ln -s -i $PWD/wofi-styles.css ~/.config/wofi/styles.css
+    ln -s -i $PWD/swaylock.conf ~/.config/swaylock/config
     sudo dnf install sway swayidle swaylock swaybg nwg-launchers nwg-panel rofi waybar wofi -y
 fi
 
