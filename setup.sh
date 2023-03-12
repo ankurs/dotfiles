@@ -17,22 +17,13 @@ function setup_mac() {
     sudo sysctl debug.lowpri_throttle_enabled=0
     #brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
-    cat ./brew_list | xargs -L 1 brew install
+    cat ./brew_list | xargs -L 10 brew install
     brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-    cat ./brew_cask_list | xargs -L 1 brew install
+    cat ./brew_cask_list | xargs -L 5 brew install
 }
 
 function setup_fedora() {
-    if [[ -z $UPDATE ]]
-    then
-        echo "Setting up Fedora"
-        sudo systemctl enable sshd
-        sudo systemctl start sshd
-        echo "setting up RPM Fusion"
-        sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
-        sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
-    fi
-
+    echo "Setting up Fedora"
     set +e
     grep -q -F 'fastestmirror=True' /etc/dnf/dnf.conf
     if [[ $? -ne 0 ]]
@@ -40,22 +31,28 @@ function setup_fedora() {
       echo 'fastestmirror=True' | sudo sudo tee --append /etc/dnf/dnf.conf
     fi
     set -e
-    sudo dnf update-minimal -y
-    echo "setting up Development Tools"
-    sudo dnf groupinstall "Development Tools" -y
-    sudo dnf install cmake make python-devel vim zsh gcc-c++ -y
-    echo "installing snap"
-    sudo dnf install -y snapd
-    sudo ln -s -i /var/lib/snapd/snap /snap
-    cat ./dnf_list | xargs -L 10 sudo dnf install -y
-    echo "waiting for snap to seed"
-    sudo snap wait system seed.loaded
-    cat ./snap_list | xargs -L 1 sudo snap install
 
-    echo "setting up awesome wm"
-    sudo cp ./fedora/sp /usr/local/bin/
-    ln -s -i `pwd`/awesome ~/.config/awesome
-    ln -s -i `pwd`/fedora/dot-Xresources ~/.Xresources
+    if [[ -z $UPDATE ]]
+    then
+        sudo systemctl enable sshd
+        sudo systemctl start sshd
+        echo "setting up RPM Fusion"
+        sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+        sudo dnf groupupdate core -y
+        sudo dnf update-minimal -y
+        echo "setting up Development Tools"
+        sudo dnf groupinstall "Development Tools" -y
+        sudo dnf install cmake make python-devel vim neovim zsh gcc-c++ -y
+        echo "installing snap"
+        sudo dnf install -y snapd
+        sudo ln -s -i /var/lib/snapd/snap /snap
+        echo "waiting for snap to seed"
+        sudo snap wait system seed.loaded
+    fi
+
+    cat ./dnf_list | xargs -L 20 sudo dnf install -y
+    #cat ./snap_list | xargs -L 1 sudo snap install
+
     bash -e fedora_post_setup.sh
 }
 
@@ -70,13 +67,21 @@ function do_setup() {
         if [[ -f /etc/os-release ]]
         then
             source /etc/os-release
-            if [[ $NAME == "Fedora" ]]
+            if [[ $NAME == "Fedora Linux" ]]
             then
                 setup_fedora
             fi
         fi
     fi
 }
+
+if [[ ! -f $HOME/.ssh/id_rsa.pub ]]
+then
+    ssh-keygen -t rsa
+fi
+
+cat $HOME/.ssh/id_rsa.pub
+read -p "Please make sure github is updated with the ssh key of this system" discard
 
 git submodule init
 git submodule update --init --recursive
@@ -107,11 +112,11 @@ fi
 
 do_setup
 
-bash ./setup_lang_server.sh
-
 npm i -g neovim --upgrade
 gem install neovim
 nvim +PlugInstall +qall
 ## install java 1.8
 #jabba install zulu@1.8
 nvim '+PlugClean!' +PlugUpdate +PlugUpgrade +qall
+
+bash ./setup_lang_server.sh

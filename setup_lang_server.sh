@@ -12,10 +12,8 @@ pip3 install pynvim bashate --user --upgrade
 pip3 install python-language-server[all] --user --upgrade
 npm i -g typescript-language-server bash-language-server neovim --upgrade
 pip3 install vim-vint --user --upgrade
-go get -u golang.org/x/tools/...
-go get -u github.com/stamblerre/gocode
 
-curl -fLo ~/.java-lang-server/jdt-language-server-latest.tar.gz --create-dir http://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz
+#curl -fLo ~/.java-lang-server/jdt-language-server-latest.tar.gz --create-dir http://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz
 
 PATH="$HOME/.cargo/bin:$PATH"
 if [[ ! -x $(which rustup) ]]
@@ -24,7 +22,7 @@ then
 fi
 rustup toolchain add nightly
 cargo +nightly install racer
-rustup default nightly
+#rustup default nightly
 
 gem install neovim
 pip install neovim --user --upgrade
@@ -33,4 +31,3 @@ python3 -m pip install neovim --user --upgrade
 
 npm install vls -g
 npm i -g eslint eslint-plugin-vue
-#brew install borkdude/brew/clj-kondo

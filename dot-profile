@@ -119,7 +119,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
-source "$HOME/.cargo/env"
 
 alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
 
@@ -139,3 +138,4 @@ if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
+. "$HOME/.cargo/env"
