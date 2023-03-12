@@ -139,3 +139,4 @@ then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
 . "$HOME/.cargo/env"
+export WLR_NO_HARDWARE_CURSORS=1

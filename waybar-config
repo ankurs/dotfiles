@@ -1,0 +1,166 @@
+{ 
+
+    "modules-left": ["sway/window", "sway/mode"],
+    "modules-center": ["sway/workspaces"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "pulseaudio#mic", "network#vpn", "network", "battery", "clock", "tray"],
+
+    "sway/window": {
+        "format": "{}",
+        "max-length": 50,
+        "rewrite": {
+            "": "\uf015  ",
+            "(.*) - Visual Studio Code": "\uf121  $1",
+            "(.*) - Brave": "\uf268  $1",
+            "xterm-kitty - (.*)": "\uf120  $1",
+            "(.*) — Mozilla Firefox": "\ue007  $1",
+            "Mozilla Firefox": "\ue007  Mozilla Firefox",
+            "xterm-kitty - (.*)": "\uf120  $1",
+            "(.*) - VIM": "\uf036  $1",
+            "Telegram (.*)": "\uf2c6  $1",
+            "(.*) - TextMaker": "\uf1c2  $1",
+            "(.*) - PlanMaker": "\uf1c3  $1",
+            "(.*) - Presentations": "\uf1c4  $1",
+            "/(.*)": "\uf07b  /$1",
+            "ymuse": "\uf001  Ymuse",
+            "(.*) — 1Password": "\uf023  $1",
+            "Postman": "\uf6cc  Postman",
+            "Volume Control": "\uf027  Volume Control",
+            "Input Method Configuration": "\uf11c  Input Method Configuration",
+            "imv - (.*)": "\uf1c5  $1",
+            "(.*) - mpv": "\uf03d  $1",
+            "smb://(.*)": "\uf6ff  $1",
+            "network:///": "\uf6ff  ",
+            "trash:///": "\uf2f8  ",
+            "mtp:/(.*)": "\uf3cd  $1",
+            "afc:/(.*)": "\uf3cd  $1",
+            "computer:///": "\uf108  ",
+            "ncmpcpp (.*)": "\uf001   ncmpcpp"
+        }
+    },
+        
+    "sway/workspaces": {
+         "disable-scroll": true,
+         "all-outputs": true,
+         "format": "{value}",
+         "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9",
+            "10": "", 
+            "urgent": ": ",
+            "focused": "",
+            "default": ""
+         }
+    },
+
+    "sway/mode": {
+        "format": "\uf054 {}"
+    },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {title}",
+        "format-disconnected": "",
+        "format-stopped": "\uf3b5",
+        "unknown-tag": "N/A",
+        "interval": 2,
+        "consume-icons": {
+            "on": " "
+
+        },
+        "random-icons": {
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "on-click": "pkill ncmpcpp; kitty -e ncmpcpp",
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "\uf0f4",
+            "deactivated": "\uf0f4"
+        }
+    },
+    "tray": {
+ 
+        "spacing": 10,
+        "show-passive-items": true
+    },
+    "clock": {
+   
+        "format": "{:\uf017 %H:%M}",
+        "format-alt": "{:\uf133 %A, %d %B, %Y}",
+        "tooltip-format": "<big>{:%d %B, %Y}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+
+    "network": {
+        "interval": 5,
+        "format-wifi": "\uf1eb",
+        "format-ethernet": "\uf796",
+        "format-disconnected": "\uf127  Offline",
+        "tooltip-format": "{ifname}: {ipaddr}",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%): {ipaddr}"
+    },
+    "network#vpn": {
+      "interval": 5,
+      "interface": "tun0",
+      "format": "\uf3ed",
+      "format-disconnected": "",
+      "tooltip-format": "VPN Connected: {ipaddr}"
+  },
+    "pulseaudio": {
+        "scroll-step": 1,
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-bluetooth-muted": " {icon}",
+        "format-muted": "",
+        "format-source": "",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pkill pulsemixer; kitty -e pulsemixer"
+    },
+    "pulseaudio#mic": {
+        "format": "{format_source}",
+        "format-source": "",
+        "format-source-muted": "",
+        "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+        "tooltip": false
+    }
+}

@@ -89,3 +89,17 @@ then
     bash -e fedora/minikube.sh
 fi
 
+read -p "Do you wish to install Sway [y/N]? " sway
+if [[ x$sway == xy || x$sway == xY ]]
+then
+    mkdir -p ~/.config/sway
+    mkdir -p ~/.config/waybar
+    mkdir -p ~/.config/wofi
+    PWD=`pwd`
+    ln -s -i $PWD/sway-config ~/.config/sway/config
+    ln -s -i $PWD/waybar-config ~/.config/waybar/config
+    ln -s -i $PWD/waybar-style.css ~/.config/waybar/style.css
+    ln -s -i $PWD/wofi-styles.css ~/.config/wofi/styles.css
+    sudo dnf install sway swayidle swaylock swaybg nwg-launchers nwg-panel rofi waybar wofi -y
+fi
+

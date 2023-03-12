@@ -50,10 +50,14 @@ function setup_fedora() {
         sudo snap wait system seed.loaded
     fi
 
+    sudo dnf upgrade -y
     cat ./dnf_list | xargs -L 20 sudo dnf install -y
     #cat ./snap_list | xargs -L 1 sudo snap install
 
-    bash -e fedora_post_setup.sh
+    if [[ -z $UPDATE ]]
+    then
+        bash -e fedora_post_setup.sh
+    fi
 }
 
 function do_setup() {
