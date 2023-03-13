@@ -14,12 +14,19 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty
+set $term alacritty --class terminal
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-#set $menu exec rofi -show drun -show-icons
+set $menuR exec rofi -show run -show-icons
 set $menu exec wofi --show drun -G -i --allow-images -s ~/.config/wofi/styles.css
+
+set $powermenu wlogout \
+  --buttons-per-row 2 \
+  --row-spacing 34 \
+  --column-spacing 34 \
+  --margin 34 \
+  --protocol layer-shell
 
 ### Output configuration
 #
@@ -71,6 +78,11 @@ output * bg /usr/share/backgrounds/default.png fill
 
     # Start your launcher
     bindsym $mod+d exec $menu
+    bindsym $mod+Shift+d exec $menuR
+
+    # lock system
+    bindsym $mod+Shift+b exec swaylock -c 000000 -f -F
+    bindsym $mod+Backspace exec $powermenu | xargs swaymsg exec
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -135,6 +147,11 @@ output * bg /usr/share/backgrounds/default.png fill
     bindsym $mod+Shift+0 move container to workspace number 10
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
+    bindsym $mod+Tab workspace next_on_output
+    bindsym $mod+Shift+Tab workspace prev_on_output
+    bindsym Alt+Tab workspace next_on_output
+    bindsym Alt+Shift+Tab workspace prev_on_output
+
 #
 # Layout stuff:
 #
@@ -197,6 +214,10 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+# Fullscreen windows inhibits idle
+for_window [class="^.*"] inhibit_idle fullscreen
+for_window [app_id="^.*"] inhibit_idle fullscreen
+
 #
 # Status Bar:
 #
@@ -204,15 +225,6 @@ bindsym $mod+r mode "resize"
 bar {
     position top
     swaybar_command waybar
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    #status_command while date +'%Y-%m-%d %I:%M:%S %p'; do sleep 1; done
-
-    #colors {
-        #statusline #ffffff
-        #background #323232
-        #inactive_workspace #32323200 #32323200 #5c5c5c
-    #}
 }
 
 ### Styling
@@ -231,5 +243,7 @@ bar {
   client.unfocused          #1d1f2166   #1d1f2188   #ffffff     #000000ee   #1d1f2166
   client.focused_inactive   #c5c8c644   #1d1f2199   #ffffff     #ffffff88   #c5c8c644
   client.background         #1d1f21f2
+
+## Start
 
 include /etc/sway/config.d/*

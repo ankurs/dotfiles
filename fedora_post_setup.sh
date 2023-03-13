@@ -102,6 +102,6 @@ then
     ln -s -i $PWD/waybar-style.css ~/.config/waybar/style.css
     ln -s -i $PWD/wofi-styles.css ~/.config/wofi/styles.css
     ln -s -i $PWD/swaylock.conf ~/.config/swaylock/config
-    sudo dnf install sway swayidle swaylock swaybg nwg-launchers nwg-panel rofi waybar wofi -y
+    sudo dnf install sway swayidle swaylock swaybg nwg-launchers nwg-panel rofi waybar wofi wlogout -y
 fi
 
