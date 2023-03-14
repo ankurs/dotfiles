@@ -107,7 +107,9 @@ Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 
 " code completers
-Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+if has('brew')
+    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+endif
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -123,9 +125,10 @@ Plug 'deoplete-plugins/deoplete-jedi'
 Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
-"Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'racer-rust/vim-racer'
-Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+if has('brew')
+    Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+endif
 Plug 'github/copilot.vim'
 
 " UML
@@ -611,6 +614,7 @@ au FileType clojure nmap <Leader>gd :IcedDefJump<CR>
 " }}}
 "
 " {{{ Tab nine
+if has('brew')
 lua <<EOF
 require('tabnine').setup({
   disable_auto_comment=true,
@@ -621,4 +625,5 @@ require('tabnine').setup({
   exclude_filetypes = {"TelescopePrompt"}
 })
 EOF
+endif
 " }}}

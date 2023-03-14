@@ -2,7 +2,7 @@
 
     "modules-left": ["sway/window", "sway/mode"],
     "modules-center": ["sway/workspaces"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "pulseaudio#mic", "network#vpn", "network", "battery", "clock", "tray"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "pulseaudio#mic", "network#vpn", "network", "battery", "clock", "custom/notification", "tray"],
 
     "sway/window": {
         "format": "{}",
@@ -162,5 +162,25 @@
         "format-source-muted": "",
         "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
         "tooltip": false
+    },
+    "custom/notification": {
+    "tooltip": false,
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "<span foreground='red'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
     }
 }

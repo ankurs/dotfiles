@@ -103,5 +103,13 @@ then
     ln -s -i $PWD/wofi-styles.css ~/.config/wofi/styles.css
     ln -s -i $PWD/swaylock.conf ~/.config/swaylock/config
     sudo dnf install sway swayidle swaylock swaybg nwg-launchers nwg-panel rofi waybar wofi wlogout -y
+    sudo dnf copr enable erikreider/SwayNotificationCenter
+    sudo dnf install SwayNotificationCenter
 fi
+#cat  /usr/share/wayland-sessions/sway.desktop
+#[Desktop Entry]
+#Name=Sway
+#Comment=An i3-compatible Wayland compositor
+#Exec=env WLR_NO_HARDWARE_CURSORS=1 WLR_RENDERER=pixman sway
+#Type=Application
 

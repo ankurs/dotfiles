@@ -133,3 +133,7 @@ window > box {
 #tray > .needs-attention {
   -gtk-icon-effect: highlight;
 }
+
+#custom-notification {
+  font-family: "NotoSansMono Nerd Font";
+}
