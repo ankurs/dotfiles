@@ -110,6 +110,5 @@ fi
 #[Desktop Entry]
 #Name=Sway
 #Comment=An i3-compatible Wayland compositor
-#Exec=env WLR_NO_HARDWARE_CURSORS=1 WLR_RENDERER=pixman sway
+#Exec=env WLR_NO_HARDWARE_CURSORS=1 sway
 #Type=Application
-

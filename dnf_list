@@ -47,3 +47,6 @@ texlive
 ruby-devel
 rubygems
 alacritty
+google-cloud-sdk
+google-cloud-sdk-gke-gcloud-auth-plugin
+chromium-freeworld

@@ -24,6 +24,7 @@ set $menu exec wofi --show drun -G -i --allow-images -s ~/.config/wofi/styles.cs
 set $res1 output Virtual-1 resolution 2560x1440 position 0 0 scale 1.0
 set $res2 output Virtual-1 resolution 1920x1200 position 0 0 scale 1.0
 set $res3 output Virtual-1 resolution 1920x1080 position 0 0 scale 1.0
+set $res4 output Virtual-1 resolution 2048x1152 position 0 0 scale 1.0
 
 set $powermenu wlogout \
   --buttons-per-row 2 \
@@ -258,6 +259,8 @@ bindsym XF86Search exec $menu
 bindsym $mod+Alt+1 exec swaymsg $res1
 bindsym $mod+Alt+2 exec swaymsg $res2
 bindsym $mod+Alt+3 exec swaymsg $res3
+bindsym $mod+Alt+4 exec swaymsg $res4
+
 
 #
 # Status Bar:

@@ -20,7 +20,8 @@ if [[ ! -x $(which rustup) ]]
 then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
-rustup toolchain add nightly
+rustup component add rust-src
+rustup component add rust-analyzer
 cargo +nightly install racer
 #rustup default nightly
 
