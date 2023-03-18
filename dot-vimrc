@@ -128,8 +128,8 @@ Plug 'Shougo/neco-syntax'
 Plug 'racer-rust/vim-racer'
 if has('brew')
     Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+    Plug 'github/copilot.vim'
 endif
-Plug 'github/copilot.vim'
 
 " UML
 Plug 'tyru/open-browser.vim'
