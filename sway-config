@@ -25,7 +25,7 @@ set $res1 output Virtual-1 resolution 2560x1440 position 0 0 scale 1.0
 set $res2 output Virtual-1 resolution 1920x1200 position 0 0 scale 1.0
 set $res3 output Virtual-1 resolution 1920x1080 position 0 0 scale 1.0
 set $res4 output Virtual-1 resolution 2048x1152 position 0 0 scale 1.0
-set $res8 output Virtual-2 resolution 1920x1200 position 0 0 scale 1.0, output Virtual-1 resolution 1920x080 position 1920 0 scale 1.0
+set $res8 output Virtual-2 resolution 1920x1200 position 0 0 scale 1.0, output Virtual-1 resolution 1920x1080 position 1920 0 scale 1.0
 set $res9 output Virtual-2 resolution 1920x1200 position 0 0 scale 1.0, output Virtual-1 resolution 2560x1440 position 1920 0 scale 1.0
 set $toggle-v2 output Virtual-2 toggle
 
@@ -296,6 +296,7 @@ bar {
 ## exec
 exec swaync
 exec variety
+exec brave-browser -enable-features=UseOzonePlatform --ozone-platform=wayland
 
 ## Start
 

@@ -76,7 +76,7 @@ function code() {
     if [[ ! -z $SVC"" ]]
     then
         # find the service
-        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/jek/" ""
+        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/go/src/github.com/ankurs/" "$HOME/code/jek/" "" "$HOME/code/ColdBrew/"
         do
             if [[ -d $base$SVC ]]
             then

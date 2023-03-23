@@ -102,7 +102,7 @@ then
     ln -s -i $PWD/waybar-style.css ~/.config/waybar/style.css
     ln -s -i $PWD/wofi-styles.css ~/.config/wofi/styles.css
     ln -s -i $PWD/swaylock.conf ~/.config/swaylock/config
-    sudo dnf install sway swayidle swaylock swaybg nwg-launchers nwg-panel rofi waybar wofi wlogout grim slurp -y
+    sudo dnf install sway swayidle swaylock swaybg nwg-launchers nwg-panel rofi waybar wofi wlogout grim slurp wdisplays -y
     sudo dnf copr enable erikreider/SwayNotificationCenter
     sudo dnf install SwayNotificationCenter
 fi
@@ -112,3 +112,4 @@ fi
 #Comment=An i3-compatible Wayland compositor
 #Exec=env WLR_NO_HARDWARE_CURSORS=1 sway
 #Type=Application
+# xhci_hcd.quirks=0x40
