@@ -27,14 +27,11 @@ set_path "/opt/homebrew/bin"
 set_path "opt/homebrew/sbin"
 set_path "/usr/local/opt/gnu-sed/libexec/gnubin"
 
-set_path "~/code/k8s/istio-1.7.0/bin"
-
 export GOPATH="$HOME/code/go"
-export GOBIN="$GOPATH/bin"
+export GOBIN="$HOME/.gotools"
 
 set_path "$HOME/.local/bin"
 set_path "$GOBIN"
-set_path "$HOME/.gotools"
 set_path "$HOME/.cargo/bin"
 set_path "$HOME/.jenv/bin"
 set_path "$HOME/.node/bin"
@@ -108,9 +105,6 @@ function enl_venv() {
     #eval "$(jenv init -)"
 #fi
 
-#opam
-#test -r $HOME/.opam/opam-init/init.zsh && . $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-#alias gdrive='google-drive-ocamlfuse ~/GoogleDrive/My\ Drive -o nonempty'
 alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
 alias t='todo.sh'

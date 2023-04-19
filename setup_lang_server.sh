@@ -13,7 +13,38 @@ pip3 install python-language-server[all] --user --upgrade
 npm i -g typescript-language-server bash-language-server neovim --upgrade
 pip3 install vim-vint --user --upgrade
 
-#curl -fLo ~/.java-lang-server/jdt-language-server-latest.tar.gz --create-dir http://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz
+if [[ ! -d ~/.java-lang-server ]]
+then
+    mkdir ~/.java-lang-server
+    mkdir ~/.java-lang-server/data
+    curl -fLo ~/.java-lang-server/jdt-language-server-latest.tar.gz --create-dir http://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz
+
+    cd ~/.java-lang-server
+    tar -xvzf jdt-language-server-latest.tar.gz
+    rm jdt-language-server-latest.tar.gz
+    cd -
+
+    # make run.sh
+    dist="linux"
+    if [[ $(uname) = 'Darwin' ]]
+    then
+        dist="mac"
+    fi
+    run="java \
+	-Declipse.application=org.eclipse.jdt.ls.core.id1 \
+	-Dosgi.bundles.defaultStartLevel=4 \
+	-Declipse.product=org.eclipse.jdt.ls.core.product \
+	-Dlog.level=ALL \
+	-Xmx1G \
+	--add-modules=ALL-SYSTEM \
+	--add-opens java.base/java.util=ALL-UNNAMED \
+	--add-opens java.base/java.lang=ALL-UNNAMED \
+    -jar ~/.java-lang-server/plugins/$(ls ~/.java-lang-server/plugins | grep org.eclipse.equinox.launcher_) \
+    -configuration ./config_$dist \
+    -data ~/.java-lang-server/data"
+    echo $run > ~/.java-lang-server/run.sh
+    chmod +x ~/.java-lang-server/run.sh
+fi
 
 PATH="$HOME/.cargo/bin:$PATH"
 if [[ ! -x $(which rustup) ]]
@@ -22,7 +53,7 @@ then
 fi
 rustup component add rust-src
 rustup component add rust-analyzer
-cargo +nightly install racer
+#cargo +nightly install racer
 #rustup default nightly
 
 gem install neovim

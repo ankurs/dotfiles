@@ -11,6 +11,7 @@ freetype-devel
 ghostwriter
 most
 neovim
+neofetch
 hugo
 rsyslog fail2ban sendmail
 util-linux-user
@@ -50,3 +51,5 @@ alacritty
 google-cloud-sdk
 google-cloud-sdk-gke-gcloud-auth-plugin
 chromium-freeworld
+gnome-shell-extension-pop-shell
+xprop

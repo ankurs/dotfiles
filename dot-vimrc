@@ -91,7 +91,7 @@ Plug 'liquidz/vim-iced-function-list', {'for': 'clojure', 'on': 'IcedBrowseFunct
 "Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
 Plug 'bufbuild/vim-buf'
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'posva/vim-vue'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
@@ -107,9 +107,10 @@ Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 
 " code completers
-if has('brew')
-    Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
+if executable('brew')
+    "Plug 'codota/tabnine-nvim', { 'do': './dl_binaries.sh' }
 endif
+Plug 'github/copilot.vim'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -126,9 +127,8 @@ Plug 'deoplete-plugins/deoplete-zsh'
 "Plug 'ujihisa/neco-look'
 Plug 'Shougo/neco-syntax'
 Plug 'racer-rust/vim-racer'
-if has('brew')
-    Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
-    Plug 'github/copilot.vim'
+if executable('brew')
+    "Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 endif
 
 " UML
@@ -300,6 +300,12 @@ let g:tagbar_type_xslt = {
 let g:prettier#config#tab_width = '2'
 "}}}'
 
+"{{{ copilot
+imap <silent><script><expr> <C-J> copilot#Accept("")
+let g:copilot_no_tab_map = v:true
+""let g:copilot_assume_mapped = v:true
+"}}}
+
 "{{{ VimWiki
 " use markdown with vimwiki and let it sync across devices
 " set wiki for work
@@ -380,15 +386,6 @@ let g:vim_json_warnings=1
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
-"}}}
-
-"{{{ Eclim
-let g:EclimCompletionMethod = 'omnifunc'
-let g:EclimJavaCallHierarchyDefaultAction = 'edit'
-let g:EclimJavaNewOpenAction = 'edit'
-let g:EclimJavaSearchSingleResult = 'edit'
-let g:EclimLoggingDisabled = 1
-nnoremap <leader>jd :JavaSearch<cr>
 "}}}
 
 "{{{ vim-go
@@ -530,7 +527,7 @@ inoremap <expr><Tab> pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 call deoplete#custom#source('_', 'min_pattern_length', 1)
-call deoplete#custom#source('tabnine', 'rank', 80)
+"call deoplete#custom#source('tabnine', 'rank', 80)
 call deoplete#custom#source('file', 'rank', 550)
 call deoplete#custom#source('LanguageClientSource', 'rank', 998)
 call deoplete#custom#source('ultisnips', 'rank', 999)
@@ -570,7 +567,7 @@ let g:LanguageClient_serverCommands = {
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'python' : ['pyls'],
-    \ 'java' : ['~/code/java-lang/run.sh'],
+    \ 'java' : [expand('~./java-lang-server/run.sh')],
     \ 'go': ['gopls'],
     \ 'clojure': ['clojure-lsp'],
     \ 'terraform': ['terraform-ls'],
@@ -614,16 +611,16 @@ au FileType clojure nmap <Leader>gd :IcedDefJump<CR>
 " }}}
 "
 " {{{ Tab nine
-if has('brew')
-lua <<EOF
-require('tabnine').setup({
-  disable_auto_comment=true,
-  accept_keymap="<C-[>",
-  dismiss_keymap = "<C-]>",
-  debounce_ms = 800,
-  suggestion_color = {gui = "#FF0000", cterm = 244},
-  exclude_filetypes = {"TelescopePrompt"}
-})
-EOF
-endif
+"if executable('brew')
+"lua <<EOF
+"require('tabnine').setup({
+  "disable_auto_comment=true,
+  "accept_keymap="<C-[>",
+  "dismiss_keymap = "<C-]>",
+  "debounce_ms = 800,
+  "suggestion_color = {gui = "#FF0000", cterm = 244},
+  "exclude_filetypes = {"TelescopePrompt"}
+"})
+"EOF
+"endif
 " }}}

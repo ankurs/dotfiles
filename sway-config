@@ -36,6 +36,10 @@ set $powermenu wlogout \
   --margin 34 \
   --protocol layer-shell
 
+## Fonts
+
+font pango:monospace 11
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -235,6 +239,8 @@ bindsym $mod+r mode "resize"
 # swaync
 bindsym $mod+shift+n exec swaync-client -t -sw
 
+bindsym $mod+Alt+w exec variety -n
+
 # Fullscreen windows inhibits idle
 for_window [class="^.*"] inhibit_idle fullscreen
 for_window [app_id="^.*"] inhibit_idle fullscreen
@@ -297,6 +303,7 @@ bar {
 exec swaync
 exec variety
 exec brave-browser -enable-features=UseOzonePlatform --ozone-platform=wayland
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 
 ## Start
 
