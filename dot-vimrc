@@ -304,6 +304,8 @@ let g:prettier#config#tab_width = '2'
 imap <silent><script><expr> <C-J> copilot#Accept("")
 let g:copilot_no_tab_map = v:true
 ""let g:copilot_assume_mapped = v:true
+imap <C-l> <Plug>(copilot-next)
+imap <C-k> <Plug>(copilot-previous)
 "}}}
 
 "{{{ VimWiki
@@ -313,7 +315,7 @@ augroup filetypedetect
   au! BufRead,BufNewFile */vimwiki/*        set filetype=vimwiki
 augroup END
 let jek_wiki = {}
-let jek_wiki.path = '~/GoogleDrive/My Drive/vimwiki/jek'
+let jek_wiki.path = '~/GoogleDrive/My Drive/vimwiki/jek2'
 let jek_wiki.syntax = 'markdown'
 let jek_wiki.ext = '.md'
 
@@ -401,7 +403,7 @@ au FileType go nmap <leader>dg <Plug>(go-def)
 au FileType go nmap <Leader>ds <Plug>(go-def-split)
 au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-let g:go_fmt_command = 'goimports'
+let g:go_fmt_command = 'gofumpt'
 "let g:go_snippet_engine = 'neosnippet'
 let g:go_bin_path = expand('~/.gotools')
 let g:go_list_type = 'quickfix'
@@ -497,10 +499,11 @@ let g:jedi#usages_command = '<leader>u'
 let g:ale_linters = {
 \   'java': [''],
 \   'rust': ['rust-analyzer', "cargo clippy"],
-\   'clojure': ['clj-kondo', 'joker'],
+\   'clojure': ['joker'],
 \   'proto': ['buf-check-lint',],
 \   'javascript': ['eslint'],
 \   'vue': ['eslint'],
+\   'go': ['golangci-lint'],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_fixers = {
@@ -512,6 +515,7 @@ let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_completion_enabled = 1
 let g:ale_linters_explicit = 1
+let g:ale_go_golangci_lint_package = 1
 "}}}
 
 "{{{ fzf
@@ -569,7 +573,7 @@ let g:LanguageClient_serverCommands = {
     \ 'python' : ['pyls'],
     \ 'java' : [expand('~./java-lang-server/run.sh')],
     \ 'go': ['gopls'],
-    \ 'clojure': ['clojure-lsp'],
+    \ 'clojure': [expand('~/.local/bin/clojure-lsp')],
     \ 'terraform': ['terraform-ls'],
     \ 'vue': ['vls']
     \ }

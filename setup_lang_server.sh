@@ -12,6 +12,21 @@ pip3 install pynvim bashate --user --upgrade
 pip3 install python-language-server[all] --user --upgrade
 npm i -g typescript-language-server bash-language-server neovim --upgrade
 pip3 install vim-vint --user --upgrade
+go install mvdan.cc/gofumpt@latest
+
+if [[ ! -f ~/.config/clojure-lsp/config.edn ]]
+then
+    mkdir -p ~/.config/clojure-lsp/
+    echo '{:lint-as {mount.core/defstate               clojure.core/def
+           rewrite-clj.zip.subedit/edit->    clojure.core/->
+           rewrite-clj.zip.subedit/subedit-> clojure.core/->}}' > ~/.config/clojure-lsp/config.edn
+fi
+
+if [[ ! -f ~/.config/clj-kondo/config.edn ]]
+then
+    mkdir -p ~/.config/clj-kondo/
+    echo '{:linters {:clj-kondo.libclj {:namespaces [mount.core]}}}' > ~/.config/clj-kondo/config.edn
+fi
 
 if [[ ! -d ~/.java-lang-server ]]
 then
