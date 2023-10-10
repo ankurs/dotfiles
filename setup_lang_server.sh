@@ -1,11 +1,11 @@
 #!/bin/bash
-if [[ ! -x $(which pip) ]]
+if [[ ! -x $(which pip3) ]]
 then
     if [[ $(uname) = 'Darwin' ]]
     then
-        sudo easy_install pip
+        sudo easy_install pip3
     else
-        easy_install pip
+        easy_install pip3
     fi
 fi
 pip3 install pynvim bashate --user --upgrade
@@ -72,7 +72,6 @@ rustup component add rust-analyzer
 #rustup default nightly
 
 gem install neovim
-pip install neovim --user --upgrade
 pip3 install neovim --user --upgrade
 python3 -m pip install neovim --user --upgrade
 
