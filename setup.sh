@@ -12,14 +12,15 @@ function setup_mac() {
     if [[ ! -x $(which brew) ]]
     then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
     echo "disabling lowpri_throttle to speed up tasks like timemachine backup"
     sudo sysctl debug.lowpri_throttle_enabled=0
     #brew cask install java
     cat ./brew_tap | xargs -L 1 brew tap
-    cat ./brew_list | xargs -L 10 brew install
+    cat ./brew_list | xargs -L 1 brew install
     brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-    cat ./brew_cask_list | xargs -L 5 brew install
+    cat ./brew_cask_list | xargs -L 1 brew install
 }
 
 function setup_fedora() {

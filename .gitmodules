@@ -12,3 +12,6 @@
 [submodule "tmuxifier"]
 	path = tmuxifier
 	url = https://github.com/jimeh/tmuxifier.git
+[submodule "awesome"]
+    path = awesome
+    url = https://github.com/ankurs/awesome-copycats.git
