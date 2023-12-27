@@ -40,25 +40,30 @@ then
     cd -
 
     # make run.sh
-    dist="linux"
-    if [[ $(uname) = 'Darwin' ]]
-    then
-        dist="mac"
-    fi
-    run="java \
-	-Declipse.application=org.eclipse.jdt.ls.core.id1 \
-	-Dosgi.bundles.defaultStartLevel=4 \
-	-Declipse.product=org.eclipse.jdt.ls.core.product \
-	-Dlog.level=ALL \
-	-Xmx1G \
-	--add-modules=ALL-SYSTEM \
-	--add-opens java.base/java.util=ALL-UNNAMED \
-	--add-opens java.base/java.lang=ALL-UNNAMED \
-    -jar ~/.java-lang-server/plugins/$(ls ~/.java-lang-server/plugins | grep org.eclipse.equinox.launcher_) \
-    -configuration ./config_$dist \
-    -data ~/.java-lang-server/data"
-    echo $run > ~/.java-lang-server/run.sh
-    chmod +x ~/.java-lang-server/run.sh
+    #dist="linux"
+    #if [[ $(uname) = 'Darwin' ]]
+    #then
+        #dist="mac"
+    #fi
+    #run="java \
+	#-Declipse.application=org.eclipse.jdt.ls.core.id1 \
+	#-Dosgi.bundles.defaultStartLevel=4 \
+	#-Declipse.product=org.eclipse.jdt.ls.core.product \
+	#-Dlog.level=ALL \
+	#-Xmx1G \
+	#--add-modules=ALL-SYSTEM \
+	#--add-opens java.base/java.util=ALL-UNNAMED \
+	#--add-opens java.base/java.lang=ALL-UNNAMED \
+    #-jar ~/.java-lang-server/plugins/$(ls ~/.java-lang-server/plugins | grep org.eclipse.equinox.launcher_) \
+    #-configuration ./config_$dist \
+    #-data ~/.java-lang-server/data"
+    #echo $run > ~/.java-lang-server/run.sh
+    #chmod +x ~/.java-lang-server/run.sh
+    cmd="vim.opt.runtimepath:append(',~/.vim/plugged/nvim-jdtls')
+local config = { cmd = {vim.fs.normalize('~/.java-lang-server/bin/jdtls')}, root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1]), }
+require('jdtls').start_or_attach(config)"
+    mkdir -p ~/.config/nvim/ftplugin/
+    echo $cmd > ~/.config/nvim/ftplugin/java.lua
 fi
 
 PATH="$HOME/.cargo/bin:$PATH"

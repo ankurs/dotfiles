@@ -100,6 +100,7 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
+Plug 'mfussenegger/nvim-jdtls'
 
 " Language servers
 Plug 'williamboman/mason.nvim'
@@ -552,14 +553,8 @@ let g:instant_markdown_autostart = 0
 " Always draw sign column. Prevent buffer moving when adding/deleting sign.
 set signcolumn=yes
 "" Language server
-" pip install python-language-server[all]
-" npm i -g typescript-language-server
-" npm i -g bash-language-server
-" pip install vim-vint
-" go get -u golang.org/x/tools/...
-" go get golang.org/x/tools/gopls@latest
-
-    " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+" \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+" \ 'java' : [expand('~./java-lang-server/run.sh')],
 let g:LanguageClient_serverCommands = {
    \  'rust': ['rust-analyzer'],
     \ 'javascript': ['javascript-typescript-stdio'],
@@ -571,7 +566,6 @@ let g:LanguageClient_serverCommands = {
     \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
     \ 'sh': ['bash-language-server', 'start'],
     \ 'python' : ['pyls'],
-    \ 'java' : [expand('~./java-lang-server/run.sh')],
     \ 'go': ['gopls'],
     \ 'clojure': [expand('~/.local/bin/clojure-lsp')],
     \ 'terraform': ['terraform-ls'],
@@ -586,6 +580,8 @@ nnoremap <leader>fx :call LanguageClient_textDocument_codeAction()<CR>
 nnoremap <leader>ex :call LanguageClient#explainErrorAtPoint()<CR>
 
 let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
+
+
 
 " Run gofmt on save
 autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
