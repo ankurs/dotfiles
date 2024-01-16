@@ -144,6 +144,7 @@ Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
 " Data set
 Plug 'vimwiki/vimwiki'
+
 call plug#end()
 
 
@@ -320,6 +321,11 @@ let jek_wiki.path = '~/GoogleDrive/My Drive/vimwiki/jek2'
 let jek_wiki.syntax = 'markdown'
 let jek_wiki.ext = '.md'
 
+let jek3_wiki = {}
+let jek3_wiki.path = '~/GoogleDrive/My Drive/vimwiki/jek3'
+let jek3_wiki.syntax = 'markdown'
+let jek3_wiki.ext = '.md'
+
 let accom_wiki = {}
 let accom_wiki.path = '~/GoogleDrive/My Drive/vimwiki/ss/Accom'
 let accom_wiki.syntax = 'markdown'
@@ -336,7 +342,7 @@ let my_wiki.path = '~/GoogleDrive/My Drive/vimwiki/my'
 let my_wiki.syntax = 'markdown'
 let my_wiki.ext = '.md'
 
-let g:vimwiki_list = [jek_wiki, ss_wiki, accom_wiki, my_wiki]
+let g:vimwiki_list = [jek3_wiki, jek_wiki, ss_wiki, accom_wiki, my_wiki]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 " https://vimwiki.github.io/vimwikiwiki/Tips%20and%20Snips.html Find
 " Incomplete Tasks
