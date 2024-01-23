@@ -129,3 +129,4 @@ wget
 wireshark
 zlib
 zsh
+hashicorp/tap/terraform
