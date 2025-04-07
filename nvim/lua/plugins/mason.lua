@@ -12,7 +12,6 @@ return {
         "bash-language-server",
         "bazelrc-lsp",
         "buf",
-        "buf-language-server",
         "clj-kondo",
         "clojure-lsp",
         "codespell",

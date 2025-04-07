@@ -6,8 +6,6 @@
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
-  version = false,
-  branch = "v3",
   ---@type AstroLSPOpts
   opts = {
     -- Configuration table of features provided by AstroLSP
@@ -89,7 +87,7 @@ return {
             },
             staticcheck = true, -- integrate Staticcheck for extra linting
             completeUnimported = true, -- auto-complete unimported packages
-            usePlaceholders = true, -- use placeholders for function parameters
+            usePlaceholders = false, -- don't use placeholders for function parameters
             matcher = "fuzzy", -- use fuzzy matching for completion
             symbolMatcher = "fuzzy", -- use fuzzy matching for symbols
             gofumpt = true, -- use gofumpt for formatting

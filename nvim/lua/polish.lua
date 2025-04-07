@@ -16,7 +16,7 @@
 -- }
 
 vim.keymap.del("n", "\\")
-vim.api.nvim_create_autocmd("VimEnter", {
-  command = "Neotree toggle",
-})
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--   command = "Neotree toggle",
+-- })
 vim.cmd 'colorscheme OceanicNext'

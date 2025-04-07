@@ -6,15 +6,13 @@
 ---@type LazySpec
 return {
   "AstroNvim/astrocore",
-  version = false,
-  branch = "v2",
   ---@type AstroCoreOpts
   opts = {
     -- Configure core features of AstroNvim
     features = {
       large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
       autopairs = true, -- enable autopairs at start
-      cmp = true, -- enable completion at start
+      --cmp = true, -- enable completion at start
       diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
       highlighturl = true, -- highlight URLs at start
       notifications = true, -- enable notifications at start
@@ -69,15 +67,25 @@ return {
 
         ["<tab>"] = { "<C-w><C-w>", desc = "tab between buffers" },
         ["<Leader><Leader>"] = { "<C-^>", desc = "switch between last two buffers" },
-        ["<Leader>n"] = { "<Cmd>Neotree toggle<CR>", desc = "Toggle Neotree" },
-        ["<Leader>rt"] = { "<Cmd>TagbarToggle<CR>", desc = "Toggle Tagbar" },
+        ["<Leader>k"] = { "<Cmd>FzfLua grep_cword<CR>", desc = "Search for word under cursor" },
         ["t"] = { "<Cmd>FzfLua files<CR>", desc = "Search for files in fzf" },
 
-        ["<leader>fg"] = { "<cmd>FzfLua live_grep<cr>", desc = "Live Grep" },
+        ["<Leader>fg"] = { "<cmd>FzfLua live_grep<cr>", desc = "Live Grep" },
+        ["<Leader>tt"] = { "<cmd>Neotest run<CR>", desc = "Run test nearest" },
+        ["<Leader>tf"] = { "<cmd>Neotest run file<CR>", desc = "Run test file" },
+        ["<Leader>ts"] = { "<cmd>Neotest summary<CR>", desc = "Test summary" },
+        ["<Leader>to"] = { "<cmd>Neotest output-panel<CR>", desc = "Test output" },
+        ["<Leader>tr"] = { "<cmd>Neotest run<CR>", desc = "Run test" },
+        ["<Leader>tS"] = { "<cmd>Neotest stop<CR>", desc = "Stop test" },
 
         -- navigate buffer tabs
         ["]b"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         ["[b"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+
+        -- coverage
+        ["<Leader>cc"] = { "<cmd>CoverageToggle<cr>", desc = "Toggle coverage" },
+        ["<Leader>cs"] = { "<cmd>CoverageSummary<cr>", desc = "Show coverage summary" },
+        ["<Leader>cl"] = { "<cmd>CoverageLoad<cr>", desc = "Load Coverage" },
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
