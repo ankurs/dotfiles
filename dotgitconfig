@@ -11,3 +11,6 @@
 	rebase = false
 [init]
 	defaultBranch = main
+
+[includeIf "hasconfig:remote.*.url:git@source.golabs.io:*/**"]
+    path = "~/.gitconfig.work"
