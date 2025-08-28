@@ -1,3 +1,0 @@
-#!/bin/sh
-#cron for btrbk
-exec /usr/sbin/btrbk -q run

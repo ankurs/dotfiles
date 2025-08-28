@@ -1,142 +1,153 @@
-source $HOME/code/dotfiles/antigen/antigen.zsh
+# Platform detection functions
+is_macos() { [[ "$OSTYPE" == darwin* ]] }
+is_linux() { [[ "$OSTYPE" == linux* ]] }
+has_cmd() { command -v "$1" >/dev/null 2>&1 }
 
-antigen use oh-my-zsh
+# Zinit setup with interactive installation
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
-antigen bundle git
-antigen bundle git-flow
-antigen bundle git-extras
-antigen bundle osx
-antigen bundle github
-antigen bundle common-aliases
-antigen bundle macports
-antigen bundle vi-mode
-antigen bundle mvn
-antigen bundle brew
-antigen bundle tmux
-antigen bundle pip
-antigen bundle python
-antigen bundle kubectl
-antigen bundle lein
-antigen bundle docker
-antigen bundle mvn
-antigen bundle dnf
-antigen bundle lein
+if [[ ! -f "${ZINIT_HOME}/zinit.zsh" ]]; then
+    echo "🚀 Zinit (modern zsh plugin manager) not found."
+    echo "Would you like to install it for better performance and features? (y/n)"
+    read -r response
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        echo "Installing Zinit..."
+        bash -c "$(curl -fsSL https://git.io/zinit-install)"
+        # Source Zinit after installation
+        [[ -f "${ZINIT_HOME}/zinit.zsh" ]] && source "${ZINIT_HOME}/zinit.zsh"
+        ZINIT_AVAILABLE=true
+    else
+        echo "Using basic zsh setup. You can install Zinit later with:"
+        echo "bash -c \"\$(curl -fsSL https://git.io/zinit-install)\""
+        ZINIT_AVAILABLE=false
+    fi
+else
+    source "${ZINIT_HOME}/zinit.zsh"
+    ZINIT_AVAILABLE=true
+fi
 
-antigen bundle zsh-users/zsh-syntax-highlighting
-
-antigen theme gentoo
-
-antigen apply
-
-### Below for OHmyzsh for reference
-
-# Path to your oh-my-zsh installation.
-#export ZSH=$HOME/.oh-my-zsh
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-#ZSH_THEME="muse"
-#ZSH_THEME="amuse"
-#ZSH_THEME="dstufft"
-#ZSH_THEME="avit"
-#ZSH_THEME="clean"
-#ZSH_THEME="miloshadzic"
-#ZSH_THEME="robbyrussell"
-#ZSH_THEME="af-magic"
-#ZSH_THEME="gentoo"
-#ZSH_THEME="bullet-train"
-#ZSH_THEME="dieter"
-#
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-#export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-##plugins=(git git-flow git-extras osx github common-aliases macports vi-mode mvn brew tmux rvm pip python kubectl)
-
-##source $ZSH/oh-my-zsh.sh
-
-# User configuration
-#export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin"
-
-## All PATHs are set by profile
+# Source profile first to get PATH setup
 source ~/.profile
-# export MANPATH="/usr/local/man:$MANPATH"
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# Initialize completion system first
+autoload -Uz compinit
+compinit
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+# Plugin loading based on Zinit availability
+if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
+    # Load OMZ framework and essential libraries first
+    zinit snippet OMZL::git.zsh
+    zinit snippet OMZL::grep.zsh
+    zinit snippet OMZL::history.zsh
+    zinit snippet OMZL::key-bindings.zsh
+    zinit snippet OMZL::completion.zsh
+    zinit snippet OMZL::theme-and-appearance.zsh
+    
+    # Load core OMZ plugins (well-tested ones)
+    zinit snippet OMZP::git
+    zinit snippet OMZP::common-aliases
+    zinit snippet OMZP::vi-mode
+    
+    # Only load tmux plugin if tmux is available
+    has_cmd "tmux" && zinit snippet OMZP::tmux
+    
+    # Development tools plugins (with command checks)
+    has_cmd "docker" && zinit snippet OMZP::docker
+    has_cmd "kubectl" && zinit snippet OMZP::kubectl
+    has_cmd "pip" && zinit snippet OMZP::pip
+    has_cmd "python" && zinit snippet OMZP::python
+    has_cmd "mvn" && zinit snippet OMZP::mvn
+    has_cmd "gradle" && zinit snippet OMZP::gradle
+    
+    # Platform-specific plugins (only if commands exist)
+    is_macos && has_cmd "brew" && zinit snippet OMZP::brew
+    is_linux && has_cmd "dnf" && zinit snippet OMZP::dnf
+    
+    # Modern zsh enhancements
+    zinit light "zsh-users/zsh-autosuggestions"
+    zinit light "zdharma-continuum/fast-syntax-highlighting"
+    zinit light "zsh-users/zsh-history-substring-search"
+else
+    # Fallback: Basic functionality without plugin manager
+    echo "Using basic zsh setup..."
+    
+    # Essential aliases
+    alias ll='ls -la'
+    alias la='ls -A'
+    alias l='ls -CF'
+    
+    # Basic git aliases
+    alias gs='git status'
+    alias ga='git add'
+    alias gc='git commit'
+    alias gp='git push'
+    alias gl='git pull'
+    alias gd='git diff'
+    alias gb='git branch'
+    alias gco='git checkout'
+    
+    # Basic docker aliases
+    has_cmd "docker" && {
+        alias dps='docker ps'
+        alias dpa='docker ps -a'
+        alias di='docker images'
+    }
+    
+    # Basic kubectl aliases
+    has_cmd "kubectl" && {
+        alias k='kubectl'
+        alias kg='kubectl get'
+        alias kd='kubectl describe'
+    }
+fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# PATH already sourced above before plugin loading
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# Modern tool integrations (work regardless of Zinit status)
+# fzf integration
+has_cmd "fzf" && {
+    source <(fzf --zsh) 2>/dev/null || {
+        # Fallback for older fzf versions
+        [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+    }
+}
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# zoxide integration (smart cd)
+has_cmd "zoxide" && eval "$(zoxide init zsh)"
 
+# Use OMZ gentoo theme (classic and clean)
+if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
+    # Load gentoo theme after all libraries are loaded
+    zinit snippet OMZT::gentoo
+else
+    # Fallback: basic gentoo-style prompt
+    autoload -U colors && colors
+    # Simple clean prompt without vcs_info complexity
+    PS1="%F{green}%n@%m%f %F{blue}%~%f %F{green}$%f "
+fi
+
+# History configuration
+export HISTSIZE=50000
+export SAVEHIST=50000
+export HISTFILE="$HOME/.zsh_history"
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+
+# Key bindings
 bindkey '^R' history-incremental-pattern-search-backward
 
-#. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
-#
-# reduce delay
+# Reduce delay for vi mode
 export KEYTIMEOUT=1
 
 # for rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 
-#for powerline
-#PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-#
-#for kubectl
+# for kubectl
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
@@ -145,4 +156,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Custom aliases
 alias claude="$HOME/.claude/local/claude"

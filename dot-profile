@@ -1,5 +1,5 @@
 function set_path() {
-    if [[ -d $1 ]]
+    if [[ -d $1 ]] && [[ ":$PATH:" != *":$1:"* ]]
     then
         export PATH="$1:$PATH"
     fi
@@ -13,8 +13,6 @@ set_path "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
 set_path "/Library/TeX/texbin"
 set_path "/var/lib/snapd/snap/bin"
 
-#powerline
-set_path "/usr/local/lib/python2.7/site-packages:/usr/local/share/python"
 
 set_path "/usr/local/go/bin"
 set_path "/sbin"
@@ -24,7 +22,7 @@ set_path "/usr/bin"
 set_path "/usr/local/bin"
 set_path "/usr/local/sbin"
 set_path "/opt/homebrew/bin"
-set_path "opt/homebrew/sbin"
+set_path "/opt/homebrew/sbin"
 set_path "/usr/local/opt/gnu-sed/libexec/gnubin"
 
 export GOPATH="$HOME/code/go"
@@ -114,7 +112,6 @@ alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 
 alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
 
@@ -136,3 +133,52 @@ then
 fi
 . "$HOME/.cargo/env"
 export WLR_NO_HARDWARE_CURSORS=1
+
+# Cross-platform detection functions
+is_macos() { [[ "$OSTYPE" == darwin* ]] }
+is_linux() { [[ "$OSTYPE" == linux* ]] }
+has_cmd() { command -v "$1" >/dev/null 2>&1 }
+
+# Cross-platform aliases
+# Clipboard integration
+if is_macos; then
+    alias clip='pbcopy'
+    alias paste='pbpaste'
+    alias open='open'
+elif has_cmd 'xclip'; then
+    alias clip='xclip -selection clipboard'
+    alias paste='xclip -selection clipboard -o'
+    alias open='xdg-open'
+elif has_cmd 'wl-copy'; then
+    alias clip='wl-copy'
+    alias paste='wl-paste'
+    alias open='xdg-open'
+fi
+
+# Package manager shortcuts
+if has_cmd 'brew'; then
+    alias install='brew install'
+    alias search='brew search'
+    alias update='brew update && brew upgrade'
+elif has_cmd 'dnf'; then
+    alias install='sudo dnf install'
+    alias search='dnf search'
+    alias update='sudo dnf upgrade'
+fi
+
+# Modern tool aliases
+has_cmd 'eza' && alias ls='eza --color=auto --icons'
+has_cmd 'bat' && alias cat='bat'
+has_cmd 'rg' && alias grep='rg'
+
+# Better history settings
+export HISTSIZE=50000
+export SAVEHIST=50000
+export HISTFILE="$HOME/.zsh_history"
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY

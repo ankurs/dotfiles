@@ -1,55 +1,96 @@
+# Core System Tools
 sysstat
-gnome-tweak-tool
-docker
-docker-compose
-the_silver_searcher
-tmux
+util-linux-user
 lshw
-golang
-opam
-freetype-devel
-ghostwriter
+iotop
+iftop
+bridge-utils
+
+# Modern CLI Tools
+bat
+eza
+fzf
+ripgrep
+starship
+zoxide
+the_silver_searcher
 most
-neovim
 neofetch
 hugo
-rsyslog fail2ban sendmail
-util-linux-user
-telegram-desktop
-setools-gui
-setroubleshoot
-protobuf
-protobuf-compiler
-vlc
-variety
-rofi
-android-tools
-android-file-transfer
-lxappearance
-NetworkManager-tui
-light
-pavucontrol
-netdata
-blueman
+
+# Shell & Development
+zsh
+tmux
+neovim
+vim
+cmake
+make
+gcc-c++
+
+# Languages & Runtimes
+golang
+python-devel
+opam
+
+# Container & Virtualization  
+docker
+docker-compose
+
+# DevOps & Cloud Tools
+kubernetes
+google-cloud-sdk
+google-cloud-sdk-gke-gcloud-auth-plugin
+
+# Network & Security Tools
+rsyslog
+fail2ban
+sendmail
 wireguard-tools
+
+# System Monitoring & Performance
 bcc
 bcc-tools
 bcc-doc
 bpftrace
-iotop
+netdata
+
+# File System & Storage
 btrfs-progs
 btrfs-heatmap
 btrbk
 rclone
-iftop
-kubernetes
-bridge-utils
-texlive
-ruby-devel
-rubygems
-alacritty
-google-cloud-sdk
-google-cloud-sdk-gke-gcloud-auth-plugin
+
+# Development & Build Tools
+protobuf
+protobuf-compiler
+freetype-devel
+
+# GUI Applications (Fedora specific)
+gnome-tweak-tool
+telegram-desktop
+vlc
+variety
 chromium-freeworld
+alacritty
+ghostwriter
+pavucontrol
+blueman
+light
+lxappearance
+NetworkManager-tui
+
+# Window Manager & Desktop
+rofi
 gnome-shell-extension-pop-shell
 xprop
+
+# Android Development
+android-tools
+android-file-transfer
+
+# Security & System Management
+setools-gui
+setroubleshoot
+
+# Text Processing
+texlive
