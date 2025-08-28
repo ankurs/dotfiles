@@ -36,6 +36,8 @@ set_path "$HOME/.cargo/bin"
 set_path "$HOME/.jenv/bin"
 set_path "$HOME/.node/bin"
 
+export PKG_CONFIG_PATH="/opt/homebrew/opt/clp/lib/pkgconfig"
+
 set_path "$HOME/.vim/plugged/vim-iced/bin"
 
 export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"

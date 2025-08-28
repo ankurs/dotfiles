@@ -144,7 +144,7 @@ Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 
 " Data set
 Plug 'vimwiki/vimwiki'
-
+Plug 'ankurs/vimwiki-git'
 call plug#end()
 
 
@@ -170,8 +170,8 @@ set cursorline
 set expandtab
 set modelines=0
 set shiftwidth=4
+set synmaxcol=1000
 set clipboard^=unnamed,unnamedplus
-set synmaxcol=450 " for those insanly long lines
 if !has('nvim')
     set ttyscroll=11
 endif
@@ -189,7 +189,7 @@ set guifont=Monaco:h12
 set background=dark
 set t_Co=256
 set mmp=5000
-" for GVIM  -- but havent used in ages
+" for GVIM  -- but haven't used in ages
 if has('gui_running')
     "remove menu and toolbar
    set guioptions-=m
@@ -313,6 +313,9 @@ imap <C-k> <Plug>(copilot-previous)
 "{{{ VimWiki
 " use markdown with vimwiki and let it sync across devices
 " set wiki for work
+
+let g:vimwiki_git_path = '~/GoogleDrive/My Drive/vimwiki/jek3'
+
 augroup filetypedetect
   au! BufRead,BufNewFile */vimwiki/*        set filetype=vimwiki
 augroup END
