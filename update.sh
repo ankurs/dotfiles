@@ -45,14 +45,14 @@ fi
 # Update system packages
 if is_macos && has_cmd "brew"; then
     log_info "Updating Homebrew packages"
-    if brew update && brew upgrade; then
+    if brew update && brew outdated && brew upgrade; then
         log_success "Homebrew packages updated"
     else
         log_warning "Homebrew update failed"
     fi
 elif is_linux && has_cmd "dnf"; then
     log_info "Updating DNF packages"
-    if sudo dnf upgrade -y; then
+    if sudo dnf update -y && sudo dnf upgrade -y; then
         log_success "DNF packages updated"
     else
         log_warning "DNF update failed"
