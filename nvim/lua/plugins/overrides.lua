@@ -1,22 +1,43 @@
 ---@type LazySpec
 return {
+  -- Add OceanicNext colorscheme
+  {
+    "mhartington/oceanic-next",
+    priority = 1000,
+  },
   -- customize dashboard options
   {
-    -- tagbar
-    "preservim/tagbar",
-  },
-  {
-    "flazz/vim-colorschemes",
-  },
-  {
-    "nvim-neo-tree/neo-tree.nvim",
+    "nvim-tree/nvim-tree.lua",
     opts = {
-      filesystem = {
-        filtered_items = {
-          visible = true,
+      filters = {
+        dotfiles = false, -- Show hidden files (like NERDTreeShowHidden=1)
+      },
+      renderer = {
+        highlight_opened_files = "name", -- NERDTreeHighlightCursorline=1
+      },
+      actions = {
+        open_file = {
+          quit_on_open = false, -- Don't close tree when opening file
         },
       },
-      open_files_do_not_replace_types = { "terminal", "trouble", "qf", "aerial", "neotest-summary" }, -- when opening files, do not use windows containing these filetypes or buftypes
+      view = {
+        side = "left",
+        width = 30,
+      },
+      on_attach = function(bufnr)
+        local api = require('nvim-tree.api')
+        
+        -- Default mappings
+        api.config.mappings.default_on_attach(bufnr)
+        
+        -- Add custom tab mapping for window switching
+        vim.keymap.set('n', '<Tab>', '<C-w><C-w>', { 
+          buffer = bufnr, 
+          noremap = true, 
+          silent = true, 
+          desc = 'Switch to next window' 
+        })
+      end,
     },
   },
   {

@@ -16,7 +16,8 @@
 -- }
 
 vim.keymap.del("n", "\\")
--- vim.api.nvim_create_autocmd("VimEnter", {
---   command = "Neotree toggle",
--- })
-vim.cmd 'colorscheme OceanicNext'
+
+-- Ensure tab mapping for window switching works properly
+vim.keymap.set("n", "<Tab>", "<C-w><C-w>", { desc = "Switch between windows", noremap = true, silent = true })
+
+-- Set colorscheme (will use the one configured in astroui.lua)

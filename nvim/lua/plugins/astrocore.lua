@@ -65,10 +65,13 @@ return {
       n = {
         -- second key is the lefthand side of the map
 
-        ["<tab>"] = { "<C-w><C-w>", desc = "tab between buffers" },
+        ["<Tab>"] = { "<C-w><C-w>", desc = "Switch between windows" },
         ["<Leader><Leader>"] = { "<C-^>", desc = "switch between last two buffers" },
+        ["<Leader>e"] = { "<cmd>NvimTreeToggle<cr>", desc = "Toggle file tree" },
+        ["<Leader>rt"] = { "<cmd>AerialToggle<cr>", desc = "Toggle symbols outline" },
         ["<Leader>k"] = { "<Cmd>FzfLua grep_cword<CR>", desc = "Search for word under cursor" },
-        ["t"] = { "<Cmd>FzfLua files<CR>", desc = "Search for files in fzf" },
+        ["t"] = { function() require("fzf-lua").files() end, desc = "Search Git files" },
+        ["T"] = { function() require("fzf-lua").files({ cmd = "find . -type f" }) end, desc = "Search ALL files (including gitignored)" },
 
         ["<Leader>fg"] = { "<cmd>FzfLua live_grep<cr>", desc = "Live Grep" },
         ["<Leader>tt"] = { "<cmd>Neotest run<CR>", desc = "Run test nearest" },

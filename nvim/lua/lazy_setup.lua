@@ -19,13 +19,23 @@ require("lazy").setup({
   ui = { backdrop = 100 },
   performance = {
     rtp = {
-      -- disable some rtp plugins, add more to your liking
+      -- disable some rtp plugins for faster startup
       disabled_plugins = {
         "gzip",
         "netrwPlugin",
         "tarPlugin",
         "tohtml",
         "zipPlugin",
+        "matchit",
+        "matchparen",
+        "2html_plugin",
+        "getscript",
+        "getscriptPlugin",
+        "logipat",
+        "rrhelper",
+        "spellfile_plugin",
+        "vimball",
+        "vimballPlugin",
       },
     },
   },
