@@ -1,36 +1,64 @@
+# Window Management & System
 amethyst
+caffeine
+logi-options+
+
+# Development Environment  
 android-file-transfer
 android-platform-tools
 android-studio
-atom
-authy
-brave-browser
-caffeine
-cloudflare-warp
-cubicsdr
-eclipse-java
-evernote
-firefox
-flutter
-google-cloud-sdk
-google-drive
-google-drive-file-stream
 intellij-idea
+eclipse-java
+cursor
+claude
+utm
+visualvm
+
+# Terminal & Development Tools
 iterm2
-jdk-mission-control
-krisp
-mactex
-nordvpn
-oracle-jdk
-pycharm
-skype
-steam
-tidal
-tunnelblick
-vagrant
-via
-vlc
-vnc-viewer
+font-inconsolata-nerd-font
+
+# Cloud & DevOps
+google-cloud-sdk
+gcloud-cli
+google-drive-file-stream
+
+# Browsers
+brave-browser
+firefox
+
+# Communication & Social
+telegram-desktop
+lark
 wechat
 whatsapp
 zoom
+
+# Media & Entertainment
+vlc
+jellyfin-media-player
+steam
+tidal
+
+# Network & Security
+nordvpn
+tunnelblick
+cloudflare-warp
+
+# Specialized Tools
+cubicsdr
+via
+vnc-viewer
+
+# Java Development
+oracle-jdk
+jdk-mission-control
+
+# Document Processing
+mactex
+
+# Mobile Development
+flutter
+
+# Other Utilities
+krisp

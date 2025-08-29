@@ -17,30 +17,34 @@ fzf
 bat
 eza
 ripgrep
-starship
 zoxide
-the_silver_searcher
 jq
 httpie
 hexyl
+fq
+ghz
+grpcurl
+just
 
 # Shell & Terminal
 zsh
 tmux
 neovim
-vim
 most
 reattach-to-user-namespace
 
 # Version Control
 git
-mercurial
 
 # Development Tools
 gcc
-cscope
-ctags
-astyle
+universal-ctags
+golangci-lint
+rust-analyzer
+delve
+clang-format
+pre-commit
+trufflehog
 
 # Languages & Runtimes
 go
@@ -50,11 +54,14 @@ perl
 lua
 luajit
 rustup-init
+groovy
+scala
 
 # Language Management
 nvm
 pyenv
 jenv
+jabba
 
 # Java & JVM
 openjdk
@@ -62,27 +69,26 @@ gradle
 maven
 leiningen
 
-# Databases & Storage
-redis
-sqlite
-mysql-client
-mysql-connector-c
-memcached
-libcouchbase
 
 # DevOps & Cloud Tools
 awscli
 kubernetes-cli
-kubectl
 k9s
 helm
+helmfile
 stern
 terraform
+terragrunt
 consul
 consul-template
 vault
-docker-machine
 colima
+docker
+docker-compose
+argocd
+glooctl
+minikube
+tailscale
 
 # Security & Network Tools
 nmap
@@ -96,58 +102,17 @@ hugo
 sphinx-doc
 cookiecutter
 
-# System Libraries (needed by other tools)
-openssl
-zlib
-ncurses
-readline
-gettext
-glib
-gnutls
-libevent
-libffi
-libgcrypt
-libgpg-error  
-libmaxminddb
-libmemcached
-libmpc
-libpng
-libssh
-libssh2
-libtasn1
-libtiff
-libunistring
-libuv
-libvterm
-nettle
-nghttp2
-pcre
-pcre2
-pkg-config
+# System Libraries (only explicit needs - brew handles most dependencies automatically)
+openssl@3
 protobuf
-gd
-gdbm
-ghostscript
-graphite2
-graphviz
-jemalloc
-jpeg
-msgpack
-netpbm
-pixman
-webp
-
-# Multimedia & GUI (if needed)
-jellyfin-media-player
 
 # Specialized Tools
 todo-txt
 weechat
-rainbarf
-prototool
-pgbadger
 sysdig
 qemu
+ollama
+clojure-lsp-native
 
 # Tap-specific packages
 hashicorp/tap/terraform
