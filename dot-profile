@@ -64,9 +64,6 @@ if command -v most > /dev/null 2>&1; then
     export PAGER="most"
 fi
 
-# tmuxifier
-export TMUXIFIER_LAYOUT_PATH="$DOTFILES/tmuxifier-layouts"
-set_path "$DOTFILES/tmuxifier/bin"
 
 function code() {
     SVC=$1
@@ -87,7 +84,30 @@ function code() {
 }
 
 function tmux_code() {
-    SVC=$1 WIN_NAME=$2 tmuxifier w code
+    local project_path=$1
+    local window_name=$2
+    
+    # Create session if it doesn't exist
+    if ! tmux list-sessions 2>/dev/null | grep -q "^work:"; then
+        tmux new-session -d -s work -c "$project_path"
+    fi
+    
+    # Create new window with project name
+    tmux new-window -t work -n "$window_name" -c "$project_path"
+    
+    # Recreate the exact tmuxifier layout: split_h 20, select_pane 1, split_v 20, split_h 50
+    tmux split-window -h -p 20 -c "$project_path"      # Split horizontally, 20% right pane
+    tmux select-pane -t 1                              # Select right pane (pane 1)
+    tmux split-window -v -p 20 -c "$project_path"      # Split right pane vertically, 20% bottom
+    tmux split-window -h -p 50 -c "$project_path"      # Split bottom-right pane horizontally, 50/50
+    
+    # Select main pane (top-left, pane 0)
+    tmux select-pane -t 0
+    
+    # Attach to session if not already in tmux
+    if [ -z "$TMUX" ]; then
+        tmux attach-session -t work
+    fi
 }
 
 function enl_venv() {

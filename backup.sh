@@ -25,7 +25,6 @@ DOTFILES=(
     ".zshrc"
     ".vimrc"
     ".tmux.conf"
-    ".tmux-powerlinerc"
     ".mostrc"
     ".gitconfig"
     ".gitignore"

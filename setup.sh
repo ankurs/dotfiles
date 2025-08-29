@@ -315,7 +315,6 @@ if [[ -z $UPDATE ]]; then
         ["$PWD/dot-tmux.conf"]="~/.tmux.conf"
         ["$PWD/dot-vimrc"]="~/.vimrc"
         ["$PWD/dot-zshrc"]="~/.zshrc"
-        ["$PWD/dot-tmux-powerlinerc"]="~/.tmux-powerlinerc"
         ["$PWD/dot-mostrc"]="~/.mostrc"
         ["$PWD/dotgitconfig"]="~/.gitconfig"
         ["$PWD/dot-gitignore"]="~/.gitignore"

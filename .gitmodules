@@ -1,8 +1,3 @@
-[submodule]
-	tmux-powerline = master
 [submodule "fonts"]
 	path = fonts
 	url = https://github.com/powerline/fonts.git
-[submodule "tmuxifier"]
-	path = tmuxifier
-	url = https://github.com/jimeh/tmuxifier.git
