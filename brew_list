@@ -112,6 +112,7 @@ weechat
 sysdig
 qemu
 ollama
+clojure
 clojure-lsp-native
 
 # Tap-specific packages
