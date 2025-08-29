@@ -1,14 +1,14 @@
 #!/bin/bash
-set -eo pipefail  # Exit on error, pipe failures (but allow undefined vars for flexibility)
+set -eo pipefail
 
-# Colors for output
+# Terminal colors for output formatting
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Progress tracking
+# Progress tracking variables
 STEPS_TOTAL=0
 STEPS_COMPLETED=0
 
@@ -38,7 +38,7 @@ fi
 function setup_mac() {
     log_info "Setting up macOS environment"
     
-    # Check for required files
+    # Verify required files exist
     for file in brew_tap brew_list brew_cask_list; do
         if [[ ! -f "./$file" ]]; then
             log_error "Required file $file not found"
@@ -95,7 +95,7 @@ function setup_mac() {
 function setup_fedora() {
     log_info "Setting up Fedora environment"
     
-    # Check for required files
+    # Verify required files exist
     if [[ ! -f "./dnf_list" ]]; then
         log_error "Required file dnf_list not found"
         return 1
@@ -247,14 +247,13 @@ function do_setup() {
     fi
 }
 
-# Count total steps for progress tracking
+# Initialize progress tracking
 count_steps
 log_info "Starting dotfiles setup (${STEPS_TOTAL} steps)"
 
-# SSH Key Strategy:
-# - Generate Ed25519 key (preferred: more secure, faster)
-# - Keep existing RSA key if present (for legacy system compatibility)
-# - SSH client will try keys in order, Ed25519 first for new connections
+# SSH Key Setup
+# Generate Ed25519 key (preferred for security and speed)
+# Keep existing RSA key if present for legacy system compatibility
 if [[ ! -f $HOME/.ssh/id_ed25519.pub ]]; then
     progress "Generating SSH key (Ed25519)"
     if ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)"; then
@@ -267,7 +266,7 @@ else
     progress "Ed25519 SSH key already exists"
 fi
 
-# Check for existing RSA key
+# Check for legacy RSA key
 if [[ -f $HOME/.ssh/id_rsa.pub ]]; then
     log_info "RSA SSH key also present (good for legacy compatibility)"
 fi
@@ -309,12 +308,10 @@ if [[ -z $UPDATE ]]; then
     progress "Creating symbolic links"
     PWD=$(pwd)
     
-    # Create symlinks with better error handling
+    # Create configuration symlinks
     declare -A dotfiles=(
-        ["$PWD/dot-profile"]="~/.profile"
-        ["$PWD/dot-tmux.conf"]="~/.tmux.conf"
-        ["$PWD/dot-vimrc"]="~/.vimrc"
         ["$PWD/dot-zshrc"]="~/.zshrc"
+        ["$PWD/dot-tmux.conf"]="~/.tmux.conf"
         ["$PWD/dot-mostrc"]="~/.mostrc"
         ["$PWD/dotgitconfig"]="~/.gitconfig"
         ["$PWD/dot-gitignore"]="~/.gitignore"
@@ -331,19 +328,18 @@ if [[ -z $UPDATE ]]; then
         fi
     done
     
-    # Special handling for cargo and nvim configs
+    # Additional configuration directories
     mkdir -p ~/.cargo/ ~/.config/nvim/
     ln -sf "$PWD/cargo-config" ~/.cargo/config
     
-    # Note: Neovim uses AstroNvim with Lazy.nvim (no vim-plug needed)
-    # Vim can still use the .vimrc with vim-plug if needed
+    # Neovim uses AstroNvim with Lazy.nvim
     log_info "Neovim will use AstroNvim configuration at ~/.config/nvim/"
     log_success "Symbolic links created"
 else
     log_info "Update mode: skipping initial setup"
 fi
 
-# Run platform-specific setup
+# Execute platform-specific setup
 do_setup
 
 progress "Installing Node.js neovim package"
@@ -362,8 +358,8 @@ if command -v nvim &> /dev/null; then
         log_warning "Neovim plugin sync failed"
     fi
     
-    # Mason packages are auto-managed by mason-tool-installer.nvim
-    log_info "Mason packages will auto-install on first Neovim startup"
+    # Mason packages will auto-install on first Neovim startup
+    log_info "Language servers managed by Mason.nvim"
 else
     log_warning "Neovim not found, skipping plugin installation"
 fi

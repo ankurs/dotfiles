@@ -1,12 +1,12 @@
 #!/bin/bash
 set -eo pipefail
 
-# Colors for output
+# Terminal colors for output formatting
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
@@ -29,7 +29,7 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
         log_warning "Repository update failed"
     fi
     
-    # Update git submodules
+    # Update submodules
     if [[ -f .gitmodules ]]; then
         log_info "Updating git submodules"
         if git submodule update --remote; then
@@ -42,7 +42,7 @@ else
     log_warning "Not in a git repository"
 fi
 
-# Update system packages
+# System package updates
 if is_macos && has_cmd "brew"; then
     log_info "Updating Homebrew packages"
     if brew update && brew outdated && brew upgrade; then
@@ -66,7 +66,7 @@ elif has_cmd "apt"; then
     fi
 fi
 
-# Update Zinit and plugins
+# Zinit plugin updates
 if [[ -d "$HOME/.local/share/zinit" ]]; then
     log_info "Updating Zinit and plugins"
     if zsh -c "source ~/.zshrc; zinit update --all" 2>/dev/null; then
@@ -76,7 +76,7 @@ if [[ -d "$HOME/.local/share/zinit" ]]; then
     fi
 fi
 
-# Update tmux plugins
+# Tmux plugin updates
 if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
     log_info "Updating tmux plugins"
     if ~/.tmux/plugins/tpm/bin/update_plugins all; then
@@ -86,7 +86,7 @@ if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
     fi
 fi
 
-# Update neovim plugins (AstroNvim)
+# Neovim plugin updates (AstroNvim)
 if has_cmd "nvim"; then
     log_info "Updating AstroNvim (plugins, language servers, and tools)"
     if nvim --headless "+AstroUpdate" +qa 2>/dev/null; then
@@ -96,7 +96,7 @@ if has_cmd "nvim"; then
     fi
 fi
 
-# Update language-specific package managers
+# Language package manager updates
 if has_cmd "npm"; then
     log_info "Updating global npm packages"
     if npm update -g; then
@@ -116,7 +116,7 @@ if has_cmd "cargo"; then
     fi
 fi
 
-# Update Go tools if GOBIN is set
+# Go tools information
 if [[ -n "${GOBIN:-}" ]] && [[ -d "$GOBIN" ]]; then
     log_info "Go tools directory: $GOBIN"
     log_info "To update Go tools, run: go install -u \$tool@latest"

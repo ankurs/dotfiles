@@ -49,6 +49,7 @@ cd ~/code/dotfiles
 ## Configuration Overview
 
 ### Shell (Zsh + Zinit)
+- **Single Config File**: Consolidated dot-zshrc with optimized loading order
 - **Plugin Manager**: Zinit with interactive installation
 - **Plugins**: Oh My Zsh plugins for git, docker, kubectl, tmux, brew, and more
 - **Modern Aliases**: 
@@ -57,6 +58,7 @@ cd ~/code/dotfiles
   - `grep` → `rg` (ripgrep for fast searching)
   - `cd` → `zoxide` integration for smart directory jumping
 - **Tools**: fzf integration for fuzzy finding files and history
+- **Performance**: Lazy loading for NVM, RVM to speed up shell startup
 - **Cross-Platform**: Automatic macOS/Fedora detection and PATH configuration
 
 ### Editor (Neovim + AstroNvim)
@@ -260,7 +262,9 @@ Organized package lists by category:
 
 ## File Structure
 
-- `dot-*`: Configuration files (automatically symlinked)
+- `dot-zshrc`: Unified shell configuration (Zsh with all settings)
+- `dot-tmux.conf`: tmux configuration
+- `dot-*`: Other configuration files (automatically symlinked)
 - `nvim/`: Neovim configuration with AstroNvim
 - `*_list`: Package lists for different package managers
 - `setup.sh`: Main installation script

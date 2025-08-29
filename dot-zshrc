@@ -1,12 +1,122 @@
-# Source profile first to get PATH setup and environment variables
-source ~/.profile
+#!/usr/bin/env zsh
+# =============================================================================
+# Unified Zsh Configuration
+# Consolidated from dot-profile and dot-zshrc - optimized for performance
+# Terminal-centric development environment evolved since 2004
+# =============================================================================
 
-# Platform detection functions
+# =============================================================================
+# Early Initialization - Platform Detection & Core Functions
+# =============================================================================
+
+# Platform detection functions (defined once, used everywhere)
 is_macos() { [[ "$OSTYPE" == darwin* ]] }
 is_linux() { [[ "$OSTYPE" == linux* ]] }
 has_cmd() { command -v "$1" >/dev/null 2>&1 }
 
-# Zinit setup with interactive installation
+# Efficient PATH management - only add if not already present
+set_path() {
+    if [[ -d $1 ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+        export PATH="$1:$PATH"
+    fi
+}
+
+# =============================================================================
+# Environment Variables & PATH Setup (needed early)
+# =============================================================================
+
+# Core environment
+export LC_CTYPE='en_US.UTF-8'
+export LC_ALL='en_US.UTF-8'
+export EDITOR="nvim"
+export DOTFILES="$HOME/code/dotfiles"
+
+# Go configuration
+export GOPATH="$HOME/code/go"
+export GOBIN="$HOME/.gotools"
+
+# Node configuration
+export NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
+export MANPATH="$HOME/.node/share/man:$MANPATH"
+
+# Build configuration
+export PKG_CONFIG_PATH="/opt/homebrew/opt/clp/lib/pkgconfig"
+export WLR_NO_HARDWARE_CURSORS=1
+
+# PATH setup (order matters - most specific to least specific)
+set_path "$HOME/.local/bin"
+set_path "$GOBIN"
+set_path "$HOME/.cargo/bin"
+set_path "$HOME/.jenv/bin"
+set_path "$HOME/.node/bin"
+set_path "$HOME/.vim/plugged/vim-iced/bin"
+
+# macOS specific paths
+if is_macos; then
+    set_path "/opt/homebrew/bin"
+    set_path "/opt/homebrew/sbin"
+    set_path "/usr/local/opt/gnu-sed/libexec/gnubin"
+    set_path "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+    set_path "/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+    set_path "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+    set_path "/Library/TeX/texbin"
+fi
+
+# Linux specific paths
+if is_linux; then
+    set_path "/var/lib/snapd/snap/bin"
+fi
+
+# System paths (these should come after user paths)
+set_path "/usr/local/bin"
+set_path "/usr/local/sbin"
+set_path "/usr/bin"
+set_path "/bin"
+set_path "/usr/sbin"
+set_path "/sbin"
+set_path "/usr/local/go/bin"
+
+# Cargo environment
+[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+# =============================================================================
+# Zsh Configuration & Completion System
+# =============================================================================
+
+# Initialize completion system first
+autoload -Uz compinit
+compinit
+
+# Brew completions (macOS)
+if is_macos && has_cmd "brew"; then
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+
+# =============================================================================
+# History Configuration (defined once)
+# =============================================================================
+
+export HISTSIZE=50000
+export SAVEHIST=50000
+export HISTFILE="$HOME/.zsh_history"
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+
+# Key bindings
+bindkey '^R' history-incremental-pattern-search-backward
+
+# Reduce delay for vi mode
+export KEYTIMEOUT=1
+
+# =============================================================================
+# Zinit Plugin Manager
+# =============================================================================
+
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
 if [[ ! -f "${ZINIT_HOME}/zinit.zsh" ]]; then
@@ -16,7 +126,6 @@ if [[ ! -f "${ZINIT_HOME}/zinit.zsh" ]]; then
     if [[ "$response" =~ ^[Yy]$ ]]; then
         echo "Installing Zinit..."
         bash -c "$(curl -fsSL https://git.io/zinit-install)"
-        # Source Zinit after installation
         [[ -f "${ZINIT_HOME}/zinit.zsh" ]] && source "${ZINIT_HOME}/zinit.zsh"
         ZINIT_AVAILABLE=true
     else
@@ -29,11 +138,10 @@ else
     ZINIT_AVAILABLE=true
 fi
 
-# Initialize completion system first
-autoload -Uz compinit
-compinit
+# =============================================================================
+# Plugin Loading
+# =============================================================================
 
-# Plugin loading based on Zinit availability
 if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
     # Load OMZ framework and essential libraries first
     zinit snippet OMZL::git.zsh
@@ -43,15 +151,13 @@ if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
     zinit snippet OMZL::completion.zsh
     zinit snippet OMZL::theme-and-appearance.zsh
     
-    # Load core OMZ plugins (well-tested ones)
+    # Load core OMZ plugins
     zinit snippet OMZP::git
     zinit snippet OMZP::common-aliases
     zinit snippet OMZP::vi-mode
     
-    # Only load tmux plugin if tmux is available
+    # Conditional plugin loading based on available commands
     has_cmd "tmux" && zinit snippet OMZP::tmux
-    
-    # Development tools plugins (with command checks)
     has_cmd "docker" && zinit snippet OMZP::docker
     has_cmd "kubectl" && zinit snippet OMZP::kubectl
     has_cmd "pip" && zinit snippet OMZP::pip
@@ -59,7 +165,7 @@ if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
     has_cmd "mvn" && zinit snippet OMZP::mvn
     has_cmd "gradle" && zinit snippet OMZP::gradle
     
-    # Platform-specific plugins (only if commands exist)
+    # Platform-specific plugins
     is_macos && has_cmd "brew" && zinit snippet OMZP::brew
     is_linux && has_cmd "dnf" && zinit snippet OMZP::dnf
     
@@ -67,8 +173,11 @@ if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
     zinit light "zsh-users/zsh-autosuggestions"
     zinit light "zdharma-continuum/fast-syntax-highlighting"
     zinit light "zsh-users/zsh-history-substring-search"
+    
+    # Load gentoo theme
+    zinit snippet OMZT::gentoo
 else
-    # Fallback: Basic functionality without plugin manager
+    # Fallback: Basic setup without plugin manager
     echo "Using basic zsh setup..."
     
     # Essential aliases
@@ -99,62 +208,174 @@ else
         alias kg='kubectl get'
         alias kd='kubectl describe'
     }
+    
+    # Simple prompt
+    autoload -U colors && colors
+    PS1="%F{green}%n@%m%f %F{blue}%~%f %F{green}$%f "
 fi
 
-# PATH already sourced above before plugin loading
+# =============================================================================
+# Cross-Platform Aliases & Tools
+# =============================================================================
 
-# Modern tool integrations (work regardless of Zinit status)
+# Clipboard integration
+if is_macos; then
+    alias clip='pbcopy'
+    alias paste='pbpaste'
+    alias open='open'
+elif has_cmd 'xclip'; then
+    alias clip='xclip -selection clipboard'
+    alias paste='xclip -selection clipboard -o'
+    alias open='xdg-open'
+elif has_cmd 'wl-copy'; then
+    alias clip='wl-copy'
+    alias paste='wl-paste'
+    alias open='xdg-open'
+fi
+
+# Package manager shortcuts
+if has_cmd 'brew'; then
+    alias install='brew install'
+    alias search='brew search'
+    alias update='brew update && brew upgrade'
+elif has_cmd 'dnf'; then
+    alias install='sudo dnf install'
+    alias search='dnf search'
+    alias update='sudo dnf upgrade'
+fi
+
+# Modern tool aliases (only if available)
+has_cmd 'eza' && alias ls='eza --color=auto --icons'
+has_cmd 'bat' && alias cat='bat'
+has_cmd 'rg' && alias grep='rg'
+
+# Better pager
+has_cmd 'most' && export PAGER="most"
+
+# Core aliases
+alias vim='nvim'
+alias wiki='nvim +VimwikiIndex'
+alias dock='eval $(docker-machine env default)'
+alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty'
+alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
+alias t='todo.sh'
+alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
+alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
+alias claude="$HOME/.claude/local/claude"
+
+# =============================================================================
+# Custom Functions
+# =============================================================================
+
+# Smart project navigation
+code() {
+    SVC=$1
+    if [[ ! -z $SVC"" ]]; then
+        # Search for the service in multiple locations
+        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/jek/" "" "$HOME/code/ColdBrew/"; do
+            if [[ -d $base$SVC ]]; then
+                tmux_code $base/$SVC $(basename $SVC)
+                return
+            fi
+        done
+    fi
+    echo "Could NOT find '$SVC' starting in ~/code"
+    tmux_code ~/code code
+}
+
+# Enhanced tmux project workspace
+tmux_code() {
+    local project_path=$1
+    local window_name=$2
+    
+    # Create session if it doesn't exist
+    if ! tmux list-sessions 2>/dev/null | grep -q "^work:"; then
+        tmux new-session -d -s work -c "$project_path"
+    fi
+    
+    # Create new window with project name
+    tmux new-window -t work -n "$window_name" -c "$project_path"
+    
+    # Recreate the tmuxifier layout
+    tmux split-window -h -p 20 -c "$project_path"
+    tmux select-pane -t 1
+    tmux split-window -v -p 20 -c "$project_path"
+    tmux split-window -h -p 50 -c "$project_path"
+    
+    # Select main pane
+    tmux select-pane -t 0
+    
+    # Attach to session if not already in tmux
+    if [ -z "$TMUX" ]; then
+        tmux attach-session -t work
+    fi
+}
+
+# Python virtual environment helper
+enl_venv() {
+    if [ -d ".venv" ]; then
+        source .venv/bin/activate
+    elif [ -d "venv" ]; then
+        source venv/bin/activate
+    fi
+}
+
+# Process management functions
+kill_falcon() {
+    ps aux | grep falcon.Agent | grep root | awk '{print $2}' | xargs sudo kill -9
+}
+
+kill_falcon_always() {
+    sudo /bin/bash -c "while true; do ps aux | grep falcon.Agent | grep -v grep |grep root | awk '{print \$2}' | xargs kill -9 ; sleep 5; done"
+}
+
+# Dynamic PKG_CONFIG_PATH setup
+set_pkg_config() {
+    export PKG_CONFIG_PATH=$(find /opt/homebrew/Cellar -name 'pkgconfig' -type d | grep lib/pkgconfig | tr '\n' ':' | sed s/.$//)
+}
+
+# =============================================================================
+# Tool Integrations (Lazy Loaded)
+# =============================================================================
+
 # fzf integration
-has_cmd "fzf" && {
+if has_cmd "fzf"; then
     source <(fzf --zsh) 2>/dev/null || {
         # Fallback for older fzf versions
         [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
     }
-}
+fi
 
 # zoxide integration (smart cd)
 has_cmd "zoxide" && eval "$(zoxide init zsh)"
 
-# Use OMZ gentoo theme (classic and clean)
-if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
-    # Load gentoo theme after all libraries are loaded
-    zinit snippet OMZT::gentoo
-else
-    # Fallback: basic gentoo-style prompt
-    autoload -U colors && colors
-    # Simple clean prompt without vcs_info complexity
-    PS1="%F{green}%n@%m%f %F{blue}%~%f %F{green}$%f "
+# kubectl completion (lazy loaded)
+if has_cmd "kubectl"; then
+    source <(kubectl completion zsh)
 fi
 
-# History configuration
-export HISTSIZE=50000
-export SAVEHIST=50000
-export HISTFILE="$HOME/.zsh_history"
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_SAVE_NO_DUPS
-setopt SHARE_HISTORY
-setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY
-
-# Key bindings
-bindkey '^R' history-incremental-pattern-search-backward
-
-# Reduce delay for vi mode
-export KEYTIMEOUT=1
-
-# for rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-
-# for kubectl
-if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
-fi
-
+# NVM (lazy loaded for performance)
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm() {
+    unset -f nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm "$@"
+}
 
-# Custom aliases
-alias claude="$HOME/.claude/local/claude"
+# RVM (lazy loaded for performance)
+rvm() {
+    unset -f rvm
+    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+    rvm "$@"
+}
+
+# Load secrets if available
+[[ -f ~/.secret.rc ]] && source ~/.secret.rc
+
+# =============================================================================
+# Final Setup
+# =============================================================================
+
+# Ensure colors work properly
+autoload -U colors && colors

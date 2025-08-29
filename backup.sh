@@ -1,29 +1,27 @@
 #!/bin/bash
 set -eo pipefail
 
-# Colors for output
+# Terminal colors for output formatting
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 
-# Configuration
+# Backup configuration
 BACKUP_DIR="$HOME/.dotfiles-backup"
 DATE=$(date +"%Y%m%d_%H%M%S")
 BACKUP_NAME="dotfiles_backup_$DATE"
 FULL_BACKUP_PATH="$BACKUP_DIR/$BACKUP_NAME"
 
-# Files and directories to backup
+# Dotfiles to backup
 DOTFILES=(
-    ".profile"
     ".zshrc"
-    ".vimrc"
     ".tmux.conf"
     ".mostrc"
     ".gitconfig"
@@ -41,7 +39,7 @@ DIRECTORIES=(
     ".cargo"
 )
 
-# Optional: backup package lists
+# Backup installed package lists
 backup_package_lists() {
     local backup_path="$1"
     
@@ -74,14 +72,14 @@ backup_package_lists() {
     fi
 }
 
-# Create backup directory
+# Initialize backup directories
 mkdir -p "$BACKUP_DIR"
 mkdir -p "$FULL_BACKUP_PATH"
 
 log_info "Creating backup: $BACKUP_NAME"
 log_info "Backup location: $FULL_BACKUP_PATH"
 
-# Backup dotfiles
+# Backup configuration files
 log_info "Backing up dotfiles..."
 for file in "${DOTFILES[@]}"; do
     if [[ -f "$HOME/$file" ]]; then
@@ -91,7 +89,7 @@ for file in "${DOTFILES[@]}"; do
     fi
 done
 
-# Backup directories
+# Backup configuration directories
 log_info "Backing up directories..."
 for dir in "${DIRECTORIES[@]}"; do
     if [[ -d "$HOME/$dir" ]]; then
@@ -106,7 +104,7 @@ for dir in "${DIRECTORIES[@]}"; do
     fi
 done
 
-# Backup current dotfiles repository state if we're in one
+# Backup git repository state
 if git rev-parse --git-dir > /dev/null 2>&1; then
     log_info "Backing up git repository state"
     git status > "$FULL_BACKUP_PATH/git_status.txt" 2>/dev/null || true
@@ -115,10 +113,10 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
     git stash list > "$FULL_BACKUP_PATH/git_stash.txt" 2>/dev/null || true
 fi
 
-# Backup package lists
+# Backup installed packages
 backup_package_lists "$FULL_BACKUP_PATH"
 
-# Create a manifest of what was backed up
+# Generate backup manifest
 log_info "Creating backup manifest"
 cat > "$FULL_BACKUP_PATH/BACKUP_MANIFEST.txt" << EOF
 Dotfiles Backup Manifest
@@ -139,7 +137,7 @@ Backup Size:
 $(du -sh "$FULL_BACKUP_PATH" | cut -f1)
 EOF
 
-# Create archive (optional)
+# Create compressed archive
 if command -v tar &> /dev/null; then
     log_info "Creating compressed archive"
     if tar -czf "$BACKUP_DIR/${BACKUP_NAME}.tar.gz" -C "$BACKUP_DIR" "$BACKUP_NAME"; then
@@ -157,7 +155,7 @@ if command -v tar &> /dev/null; then
     fi
 fi
 
-# Clean old backups (keep last 10)
+# Cleanup old backups (keep last 10)
 log_info "Cleaning old backups (keeping last 10)..."
 cd "$BACKUP_DIR"
 ls -t | grep "^dotfiles_backup_" | tail -n +11 | while read old_backup; do
@@ -172,6 +170,6 @@ log_success "Backup completed successfully!"
 log_info "Backup location: $FULL_BACKUP_PATH"
 log_info "To restore from this backup, see the BACKUP_MANIFEST.txt file"
 
-# Show backup directory contents
+# Display backup directory
 log_info "\nCurrent backups:"
 ls -la "$BACKUP_DIR" | tail -n +2
