@@ -1,3 +1,6 @@
+# Source profile first to get PATH setup and environment variables
+source ~/.profile
+
 # Platform detection functions
 is_macos() { [[ "$OSTYPE" == darwin* ]] }
 is_linux() { [[ "$OSTYPE" == linux* ]] }
@@ -25,9 +28,6 @@ else
     source "${ZINIT_HOME}/zinit.zsh"
     ZINIT_AVAILABLE=true
 fi
-
-# Source profile first to get PATH setup
-source ~/.profile
 
 # Initialize completion system first
 autoload -Uz compinit
