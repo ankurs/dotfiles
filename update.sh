@@ -86,20 +86,13 @@ if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
     fi
 fi
 
-# Update neovim plugins (Lazy.nvim + Mason)
+# Update neovim plugins (AstroNvim)
 if has_cmd "nvim"; then
-    log_info "Updating Neovim plugins (Lazy.nvim)"
-    if nvim --headless "+Lazy! sync" +qa 2>/dev/null; then
-        log_success "Neovim plugins updated via Lazy.nvim"
+    log_info "Updating AstroNvim (plugins, language servers, and tools)"
+    if nvim --headless "+AstroUpdate" +qa 2>/dev/null; then
+        log_success "AstroNvim updated successfully"
     else
-        log_warning "Neovim plugin update failed"
-    fi
-    
-    log_info "Updating Mason packages"
-    if nvim --headless "+MasonToolsUpdate" +qa 2>/dev/null; then
-        log_success "Mason packages updated"
-    else
-        log_info "Mason packages will auto-update on next Neovim startup"
+        log_warning "AstroNvim update failed - try running :AstroUpdate manually"
     fi
 fi
 
