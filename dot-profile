@@ -123,7 +123,7 @@ function kill_falcon_always() {
     sudo /bin/bash -c "while true; do ps aux | grep falcon.Agent | grep -v grep |grep root | awk '{print \$2}' | xargs kill -9 ; sleep 5; done"
 }
 
-func set_pkg_config () {
+function set_pkg_config() {
     export PKG_CONFIG_PATH=$(find /opt/homebrew/Cellar -name 'pkgconfig' -type d | grep lib/pkgconfig | tr '\n' ':' | sed s/.$//)
 }
 
@@ -135,9 +135,9 @@ fi
 export WLR_NO_HARDWARE_CURSORS=1
 
 # Cross-platform detection functions
-is_macos() { [[ "$OSTYPE" == darwin* ]] }
-is_linux() { [[ "$OSTYPE" == linux* ]] }
-has_cmd() { command -v "$1" >/dev/null 2>&1 }
+is_macos() { [[ "$OSTYPE" == darwin* ]]; }
+is_linux() { [[ "$OSTYPE" == linux* ]]; }
+has_cmd() { command -v "$1" >/dev/null 2>&1; }
 
 # Cross-platform aliases
 # Clipboard integration
@@ -175,10 +175,14 @@ has_cmd 'rg' && alias grep='rg'
 export HISTSIZE=50000
 export SAVEHIST=50000
 export HISTFILE="$HOME/.zsh_history"
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_SAVE_NO_DUPS
-setopt SHARE_HISTORY
-setopt APPEND_HISTORY
-setopt INC_APPEND_HISTORY
+
+# Zsh-specific history settings
+if [ -n "$ZSH_VERSION" ]; then
+    setopt HIST_IGNORE_DUPS
+    setopt HIST_IGNORE_ALL_DUPS
+    setopt HIST_IGNORE_SPACE
+    setopt HIST_SAVE_NO_DUPS
+    setopt SHARE_HISTORY
+    setopt APPEND_HISTORY
+    setopt INC_APPEND_HISTORY
+fi

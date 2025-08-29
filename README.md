@@ -23,10 +23,10 @@ cd ~/code/dotfiles
 The setup script will:
 - Install and configure all dotfiles
 - Set up Zinit for zsh plugin management
-- Install tmux TPM for plugin management
+- Install tmux TPM and Catppuccin theme
 - Configure Neovim with AstroNvim and modern packages
 - Generate SSH keys if needed
-- Install platform-specific packages
+- Install platform-specific packages and modern CLI tools
 
 ## Requirements
 
@@ -49,9 +49,14 @@ The setup script will:
 
 ### Shell (Zsh + Zinit)
 - **Plugin Manager**: Zinit with interactive installation
-- **Plugins**: Oh My Zsh plugins for common tools (git, docker, kubectl, etc.)
-- **Modern Tools**: Integrated aliases and functions for bat, eza, fzf, ripgrep
-- **Cross-Platform**: Platform-specific detection and configuration
+- **Plugins**: Oh My Zsh plugins for git, docker, kubectl, tmux, brew, and more
+- **Modern Aliases**: 
+  - `ls` → `eza` (modern ls with icons)
+  - `cat` → `bat` (syntax-highlighted cat)
+  - `grep` → `rg` (ripgrep for fast searching)
+  - `cd` → `zoxide` integration for smart directory jumping
+- **Tools**: fzf integration for fuzzy finding files and history
+- **Cross-Platform**: Automatic macOS/Fedora detection and PATH configuration
 
 ### Editor (Neovim + AstroNvim)
 - **Distribution**: AstroNvim for out-of-the-box IDE experience
@@ -61,8 +66,15 @@ The setup script will:
 
 ### Terminal (tmux + TPM)
 - **Plugin Manager**: TPM (Tmux Plugin Manager)
-- **Plugins**: Modern clipboard, session management, and navigation
-- **Key Bindings**: Preserved custom mappings
+- **Theme**: Catppuccin Mocha with clean status bar
+- **Status Bar**: Displays session info, load averages, CPU usage, battery status, and date/time
+- **Session Management**: Automatic session save/restore every 15 minutes
+- **Key Bindings**: 
+  - Prefix: `Ctrl+a` (instead of default Ctrl+b)
+  - Save session: `Ctrl+a` + `Ctrl+s`
+  - Restore session: `Ctrl+a` + `Ctrl+r`
+  - Split horizontal: `Ctrl+a` + `|`
+  - Split vertical: `Ctrl+a` + `-`
 - **Cross-Platform**: Platform-aware clipboard integration
 
 ### Modern CLI Tools
@@ -141,7 +153,8 @@ Organized package lists by category:
 - `check.sh`: Health check script
 - `update.sh`: Update all components
 - `backup.sh`: Backup configuration
-- Submodules: External tools and themes
+- `fonts/`: Powerline fonts for terminal/tmux icons
+- `tmuxifier/`: Tmux session layout management
 
 ## License
 
