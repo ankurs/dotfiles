@@ -267,6 +267,20 @@ alias claude="$HOME/.claude/local/claude"
 # Custom Functions
 # =============================================================================
 
+# Lazy loading kubectl completion for performance
+kubectl() {
+    # Remove this function to avoid infinite recursion
+    unset -f kubectl
+    
+    # Load kubectl completion now that we need it
+    if command -v kubectl >/dev/null 2>&1; then
+        source <(command kubectl completion zsh)
+    fi
+    
+    # Now run the actual kubectl command
+    command kubectl "$@"
+}
+
 # Smart project navigation
 code() {
     SVC=$1
@@ -349,10 +363,7 @@ fi
 # zoxide integration (smart cd)
 has_cmd "zoxide" && eval "$(zoxide init zsh)"
 
-# kubectl completion (lazy loaded)
-if has_cmd "kubectl"; then
-    source <(kubectl completion zsh)
-fi
+# kubectl completion will be lazy loaded when first used
 
 # NVM (lazy loaded for performance)
 export NVM_DIR="$HOME/.nvm"
