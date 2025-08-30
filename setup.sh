@@ -129,10 +129,10 @@ function setup_fedora() {
         fi
         
         progress "Updating core system packages"
-        sudo dnf groupupdate core -y && sudo dnf update-minimal -y
+        sudo dnf group upgrade core -y && sudo dnf update-minimal -y
         
         progress "Installing Development Tools"
-        if sudo dnf groupinstall "Development Tools" -y; then
+        if sudo dnf group install "Development Tools" -y; then
             log_success "Development Tools installed"
         else
             log_warning "Development Tools installation failed"
@@ -155,10 +155,20 @@ function setup_fedora() {
             log_warning "Snap installation failed"
         fi
         progress "Setting up Google Cloud SDK repository"
+        # Determine architecture - uname -i may return "unknown" in VMs
+        ARCH=$(uname -m)
+        if [[ "$ARCH" == "x86_64" ]]; then
+            REPO_ARCH="x86_64"
+        elif [[ "$ARCH" == "aarch64" ]]; then
+            REPO_ARCH="arm64"
+        else
+            REPO_ARCH="$ARCH"
+        fi
+        
         if sudo tee /etc/yum.repos.d/google-cloud-sdk.repo > /dev/null << EOM
 [google-cloud-cli]
 name=Google Cloud CLI
-baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-$(uname -i)
+baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-${REPO_ARCH}
 enabled=1
 gpgcheck=1
 repo_gpgcheck=0
@@ -171,7 +181,8 @@ EOM
         fi
         
         progress "Installing AWS CLI"
-        if curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -i).zip" -o "awscliv2.zip" && \
+        # Use uname -m for architecture as uname -i may return "unknown" in VMs
+        if curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
            unzip awscliv2.zip && \
            sudo ./aws/install; then
             log_success "AWS CLI installed"
@@ -220,6 +231,11 @@ count_steps() {
     
     if [[ -z $UPDATE ]]; then
         STEPS_TOTAL=$((STEPS_TOTAL + 2))  # fonts and symlinks only in non-update mode
+    else
+        # In update mode on Linux, add font cache refresh step
+        if [[ $(uname) == "Linux" ]]; then
+            STEPS_TOTAL=$((STEPS_TOTAL + 1))  # font cache refresh
+        fi
     fi
 }
 
@@ -250,6 +266,16 @@ function do_setup() {
 # Initialize progress tracking
 count_steps
 log_info "Starting dotfiles setup (${STEPS_TOTAL} steps)"
+
+# Initialize git submodules if needed
+if [[ -f .gitmodules ]]; then
+    log_info "Initializing git submodules..."
+    if git submodule update --init --recursive; then
+        log_success "Git submodules initialized"
+    else
+        log_warning "Git submodule initialization failed"
+    fi
+fi
 
 # SSH Key Setup
 # Generate Ed25519 key (preferred for security and speed)
@@ -290,20 +316,48 @@ progress "Installing TPM (tmux plugin manager)"
 if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
     if git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; then
         log_success "TPM installed"
+        # Auto-install tmux plugins
+        log_info "Installing tmux plugins..."
+        if ~/.tmux/plugins/tpm/bin/install_plugins; then
+            log_success "Tmux plugins installed"
+        else
+            log_warning "Tmux plugin installation failed (manual install needed)"
+        fi
     else
         log_warning "TPM installation failed"
     fi
 else
     log_info "TPM already installed"
+    # Update plugins if TPM exists
+    if [[ -x "$HOME/.tmux/plugins/tpm/bin/update_plugins" ]]; then
+        log_info "Updating tmux plugins..."
+        ~/.tmux/plugins/tpm/bin/update_plugins all
+    fi
 fi
 
 if [[ -z $UPDATE ]]; then
     progress "Installing fonts"
     if [[ -f "fonts/install.sh" ]] && bash fonts/install.sh; then
         log_success "Fonts installed"
+        # Refresh font cache on Linux
+        if [[ $(uname) == "Linux" ]] && command -v fc-cache &>/dev/null; then
+            log_info "Refreshing font cache..."
+            fc-cache -f ~/.local/share/fonts
+        fi
     else
         log_warning "Font installation failed or script not found"
     fi
+else
+    # In update mode, just refresh font cache if on Linux
+    if [[ $(uname) == "Linux" ]] && command -v fc-cache &>/dev/null; then
+        progress "Refreshing font cache"
+        if fc-cache -f ~/.local/share/fonts; then
+            log_success "Font cache refreshed"
+        else
+            log_warning "Font cache refresh failed"
+        fi
+    fi
+fi
     
     progress "Creating symbolic links"
     PWD=$(pwd)
@@ -366,4 +420,4 @@ fi
 
 log_success "\nDotfiles setup completed! (${STEPS_COMPLETED}/${STEPS_TOTAL} steps)"
 log_info "Language servers are now managed by Mason.nvim in Neovim config"
-log_info "To complete tmux setup, run: tmux source ~/.tmux.conf && ~/.tmux/plugins/tpm/bin/install_plugins"
+log_info "Tmux plugins have been installed. If you're in tmux, reload with: tmux source ~/.tmux.conf"

@@ -21,12 +21,16 @@ echo "setting up flathub"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 echo "setting up fail2ban"
-sudo cp -i ./fedora/fail2ban/jail.d/99-local.conf /etc/fail2ban/jail.d/
-sudo systemctl enable rsyslog
-sudo systemctl start rsyslog
-sudo systemctl restart fail2ban
-sudo systemctl enable fail2ban
-sudo fail2ban-client status
+if command -v fail2ban-client &>/dev/null; then
+    sudo cp -i ./fedora/fail2ban/jail.d/99-local.conf /etc/fail2ban/jail.d/
+    sudo systemctl enable rsyslog
+    sudo systemctl start rsyslog
+    sudo systemctl restart fail2ban
+    sudo systemctl enable fail2ban
+    sudo fail2ban-client status
+else
+    echo "fail2ban not installed, skipping configuration..."
+fi
 
 echo "setting up sysctl options"
 sudo cp -i ./fedora/sysctl.d/90-ankur.conf /etc/sysctl.d/90-ankur.conf
@@ -35,10 +39,21 @@ sudo sysctl --system
 echo "setting up systemctl"
 sudo systemctl enable sshd
 sudo systemctl start sshd
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo systemctl start netdata
-sudo systemctl enable netdata
+
+# Only configure services if they're installed
+if systemctl list-unit-files | grep -q docker.service; then
+    sudo systemctl start docker
+    sudo systemctl enable docker
+else
+    echo "Docker service not found, skipping..."
+fi
+
+if systemctl list-unit-files | grep -q netdata.service; then
+    sudo systemctl start netdata
+    sudo systemctl enable netdata
+else
+    echo "Netdata service not found, skipping..."
+fi
 
 # setup noatime for ssd ?
 #lsblk -d -o name,rota,type | grep disk
