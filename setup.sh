@@ -347,17 +347,6 @@ if [[ -z $UPDATE ]]; then
     else
         log_warning "Font installation failed or script not found"
     fi
-else
-    # In update mode, just refresh font cache if on Linux
-    if [[ $(uname) == "Linux" ]] && command -v fc-cache &>/dev/null; then
-        progress "Refreshing font cache"
-        if fc-cache -f ~/.local/share/fonts; then
-            log_success "Font cache refreshed"
-        else
-            log_warning "Font cache refresh failed"
-        fi
-    fi
-fi
     
     progress "Creating symbolic links"
     PWD=$(pwd)
@@ -390,6 +379,15 @@ fi
     log_info "Neovim will use AstroNvim configuration at ~/.config/nvim/"
     log_success "Symbolic links created"
 else
+    # In update mode, just refresh font cache if on Linux
+    if [[ $(uname) == "Linux" ]] && command -v fc-cache &>/dev/null; then
+        progress "Refreshing font cache"
+        if fc-cache -f ~/.local/share/fonts; then
+            log_success "Font cache refreshed"
+        else
+            log_warning "Font cache refresh failed"
+        fi
+    fi
     log_info "Update mode: skipping initial setup"
 fi
 
