@@ -365,14 +365,34 @@ has_cmd "zoxide" && eval "$(zoxide init zsh)"
 
 # kubectl completion will be lazy loaded when first used
 
-# NVM (lazy loaded for performance)
+# NVM - Load default Node version automatically
 export NVM_DIR="$HOME/.nvm"
-nvm() {
-    unset -f nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    nvm "$@"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Auto-load default Node version
+if command -v nvm >/dev/null 2>&1; then
+    nvm use default --silent
+fi
+
+# Optional: Auto-switch Node version based on .nvmrc when changing directories
+autoload -U add-zsh-hook
+load-nvmrc() {
+    local nvmrc_path="$(nvm_find_nvmrc)"
+    if [ -n "$nvmrc_path" ]; then
+        local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+        if [ "$nvmrc_node_version" = "N/A" ]; then
+            nvm install
+        elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+            nvm use --silent
+        fi
+    elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+        echo "Reverting to nvm default version"
+        nvm use default --silent
+    fi
 }
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
 
 # RVM (lazy loaded for performance)
 rvm() {
