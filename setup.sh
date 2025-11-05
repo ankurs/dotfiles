@@ -374,7 +374,26 @@ if [[ -z $UPDATE ]]; then
     # Additional configuration directories
     mkdir -p ~/.cargo/ ~/.config/nvim/
     ln -sf "$PWD/cargo-config" ~/.cargo/config
-    
+
+    # Platform-specific Ghostty configuration
+    if [[ $(uname) == "Darwin" ]]; then
+        # macOS: Use Application Support directory
+        mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
+        if ln -sf "$PWD/dot-ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"; then
+            log_info "Linked Ghostty config (macOS)"
+        else
+            log_warning "Failed to link Ghostty config"
+        fi
+    else
+        # Linux: Use XDG config directory
+        mkdir -p ~/.config/ghostty
+        if ln -sf "$PWD/dot-ghostty" ~/.config/ghostty/config; then
+            log_info "Linked Ghostty config (Linux)"
+        else
+            log_warning "Failed to link Ghostty config"
+        fi
+    fi
+
     # Neovim uses AstroNvim with Lazy.nvim
     log_info "Neovim will use AstroNvim configuration at ~/.config/nvim/"
     log_success "Symbolic links created"

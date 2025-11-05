@@ -16,6 +16,7 @@ visualvm
 
 # Terminal & Development Tools
 iterm2
+ghostty
 font-inconsolata-nerd-font
 
 # Cloud & DevOps
@@ -41,7 +42,6 @@ steam
 tidal
 
 # Network & Security
-nordvpn
 tunnelblick
 cloudflare-warp
 

@@ -1,0 +1,84 @@
+# Ghostty Terminal Configuration
+# Symlinked by setup.sh to:
+#   macOS: ~/Library/Application Support/com.mitchellh.ghostty/config
+#   Linux: ~/.config/ghostty/config
+
+# Font Configuration
+font-family = "Monaco Nerd Font"
+font-size = 12
+font-thicken = false
+
+# Color Theme
+theme = iTerm2 Dark Background
+
+# Window Configuration
+window-padding-x = 8
+window-padding-y = 8
+window-padding-balance = true
+window-padding-color = background
+
+# Terminal Features
+term = xterm-256color
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# Mouse Support (matches tmux setup)
+mouse-hide-while-typing = true
+copy-on-select = false
+
+# Link and URL Configuration
+# Cmd+Click (macOS) or Ctrl+Click (Linux) to open URLs
+link-url = true
+link-previews = false
+
+# Command/Control key behavior (macOS-friendly, tmux-safe)
+# Using Command key for terminal operations to avoid tmux conflicts
+macos-option-as-alt = true
+
+# Keybindings (tmux-safe - no Ctrl+a conflicts)
+# Tab management
+keybind = super+t=new_tab
+keybind = super+w=close_surface
+keybind = super+shift+left_bracket=previous_tab
+keybind = super+shift+right_bracket=next_tab
+keybind = super+1=goto_tab:1
+keybind = super+2=goto_tab:2
+keybind = super+3=goto_tab:3
+keybind = super+4=goto_tab:4
+keybind = super+5=goto_tab:5
+keybind = super+6=goto_tab:6
+keybind = super+7=goto_tab:7
+keybind = super+8=goto_tab:8
+keybind = super+9=goto_tab:9
+
+# Window management
+keybind = super+n=new_window
+
+# Font size
+keybind = super+equal=increase_font_size:1
+keybind = super+minus=decrease_font_size:1
+keybind = super+0=reset_font_size
+
+# Splits (tmux-style but using Command key)
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+
+# Copy/Paste (standard macOS)
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+
+# Clipboard behavior
+clipboard-read = allow
+clipboard-write = allow
+clipboard-trim-trailing-spaces = true
+
+# Performance
+unfocused-split-opacity = 0.8
+resize-overlay = never
+resize-overlay-position = center
+resize-overlay-duration = 0
+
+# Misc
+confirm-close-surface = true
+quit-after-last-window-closed = false
+auto-update = check
