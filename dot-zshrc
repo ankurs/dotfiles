@@ -173,6 +173,7 @@ if [[ "$ZINIT_AVAILABLE" == "true" ]]; then
     zinit light "zsh-users/zsh-autosuggestions"
     zinit light "zdharma-continuum/fast-syntax-highlighting"
     zinit light "zsh-users/zsh-history-substring-search"
+    zinit light "zsh-users/zsh-completions" # Add more completions
     
     # Load gentoo theme
     zinit snippet OMZT::gentoo
