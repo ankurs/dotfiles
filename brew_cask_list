@@ -22,7 +22,7 @@ font-inconsolata-nerd-font
 # Cloud & DevOps
 google-cloud-sdk
 gcloud-cli
-google-drive-file-stream
+google-drive
 
 # Browsers
 brave-browser
