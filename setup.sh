@@ -351,37 +351,35 @@ if [[ -z $UPDATE ]]; then
     fi
     
     progress "Creating symbolic links"
-    PWD=$(pwd)
-    
-    # Create configuration symlinks
-    declare -A dotfiles=(
-        ["$PWD/dot-zshrc"]="~/.zshrc"
-        ["$PWD/dot-tmux.conf"]="~/.tmux.conf"
-        ["$PWD/dot-mostrc"]="~/.mostrc"
-        ["$PWD/dotgitconfig"]="~/.gitconfig"
-        ["$PWD/dot-gitignore"]="~/.gitignore"
-        ["$PWD/dot-todo.cfg"]="~/.todo.cfg"
-    )
-    
-    for src in "${!dotfiles[@]}"; do
-        dst="${dotfiles[$src]}"
-        expanded_dst="${dst/#~/$HOME}"
-        if ln -sf "$src" "$expanded_dst"; then
+    DOTFILES_DIR=$(pwd)
+
+    # Create configuration symlinks (compatible with bash 3.x on macOS)
+    create_symlink() {
+        local src="$1"
+        local dst="$2"
+        if ln -sf "$src" "$dst"; then
             log_info "Linked $(basename "$src")"
         else
             log_warning "Failed to link $(basename "$src")"
         fi
-    done
+    }
+
+    create_symlink "$DOTFILES_DIR/dot-zshrc" "$HOME/.zshrc"
+    create_symlink "$DOTFILES_DIR/dot-tmux.conf" "$HOME/.tmux.conf"
+    create_symlink "$DOTFILES_DIR/dot-mostrc" "$HOME/.mostrc"
+    create_symlink "$DOTFILES_DIR/dotgitconfig" "$HOME/.gitconfig"
+    create_symlink "$DOTFILES_DIR/dot-gitignore" "$HOME/.gitignore"
+    create_symlink "$DOTFILES_DIR/dot-todo.cfg" "$HOME/.todo.cfg"
     
     # Additional configuration directories
     mkdir -p ~/.cargo/ ~/.config/nvim/
-    ln -sf "$PWD/cargo-config" ~/.cargo/config
+    ln -sf "$DOTFILES_DIR/cargo-config" ~/.cargo/config
 
     # Platform-specific Ghostty configuration
     if [[ $(uname) == "Darwin" ]]; then
         # macOS: Use Application Support directory
         mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
-        if ln -sf "$PWD/dot-ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"; then
+        if ln -sf "$DOTFILES_DIR/dot-ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"; then
             log_info "Linked Ghostty config (macOS)"
         else
             log_warning "Failed to link Ghostty config"
@@ -389,7 +387,7 @@ if [[ -z $UPDATE ]]; then
     else
         # Linux: Use XDG config directory
         mkdir -p ~/.config/ghostty
-        if ln -sf "$PWD/dot-ghostty" ~/.config/ghostty/config; then
+        if ln -sf "$DOTFILES_DIR/dot-ghostty" ~/.config/ghostty/config; then
             log_info "Linked Ghostty config (Linux)"
         else
             log_warning "Failed to link Ghostty config"

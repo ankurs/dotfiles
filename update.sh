@@ -94,6 +94,13 @@ if has_cmd "nvim"; then
     else
         log_warning "AstroNvim update failed - try running :AstroUpdate manually"
     fi
+
+    log_info "Updating Mason packages"
+    if nvim --headless "+MasonUpdate" "+MasonToolsUpdate" +qa 2>/dev/null; then
+        log_success "Mason packages updated"
+    else
+        log_warning "Mason update failed - try running :MasonUpdate and :MasonToolsUpdate manually"
+    fi
 fi
 
 # Language package manager updates
