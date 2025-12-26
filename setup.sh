@@ -328,10 +328,12 @@ if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
     fi
 else
     log_info "TPM already installed"
-    # Update plugins if TPM exists
-    if [[ -x "$HOME/.tmux/plugins/tpm/bin/update_plugins" ]]; then
+    # Update plugins if TPM exists and tmux.conf is configured
+    if [[ -x "$HOME/.tmux/plugins/tpm/bin/update_plugins" ]] && [[ -f "$HOME/.tmux.conf" ]]; then
         log_info "Updating tmux plugins..."
         ~/.tmux/plugins/tpm/bin/update_plugins all
+    elif [[ ! -f "$HOME/.tmux.conf" ]]; then
+        log_info "Skipping plugin update (tmux.conf not yet linked)"
     fi
 fi
 
