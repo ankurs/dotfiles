@@ -27,6 +27,7 @@ google-drive-file-stream
 # Browsers
 brave-browser
 firefox
+google-chrome
 
 # Communication & Social
 telegram-desktop
@@ -44,11 +45,11 @@ tidal
 # Network & Security
 tunnelblick
 cloudflare-warp
+bitwarden
 
 # Specialized Tools
 cubicsdr
 via
-vnc-viewer
 
 # Java Development
 oracle-jdk
@@ -62,3 +63,4 @@ flutter
 
 # Other Utilities
 krisp
+evernote
