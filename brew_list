@@ -38,7 +38,6 @@ git
 
 # Development Tools
 gcc
-universal-ctags
 golangci-lint
 rust-analyzer
 delve
@@ -77,7 +76,6 @@ k9s
 helm
 helmfile
 stern
-terraform
 terragrunt
 consul
 consul-template
@@ -113,7 +111,7 @@ sysdig
 qemu
 ollama
 clojure
-clojure-lsp-native
+clojure-lsp
 
 # Tap-specific packages
 hashicorp/tap/terraform
