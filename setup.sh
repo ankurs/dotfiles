@@ -71,21 +71,21 @@ function setup_mac() {
     fi
     
     progress "Installing Homebrew packages"
-    if cat ./brew_list | grep -v '^#' | grep -v '^$' | xargs -L 1 brew install; then
+    if grep -v '^#' ./brew_list | grep -v '^$' | xargs -L 10 brew install; then
         log_success "Homebrew packages installed"
     else
         log_warning "Some packages may have failed to install"
     fi
-    
+
     progress "Installing universal-ctags"
     if brew install --HEAD universal-ctags/universal-ctags/universal-ctags; then
         log_success "Universal-ctags installed"
     else
         log_warning "Universal-ctags installation failed"
     fi
-    
+
     progress "Installing Homebrew cask applications"
-    if [[ -f ./brew_cask_list ]] && cat ./brew_cask_list | grep -v '^#' | grep -v '^$' | xargs -L 1 brew install; then
+    if [[ -f ./brew_cask_list ]] && grep -v '^#' ./brew_cask_list | grep -v '^$' | xargs -L 10 brew install; then
         log_success "Homebrew cask applications installed"
     else
         log_warning "Some cask applications may have failed to install"
@@ -372,8 +372,19 @@ if [[ -z $UPDATE ]]; then
     create_symlink "$DOTFILES_DIR/dot-todo.cfg" "$HOME/.todo.cfg"
     
     # Additional configuration directories
-    mkdir -p ~/.cargo/ ~/.config/nvim/
+    mkdir -p ~/.cargo/ ~/.config/
     ln -sf "$DOTFILES_DIR/cargo-config" ~/.cargo/config
+
+    # Neovim configuration - symlink the entire nvim directory
+    if [[ -d "$HOME/.config/nvim" ]] && [[ ! -L "$HOME/.config/nvim" ]]; then
+        log_warning "Existing nvim config found, backing up to ~/.config/nvim.bak"
+        mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
+    fi
+    if ln -sf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"; then
+        log_info "Linked nvim config"
+    else
+        log_warning "Failed to link nvim config"
+    fi
 
     # Platform-specific Ghostty configuration
     if [[ $(uname) == "Darwin" ]]; then
@@ -394,8 +405,6 @@ if [[ -z $UPDATE ]]; then
         fi
     fi
 
-    # Neovim uses AstroNvim with Lazy.nvim
-    log_info "Neovim will use AstroNvim configuration at ~/.config/nvim/"
     log_success "Symbolic links created"
 else
     # In update mode, just refresh font cache if on Linux
