@@ -411,3 +411,5 @@ rvm() {
 
 # Ensure colors work properly
 autoload -U colors && colors
+# Added by Antigravity
+export PATH="/Users/ankurshrivastava/.antigravity/antigravity/bin:$PATH"

@@ -8,7 +8,6 @@ android-file-transfer
 android-platform-tools
 android-studio
 intellij-idea
-eclipse-java
 cursor
 claude
 utm
@@ -64,3 +63,4 @@ flutter
 # Other Utilities
 krisp
 evernote
+antigravity
