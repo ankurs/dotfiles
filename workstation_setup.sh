@@ -39,7 +39,6 @@ log_info "Installing essential packages..."
 sudo apt-get install -y \
     git curl wget zsh tmux \
     neovim \
-    nodejs npm \
     python3 python3-pip python3-venv \
     build-essential cmake \
     libssl-dev libffi-dev python3-dev
@@ -52,9 +51,24 @@ sudo apt-get install -y ripgrep fzf bat jq zoxide || log_warning "Some CLI tools
 log_info "Installing language runtimes..."
 sudo apt-get install -y golang-go lua5.3 luajit || log_warning "Some runtimes unavailable"
 
-# Install global npm neovim package
-log_info "Installing npm neovim package..."
-sudo npm install -g neovim || log_warning "npm neovim install failed"
+# Install Node.js via nvm (avoids Ubuntu nodejs/npm conflicts, provides Node 22+ for Codex)
+log_info "Installing nvm and Node.js..."
+export NVM_DIR="$HOME/.nvm"
+if [[ ! -d "$NVM_DIR" ]]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+fi
+# Load nvm for current session
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Install Node.js 22 LTS (required for OpenAI Codex)
+log_info "Installing Node.js 22 LTS..."
+nvm install 22
+nvm use 22
+nvm alias default 22
+
+# Install global npm packages
+log_info "Installing npm packages..."
+npm install -g neovim || log_warning "npm neovim install failed"
 
 # Install AI coding assistants
 log_info "Installing AI coding assistants..."
@@ -62,8 +76,8 @@ log_info "Installing AI coding assistants..."
 npm install -g @anthropic-ai/claude-code || log_warning "Claude Code install failed"
 # Gemini CLI - https://www.npmjs.com/package/@google/gemini-cli
 npm install -g @google/gemini-cli || log_warning "Gemini CLI install failed"
-# OpenAI Codex - https://www.npmjs.com/package/@openai/codex (requires Node 22+)
-npm install -g @openai/codex || log_warning "OpenAI Codex install failed (may need Node 22+)"
+# OpenAI Codex - https://www.npmjs.com/package/@openai/codex
+npm install -g @openai/codex || log_warning "OpenAI Codex install failed"
 
 # Setup Zinit
 log_info "Installing Zinit..."
