@@ -316,25 +316,11 @@ progress "Installing TPM (tmux plugin manager)"
 if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
     if git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; then
         log_success "TPM installed"
-        # Auto-install tmux plugins
-        log_info "Installing tmux plugins..."
-        if ~/.tmux/plugins/tpm/bin/install_plugins; then
-            log_success "Tmux plugins installed"
-        else
-            log_warning "Tmux plugin installation failed (manual install needed)"
-        fi
     else
         log_warning "TPM installation failed"
     fi
 else
     log_info "TPM already installed"
-    # Update plugins if TPM exists and tmux.conf is configured
-    if [[ -x "$HOME/.tmux/plugins/tpm/bin/update_plugins" ]] && [[ -f "$HOME/.tmux.conf" ]]; then
-        log_info "Updating tmux plugins..."
-        ~/.tmux/plugins/tpm/bin/update_plugins all
-    elif [[ ! -f "$HOME/.tmux.conf" ]]; then
-        log_info "Skipping plugin update (tmux.conf not yet linked)"
-    fi
 fi
 
 if [[ -z $UPDATE ]]; then
@@ -406,6 +392,16 @@ if [[ -z $UPDATE ]]; then
     fi
 
     log_success "Symbolic links created"
+
+    # Install tmux plugins (must be after symlinks so .tmux.conf exists)
+    if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
+        progress "Installing tmux plugins"
+        if ~/.tmux/plugins/tpm/bin/install_plugins; then
+            log_success "Tmux plugins installed"
+        else
+            log_warning "Tmux plugin installation failed"
+        fi
+    fi
 else
     # In update mode, just refresh font cache if on Linux
     if [[ $(uname) == "Linux" ]] && command -v fc-cache &>/dev/null; then
