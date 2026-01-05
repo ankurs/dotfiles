@@ -262,7 +262,6 @@ alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
 alias t='todo.sh'
 alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
 alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
-alias claude="$HOME/.claude/local/claude"
 
 # =============================================================================
 # Custom Functions
@@ -368,7 +367,12 @@ has_cmd "zoxide" && eval "$(zoxide init zsh)"
 
 # NVM - Load default Node version automatically
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+# Support both Homebrew and standard nvm installations
+if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
+    \. "/opt/homebrew/opt/nvm/nvm.sh" --no-use
+elif [ -s "$NVM_DIR/nvm.sh" ]; then
+    \. "$NVM_DIR/nvm.sh" --no-use
+fi
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Auto-load default Node version
@@ -377,23 +381,25 @@ if command -v nvm >/dev/null 2>&1; then
 fi
 
 # Optional: Auto-switch Node version based on .nvmrc when changing directories
-autoload -U add-zsh-hook
-load-nvmrc() {
-    local nvmrc_path="$(nvm_find_nvmrc)"
-    if [ -n "$nvmrc_path" ]; then
-        local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-        if [ "$nvmrc_node_version" = "N/A" ]; then
-            nvm install
-        elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
-            nvm use --silent
+if type nvm_find_nvmrc &>/dev/null; then
+    autoload -U add-zsh-hook
+    load-nvmrc() {
+        local nvmrc_path="$(nvm_find_nvmrc)"
+        if [ -n "$nvmrc_path" ]; then
+            local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+            if [ "$nvmrc_node_version" = "N/A" ]; then
+                nvm install
+            elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+                nvm use --silent
+            fi
+        elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+            echo "Reverting to nvm default version"
+            nvm use default --silent
         fi
-    elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
-        echo "Reverting to nvm default version"
-        nvm use default --silent
-    fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+    }
+    add-zsh-hook chpwd load-nvmrc
+    load-nvmrc
+fi
 
 # RVM (lazy loaded for performance)
 rvm() {
