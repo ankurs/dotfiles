@@ -422,11 +422,15 @@ fi
 # Execute platform-specific setup
 do_setup
 
-progress "Installing Node.js neovim package"
-if npm i -g neovim --upgrade 2>/dev/null; then
-    log_success "Node.js neovim package installed"
+progress "Installing global npm packages"
+if [[ -f ./npm_global_list ]]; then
+    if cat ./npm_global_list | grep -v '^#' | grep -v '^$' | xargs npm i -g --upgrade 2>/dev/null; then
+        log_success "Global npm packages installed"
+    else
+        log_warning "Some npm packages may have failed to install"
+    fi
 else
-    log_warning "Node.js neovim package installation failed (npm may not be available)"
+    log_warning "npm_global_list not found, skipping npm packages"
 fi
 
 

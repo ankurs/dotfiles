@@ -1,0 +1,7 @@
+# Global npm packages
+# Used by setup.sh and update.sh
+
+neovim
+@anthropic-ai/claude-code
+@google/gemini-cli
+@openai/codex

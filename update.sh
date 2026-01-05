@@ -131,6 +131,16 @@ if has_cmd "npm"; then
     else
         log_warning "npm update failed"
     fi
+
+    # Install any missing packages from npm_global_list
+    if [[ -f ./npm_global_list ]]; then
+        log_info "Installing any missing npm global packages"
+        if cat ./npm_global_list | grep -v '^#' | grep -v '^$' | xargs npm i -g --upgrade 2>/dev/null; then
+            log_success "npm global packages installed"
+        else
+            log_warning "Some npm packages may have failed to install"
+        fi
+    fi
 fi
 
 

@@ -44,6 +44,7 @@ delve
 clang-format
 pre-commit
 trufflehog
+tree-sitter
 
 # Languages & Runtimes
 go

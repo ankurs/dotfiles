@@ -79,6 +79,17 @@ for tool in "${MODERN_TOOLS[@]}"; do
     fi
 done
 
+# Verify AI CLI tools
+log_info "\nChecking AI CLI tools:"
+AI_TOOLS=("claude" "gemini" "codex")
+for tool in "${AI_TOOLS[@]}"; do
+    if has_cmd "$tool"; then
+        log_success "$tool is available"
+    else
+        log_warning "$tool is not available (optional)"
+    fi
+done
+
 # Verify shell configuration
 log_info "\nChecking shell configuration:"
 check_symlink "$HOME/.zshrc"
