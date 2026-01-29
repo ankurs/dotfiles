@@ -109,7 +109,7 @@ show_menu() {
     echo "  11) Laptop Power Management (TLP, powertop)"
     echo
     echo "  === Desktop Environments ==="
-    echo "  12) Sway Window Manager"
+    echo "  12) COSMIC Desktop"
     echo "  13) Desktop Applications (variety, rofi)"
     echo
     echo "  === Storage ==="
@@ -118,9 +118,9 @@ show_menu() {
     echo
     echo "  === Presets ==="
     if is_laptop; then
-        echo "  R) Recommended (1,3,4,5,8,9,10,11,12,13)"
+        echo "  R) Recommended (1,3,4,5,8,9,10,11,13)"
     else
-        echo "  R) Recommended (1,3,4,5,8,9,10,12,13)"
+        echo "  R) Recommended (1,3,4,5,8,9,10,13)"
     fi
     echo "  D) Development (4,5,6,7)"
     echo "  A) All (everything)"
@@ -146,11 +146,11 @@ show_menu() {
             9) SELECTIONS["optimization"]=1 ;;
             10) SELECTIONS["monitoring"]=1 ;;
             11) SELECTIONS["laptop"]=1 ;;
-            12) SELECTIONS["sway"]=1 ;;
+            12) SELECTIONS["cosmic"]=1 ;;
             13) SELECTIONS["desktop_apps"]=1 ;;
             14) SELECTIONS["zfs"]=1 ;;
             15) SELECTIONS["backup"]=1 ;;
-            r) 
+            r)
                 SELECTIONS["brave"]=1
                 SELECTIONS["chromium"]=1
                 SELECTIONS["docker"]=1
@@ -159,7 +159,6 @@ show_menu() {
                 SELECTIONS["optimization"]=1
                 SELECTIONS["monitoring"]=1
                 is_laptop && SELECTIONS["laptop"]=1
-                SELECTIONS["sway"]=1
                 SELECTIONS["desktop_apps"]=1
                 ;;
             d)
@@ -180,7 +179,7 @@ show_menu() {
                 SELECTIONS["optimization"]=1
                 SELECTIONS["monitoring"]=1
                 SELECTIONS["laptop"]=1
-                SELECTIONS["sway"]=1
+                SELECTIONS["cosmic"]=1
                 SELECTIONS["desktop_apps"]=1
                 SELECTIONS["zfs"]=1
                 SELECTIONS["backup"]=1
@@ -525,41 +524,42 @@ setup_laptop() {
     log_success "Laptop power management configured"
 }
 
-setup_sway() {
-    progress "Installing Sway Window Manager"
-    
-    # Check if regular rofi is installed and replace with rofi-wayland
-    if is_installed rofi && ! is_installed rofi-wayland; then
-        log_info "Replacing rofi with rofi-wayland for better Wayland support"
-        sudo dnf swap -y rofi rofi-wayland
-    fi
-    
-    # Install Sway and related packages (skip already installed)
-    sudo dnf install -y --skip-broken sway swayidle swaylock swaybg \
-        waybar wofi wlogout grim slurp wdisplays \
-        network-manager-applet wl-clipboard \
-        nwg-launchers nwg-panel rofi-wayland \
-        mako kanshi light xdg-desktop-portal-wlr
-    
-    # Install SwayNotificationCenter
-    if ! is_installed SwayNotificationCenter; then
-        sudo dnf copr enable -y erikreider/SwayNotificationCenter
-        sudo dnf install -y SwayNotificationCenter
-    fi
-    
-    # Setup configuration directories
-    mkdir -p ~/.config/{sway,waybar,wofi,swaylock,mako}
-    
-    # Link configurations if they exist
+setup_cosmic() {
+    progress "Setting up COSMIC Desktop"
+
+    # COSMIC is pre-installed on Fedora COSMIC Spin
+    # This function configures it with custom keybindings and settings
+
+    # Install additional Wayland tools
+    sudo dnf install -y --skip-broken wl-clipboard grim slurp
+
+    # Install variety for wallpaper management
+    sudo dnf install -y variety
+
+    # Setup COSMIC configuration directories
+    mkdir -p ~/.config/cosmic/com.system76.CosmicComp.keybindings/v1
+
+    # Link COSMIC configurations if they exist
     PWD=$(pwd)
-    [[ -f sway-config ]] && ln -sf "$PWD/sway-config" ~/.config/sway/config
-    [[ -f waybar-config ]] && ln -sf "$PWD/waybar-config" ~/.config/waybar/config
-    [[ -f waybar-style.css ]] && ln -sf "$PWD/waybar-style.css" ~/.config/waybar/style.css
-    [[ -f wofi-styles.css ]] && ln -sf "$PWD/wofi-styles.css" ~/.config/wofi/styles.css
-    [[ -f swaylock.conf ]] && ln -sf "$PWD/swaylock.conf" ~/.config/swaylock/config
-    
-    log_success "Sway window manager installed"
-    log_info "To use Sway, logout and select it from the login screen"
+    if [[ -d cosmic/com.system76.CosmicComp.keybindings ]]; then
+        ln -sf "$PWD/cosmic/com.system76.CosmicComp.keybindings/v1/custom" \
+            ~/.config/cosmic/com.system76.CosmicComp.keybindings/v1/custom
+    fi
+
+    # Setup xdg-terminal-exec for alacritty as default terminal
+    mkdir -p ~/.config
+    if ! grep -q "alacritty" ~/.config/xdg-terminals.list 2>/dev/null; then
+        echo "alacritty" > ~/.config/xdg-terminals.list
+    fi
+
+    # Ensure alacritty is installed
+    if ! is_installed alacritty; then
+        sudo dnf install -y alacritty
+    fi
+
+    log_success "COSMIC Desktop configured"
+    log_info "Custom keybindings: Super+Return (terminal), Super+H/J/K/L (vim navigation)"
+    log_info "Logout and log back in for changes to take effect"
 }
 
 setup_desktop_apps() {
@@ -590,9 +590,9 @@ setup_desktop_apps() {
     fi
     
     # Setup rofi
-    if [[ -f fedora/config.rasi ]]; then
+    if [[ -f archive/sway/config.rasi ]]; then
         mkdir -p ~/.config/rofi
-        ln -sf "$(pwd)/fedora/config.rasi" ~/.config/rofi/config.rasi
+        ln -sf "$(pwd)/archive/sway/config.rasi" ~/.config/rofi/config.rasi
     fi
     
     log_success "Desktop applications configured"
@@ -677,7 +677,7 @@ main() {
     [[ ${SELECTIONS["optimization"]} ]] && setup_optimization
     [[ ${SELECTIONS["monitoring"]} ]] && setup_monitoring
     [[ ${SELECTIONS["laptop"]} ]] && setup_laptop
-    [[ ${SELECTIONS["sway"]} ]] && setup_sway
+    [[ ${SELECTIONS["cosmic"]} ]] && setup_cosmic
     [[ ${SELECTIONS["desktop_apps"]} ]] && setup_desktop_apps
     [[ ${SELECTIONS["zfs"]} ]] && setup_zfs
     [[ ${SELECTIONS["backup"]} ]] && setup_backup
@@ -721,9 +721,10 @@ main() {
         echo "    - Netdata available at http://localhost:19999"
     fi
     
-    if [[ ${SELECTIONS["sway"]} ]]; then
-        echo "  • Sway window manager installed"
-        echo "    - Select from login screen after logout"
+    if [[ ${SELECTIONS["cosmic"]} ]]; then
+        echo "  • COSMIC Desktop configured"
+        echo "    - Custom keybindings applied"
+        echo "    - Variety wallpaper manager installed"
     fi
     
     echo

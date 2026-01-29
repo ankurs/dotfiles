@@ -75,6 +75,7 @@ set_path "/bin"
 set_path "/usr/sbin"
 set_path "/sbin"
 set_path "/usr/local/go/bin"
+set_path "$HOME/.local/bin"
 
 # Cargo environment
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
