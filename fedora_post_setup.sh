@@ -588,13 +588,7 @@ setup_desktop_apps() {
         mkdir -p ~/.config/variety
         cp variety.conf ~/.config/variety/
     fi
-    
-    # Setup rofi
-    if [[ -f archive/sway/config.rasi ]]; then
-        mkdir -p ~/.config/rofi
-        ln -sf "$(pwd)/archive/sway/config.rasi" ~/.config/rofi/config.rasi
-    fi
-    
+
     log_success "Desktop applications configured"
 }
 

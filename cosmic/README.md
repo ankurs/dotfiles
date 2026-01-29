@@ -14,7 +14,7 @@ cosmic/
 
 ## Keybindings
 
-Custom keybindings configured to match previous Sway workflow:
+Custom keybindings:
 
 | Action | Binding |
 |--------|---------|
@@ -56,6 +56,3 @@ These defaults work alongside the custom keybindings:
 | Toggle floating | Super+G |
 | Screenshot | Print |
 
-## Migrated From
-
-This configuration was migrated from Sway window manager. Original Sway configs are archived in `archive/sway/`.
