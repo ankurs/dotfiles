@@ -1,6 +1,5 @@
 (
     // Custom COSMIC keybindings
-    // Migrated from Sway configuration
 
     // Terminal - Super+Return opens alacritty
     (

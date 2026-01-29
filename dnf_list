@@ -28,6 +28,7 @@ gcc-c++
 golang
 python-devel
 opam
+nodejs
 
 # Container & Virtualization  
 docker
