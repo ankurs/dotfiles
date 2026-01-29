@@ -225,7 +225,7 @@ count_steps() {
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
         if [[ $NAME == "Fedora Linux" ]]; then
-            STEPS_TOTAL=$((STEPS_TOTAL + 8))  # dnf config, ssh, repos, updates, dev tools, snap, cloud tools, packages
+            STEPS_TOTAL=$((STEPS_TOTAL + 9))  # dnf config, ssh, repos, updates, dev tools, snap, cloud tools, packages, zsh shell
         fi
     fi
     
@@ -417,6 +417,21 @@ fi
 
 # Execute platform-specific setup
 do_setup
+
+# Set zsh as default shell on Linux (macOS uses zsh by default)
+if [[ $(uname) == "Linux" ]] && [[ "$SHELL" != *"zsh"* ]]; then
+    progress "Setting zsh as default shell"
+    if command -v zsh &>/dev/null; then
+        if chsh -s "$(which zsh)"; then
+            log_success "Default shell changed to zsh (logout required)"
+        else
+            log_warning "Failed to change default shell to zsh"
+            log_info "You can manually run: chsh -s \$(which zsh)"
+        fi
+    else
+        log_warning "zsh not found, skipping shell change"
+    fi
+fi
 
 progress "Installing global npm packages"
 if [[ -f ./npm_global_list ]]; then
