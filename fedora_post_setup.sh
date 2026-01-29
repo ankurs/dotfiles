@@ -108,19 +108,18 @@ show_menu() {
     echo "  10) Monitoring Tools (netdata, htop, etc.)"
     echo "  11) Laptop Power Management (TLP, powertop)"
     echo
-    echo "  === Desktop Environments ==="
-    echo "  12) COSMIC Desktop"
-    echo "  13) Desktop Applications (variety, rofi)"
+    echo "  === Desktop ==="
+    echo "  12) Desktop Applications (variety, rofi)"
     echo
     echo "  === Storage ==="
-    echo "  14) OpenZFS Support"
-    echo "  15) Backup Tools (btrbk, restic)"
+    echo "  13) OpenZFS Support"
+    echo "  14) Backup Tools (btrbk, restic)"
     echo
     echo "  === Presets ==="
     if is_laptop; then
-        echo "  R) Recommended (1,3,4,5,8,9,10,11,13)"
+        echo "  R) Recommended (1,3,4,5,8,9,10,11,12)"
     else
-        echo "  R) Recommended (1,3,4,5,8,9,10,13)"
+        echo "  R) Recommended (1,3,4,5,8,9,10,12)"
     fi
     echo "  D) Development (4,5,6,7)"
     echo "  A) All (everything)"
@@ -146,10 +145,9 @@ show_menu() {
             9) SELECTIONS["optimization"]=1 ;;
             10) SELECTIONS["monitoring"]=1 ;;
             11) SELECTIONS["laptop"]=1 ;;
-            12) SELECTIONS["cosmic"]=1 ;;
-            13) SELECTIONS["desktop_apps"]=1 ;;
-            14) SELECTIONS["zfs"]=1 ;;
-            15) SELECTIONS["backup"]=1 ;;
+            12) SELECTIONS["desktop_apps"]=1 ;;
+            13) SELECTIONS["zfs"]=1 ;;
+            14) SELECTIONS["backup"]=1 ;;
             r)
                 SELECTIONS["brave"]=1
                 SELECTIONS["chromium"]=1
@@ -179,7 +177,6 @@ show_menu() {
                 SELECTIONS["optimization"]=1
                 SELECTIONS["monitoring"]=1
                 SELECTIONS["laptop"]=1
-                SELECTIONS["cosmic"]=1
                 SELECTIONS["desktop_apps"]=1
                 SELECTIONS["zfs"]=1
                 SELECTIONS["backup"]=1
@@ -515,44 +512,6 @@ setup_laptop() {
     log_success "Laptop power management configured"
 }
 
-setup_cosmic() {
-    progress "Setting up COSMIC Desktop"
-
-    # COSMIC is pre-installed on Fedora COSMIC Spin
-    # This function configures it with custom keybindings and settings
-
-    # Install additional Wayland tools
-    sudo dnf install -y --skip-broken wl-clipboard grim slurp
-
-    # Install variety for wallpaper management
-    sudo dnf install -y variety
-
-    # Setup COSMIC configuration directories
-    mkdir -p ~/.config/cosmic/com.system76.CosmicComp.keybindings/v1
-
-    # Link COSMIC configurations if they exist
-    PWD=$(pwd)
-    if [[ -d cosmic/com.system76.CosmicComp.keybindings ]]; then
-        ln -sf "$PWD/cosmic/com.system76.CosmicComp.keybindings/v1/custom" \
-            ~/.config/cosmic/com.system76.CosmicComp.keybindings/v1/custom
-    fi
-
-    # Setup xdg-terminal-exec for alacritty as default terminal
-    mkdir -p ~/.config
-    if ! grep -q "alacritty" ~/.config/xdg-terminals.list 2>/dev/null; then
-        echo "alacritty" > ~/.config/xdg-terminals.list
-    fi
-
-    # Ensure alacritty is installed
-    if ! is_installed alacritty; then
-        sudo dnf install -y alacritty
-    fi
-
-    log_success "COSMIC Desktop configured"
-    log_info "Custom keybindings: Super+Return (terminal), Super+H/J/K/L (vim navigation)"
-    log_info "Logout and log back in for changes to take effect"
-}
-
 setup_desktop_apps() {
     progress "Setting up Desktop Applications"
     
@@ -662,7 +621,6 @@ main() {
     [[ ${SELECTIONS["optimization"]} ]] && setup_optimization
     [[ ${SELECTIONS["monitoring"]} ]] && setup_monitoring
     [[ ${SELECTIONS["laptop"]} ]] && setup_laptop
-    [[ ${SELECTIONS["cosmic"]} ]] && setup_cosmic
     [[ ${SELECTIONS["desktop_apps"]} ]] && setup_desktop_apps
     [[ ${SELECTIONS["zfs"]} ]] && setup_zfs
     [[ ${SELECTIONS["backup"]} ]] && setup_backup
@@ -705,13 +663,7 @@ main() {
         echo "  • Monitoring tools installed"
         echo "    - Netdata available at http://localhost:19999"
     fi
-    
-    if [[ ${SELECTIONS["cosmic"]} ]]; then
-        echo "  • COSMIC Desktop configured"
-        echo "    - Custom keybindings applied"
-        echo "    - Variety wallpaper manager installed"
-    fi
-    
+
     echo
     log_warning "Some changes require logout/reboot to take effect:"
     echo "  • Shell change to zsh"

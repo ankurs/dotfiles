@@ -68,6 +68,8 @@ telegram-desktop
 vlc
 # chromium-freeworld - requires RPM Fusion repo
 alacritty
+variety
+ghostty
 ghostwriter
 pavucontrol
 NetworkManager-tui
