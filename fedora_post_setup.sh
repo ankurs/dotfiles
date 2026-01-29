@@ -274,30 +274,21 @@ setup_chromium() {
 
 setup_docker() {
     progress "Setting up Docker & Container Tools"
-    
-    # Install Docker
-    if ! is_installed docker-ce; then
-        # Download Docker repo directly
-        sudo curl -fsSL https://download.docker.com/linux/fedora/docker-ce.repo -o /etc/yum.repos.d/docker-ce.repo
-        sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+    # Install moby-engine (Fedora's Docker package)
+    if ! is_installed moby-engine; then
+        sudo dnf install -y moby-engine docker-compose
     fi
-    
+
     # Enable service
     enable_service docker
-    
+
     # Add user to docker group
     if getent group docker >/dev/null; then
         sudo usermod -aG docker "$USER"
         log_info "User added to docker group (logout required for changes to take effect)"
     fi
-    
-    # Install docker-compose standalone
-    if ! command -v docker-compose &>/dev/null; then
-        log_info "Installing docker-compose..."
-        sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-    fi
-    
+
     log_success "Docker setup completed"
 }
 

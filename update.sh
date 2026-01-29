@@ -77,6 +77,18 @@ elif is_linux && has_cmd "dnf"; then
     else
         log_warning "DNF update failed"
     fi
+
+    # Install any missing packages from dnf_list
+    if [[ -f ./dnf_list ]]; then
+        log_info "Installing any missing DNF packages"
+        packages=$(grep -v '^#' ./dnf_list | grep -v '^$' | tr '\n' ' ')
+        if sudo dnf install -y $packages; then
+            log_success "DNF packages installed"
+        else
+            log_error "DNF package installation failed"
+            exit 1
+        fi
+    fi
 elif has_cmd "apt"; then
     log_info "Updating APT packages"
     if sudo apt update && sudo apt upgrade -y; then
@@ -145,11 +157,23 @@ fi
 
 
 if has_cmd "cargo"; then
+    # Install any missing packages from cargo_list
+    if [[ -f ./cargo_list ]]; then
+        log_info "Installing any missing Cargo packages"
+        while IFS= read -r package; do
+            [[ -z "$package" || "$package" =~ ^# ]] && continue
+            if ! cargo install --list | grep -q "^$package "; then
+                log_info "Installing $package..."
+                cargo install "$package" || log_warning "Failed to install $package"
+            fi
+        done < ./cargo_list
+    fi
+
     log_info "Updating Rust packages"
     if cargo install-update -a 2>/dev/null; then
         log_success "Rust packages updated"
     else
-        log_info "Install cargo-update with: cargo install cargo-update"
+        log_warning "cargo-update not installed, skipping update"
     fi
 fi
 

@@ -1,0 +1,8 @@
+# Cargo packages to install
+# Install with: cargo install <package>
+
+# Package management
+cargo-update
+
+# Modern CLI Tools
+eza

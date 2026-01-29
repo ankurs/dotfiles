@@ -8,7 +8,7 @@ bridge-utils
 
 # Modern CLI Tools
 bat
-eza
+# eza - see cargo_list
 fzf
 ripgrep
 zoxide
@@ -30,14 +30,14 @@ python-devel
 opam
 nodejs
 
-# Container & Virtualization  
-docker
+# Container & Virtualization
+moby-engine
 docker-compose
 
 # DevOps & Cloud Tools
 kubernetes
-google-cloud-sdk
-google-cloud-sdk-gke-gcloud-auth-plugin
+# google-cloud-sdk - requires Google Cloud repo (see fedora_post_setup.sh)
+# google-cloud-sdk-gke-gcloud-auth-plugin - requires Google Cloud repo
 
 # Network & Security Tools
 rsyslog
@@ -50,7 +50,7 @@ bcc
 bcc-tools
 bcc-doc
 bpftrace
-netdata
+# netdata - install from https://learn.netdata.cloud/docs/installing/
 
 # File System & Storage
 btrfs-progs
@@ -63,24 +63,14 @@ protobuf
 protobuf-compiler
 freetype-devel
 
-# GUI Applications (Fedora specific)
-gnome-tweak-tool
+# GUI Applications
 telegram-desktop
 vlc
-variety
-chromium-freeworld
+# chromium-freeworld - requires RPM Fusion repo
 alacritty
 ghostwriter
 pavucontrol
-blueman
-light
-lxappearance
 NetworkManager-tui
-
-# Window Manager & Desktop
-rofi
-gnome-shell-extension-pop-shell
-xprop
 
 # Android Development
 android-tools
