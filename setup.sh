@@ -192,13 +192,21 @@ EOM
         rm -rf aws awscliv2.zip 2>/dev/null || true
     fi
 
+    progress "Adding COPR repositories"
+    if sudo dnf install -y dnf-plugins-core && \
+       sudo dnf copr enable -y pgdev/ghostty; then
+        log_success "COPR repositories added"
+    else
+        log_warning "COPR repository setup failed"
+    fi
+
     progress "Upgrading system packages"
     if sudo dnf upgrade -y; then
         log_success "System packages upgraded"
     else
         log_warning "System upgrade failed"
     fi
-    
+
     progress "Installing packages from dnf_list"
     if cat ./dnf_list | grep -v '^#' | grep -v '^$' | xargs -L 20 sudo dnf install -y; then
         log_success "DNF packages installed"
@@ -225,7 +233,7 @@ count_steps() {
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
         if [[ $NAME == "Fedora Linux" ]]; then
-            STEPS_TOTAL=$((STEPS_TOTAL + 9))  # dnf config, ssh, repos, updates, dev tools, snap, cloud tools, packages, zsh shell
+            STEPS_TOTAL=$((STEPS_TOTAL + 10))  # dnf config, ssh, repos, copr, updates, dev tools, snap, cloud tools, packages, zsh shell
         fi
     fi
     
