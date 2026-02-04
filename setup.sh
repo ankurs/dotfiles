@@ -391,6 +391,12 @@ if [[ -z $UPDATE ]]; then
         fi
     fi
 
+    # Claude Code configuration
+    mkdir -p ~/.claude
+    create_symlink "$DOTFILES_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+    create_symlink "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+    create_symlink "$DOTFILES_DIR/claude/mcp-global.json" "$HOME/.claude/mcp-global.json"
+
     log_success "Symbolic links created"
 
     # Install tmux plugins (must be after symlinks so .tmux.conf exists)

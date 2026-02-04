@@ -1,0 +1,4 @@
+- always update tests
+- use make commands when available
+- always use relevant mcp language servers
+- always use https://github.com/BurntSushi/ripgrep instead of grep in this system

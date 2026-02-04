@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "gopls": {
+      "command": "mcp-gopls",
+      "args": ["-workspace", "${PROJECT_ROOT}"],
+      "env": {
+        "GOPRIVATE": "source.golabs.io"
+      }
+    },
+    "svelte-docs": {
+      "command": "npx",
+      "args": ["-y", "@spences10/mcp-svelte-docs"]
+    }
+  }
+}
