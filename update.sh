@@ -51,23 +51,13 @@ if is_macos && has_cmd "brew"; then
         log_warning "Homebrew update failed"
     fi
 
-    # Install any missing packages from brew_list
-    if [[ -f ./brew_list ]]; then
-        log_info "Installing any missing Homebrew packages"
-        if grep -v '^#' ./brew_list | grep -v '^$' | xargs -L 10 brew install; then
-            log_success "Homebrew packages installed"
+    # Install any missing packages from Brewfile
+    if [[ -f ./Brewfile ]]; then
+        log_info "Installing any missing packages from Brewfile"
+        if brew bundle install --file=Brewfile; then
+            log_success "Brewfile packages installed"
         else
-            log_warning "Some packages may have failed to install"
-        fi
-    fi
-
-    # Install any missing cask applications
-    if [[ -f ./brew_cask_list ]]; then
-        log_info "Installing any missing cask applications"
-        if grep -v '^#' ./brew_cask_list | grep -v '^$' | xargs -L 10 brew install; then
-            log_success "Cask applications installed"
-        else
-            log_warning "Some cask applications may have failed to install"
+            log_warning "Some Brewfile packages may have failed to install"
         fi
     fi
 elif is_linux && has_cmd "dnf"; then

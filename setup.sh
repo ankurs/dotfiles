@@ -38,13 +38,11 @@ fi
 function setup_mac() {
     log_info "Setting up macOS environment"
     
-    # Verify required files exist
-    for file in brew_tap brew_list brew_cask_list; do
-        if [[ ! -f "./$file" ]]; then
-            log_error "Required file $file not found"
-            return 1
-        fi
-    done
+    # Verify Brewfile exists
+    if [[ ! -f "./Brewfile" ]]; then
+        log_error "Required file Brewfile not found"
+        return 1
+    fi
     if [[ ! -x $(which brew 2>/dev/null || echo) ]]; then
         progress "Installing Homebrew package manager"
         if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
@@ -63,32 +61,12 @@ function setup_mac() {
     else
         log_warning "Failed to disable low priority throttling (non-critical)"
     fi
-    progress "Adding Homebrew taps"
-    if cat ./brew_tap | xargs -L 1 brew tap; then
-        log_success "Homebrew taps added"
-    else
-        log_warning "Some taps may have failed to add"
-    fi
-    
-    progress "Installing Homebrew packages"
-    if grep -v '^#' ./brew_list | grep -v '^$' | xargs -L 10 brew install; then
-        log_success "Homebrew packages installed"
-    else
-        log_warning "Some packages may have failed to install"
-    fi
 
-    progress "Installing universal-ctags"
-    if brew install --HEAD universal-ctags/universal-ctags/universal-ctags; then
-        log_success "Universal-ctags installed"
+    progress "Installing packages from Brewfile"
+    if brew bundle install --file=Brewfile; then
+        log_success "Brewfile packages installed"
     else
-        log_warning "Universal-ctags installation failed"
-    fi
-
-    progress "Installing Homebrew cask applications"
-    if [[ -f ./brew_cask_list ]] && grep -v '^#' ./brew_cask_list | grep -v '^$' | xargs -L 10 brew install; then
-        log_success "Homebrew cask applications installed"
-    else
-        log_warning "Some cask applications may have failed to install"
+        log_warning "Some Brewfile packages may have failed to install"
     fi
 }
 
@@ -221,7 +199,7 @@ count_steps() {
     
     # Add platform-specific steps
     if [[ $(uname) == "Darwin" ]]; then
-        STEPS_TOTAL=$((STEPS_TOTAL + 6))  # brew install, taps, packages, ctags, casks, optimization
+        STEPS_TOTAL=$((STEPS_TOTAL + 2))  # optimization, Brewfile install
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
         if [[ $NAME == "Fedora Linux" ]]; then

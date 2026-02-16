@@ -157,6 +157,29 @@ fi
 if is_macos; then
     log_info "\nChecking macOS-specific setup:"
     check_cmd "brew"
+
+    # Verify Brewfile and installed packages
+    if [[ -f "./Brewfile" ]]; then
+        log_success "Brewfile exists"
+        log_info "Checking Brewfile dependencies..."
+
+        # Capture check output
+        bundle_output=$(brew bundle check --file=Brewfile --verbose 2>&1)
+        if [[ $? -eq 0 ]]; then
+            log_success "All Brewfile dependencies are satisfied"
+        else
+            log_warning "Some Brewfile dependencies are missing"
+            # Show which packages are missing (lines starting with →)
+            echo "$bundle_output" | while read -r line; do
+                if [[ "$line" =~ ^→ ]]; then
+                    log_warning "  ${line#→ }"
+                fi
+            done
+            log_info "Run 'brew bundle install --file=Brewfile' to install missing packages"
+        fi
+    else
+        log_warning "Brewfile not found"
+    fi
 elif is_linux; then
     log_info "\nChecking Linux-specific setup:"
     if [[ -f /etc/os-release ]]; then

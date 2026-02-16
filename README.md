@@ -6,13 +6,31 @@ I keep it here primarily to sync my configurations between my macOS and Fedora s
 
 It's an opinionated setup that works well for my terminal-centric workflow - your mileage may vary.
 
+## Table of Contents
+
+- [What's Here](#whats-here)
+- [Using This Setup](#using-this-setup)
+- [Requirements](#requirements)
+- [Configuration Overview](#configuration-overview)
+- [Keyboard Bindings](#keyboard-bindings)
+- [My Utility Scripts](#my-utility-scripts)
+- [Cross-Platform Support](#cross-platform-support)
+- [Package Lists](#package-lists)
+- [Maintenance](#maintenance)
+- [File Structure](#file-structure)
+- [Common Issues I've Encountered](#common-issues-ive-encountered)
+- [Notes](#notes)
+- [License](#license)
+
 ## What's Here
 
 This setup includes the tools I use for my terminal-centric development workflow:
 
 - **Shell**: Zsh with Zinit plugin manager - the foundation of terminal-based development
-- **Editor**: Neovim configured with AstroNvim - powerful terminal-based editing  
-- **Terminal**: tmux with Catppuccin Frappé theme - essential for managing multiple terminal sessions
+- **Editor**: Neovim configured with AstroNvim (OceanicNext theme) - powerful terminal-based editing
+- **Terminal Emulator**: Ghostty with Monaco Nerd Font and iTerm2 Dark Background theme
+- **Terminal Multiplexer**: tmux with Catppuccin Frappé theme - essential for managing multiple sessions
+- **AI Tools**: Claude Code, GitHub Copilot (in Neovim), Gemini CLI, and Codex
 - **CLI Tools**: Evolved alternatives that enhance terminal productivity (see CLI Tools Evolution)
 - **Scripts**: Personal utilities for maintenance, backups, and health checks
 - **Package Lists**: What I install on new systems to recreate this terminal environment
@@ -63,9 +81,11 @@ cd ~/code/dotfiles
 
 ### Editor (Neovim + AstroNvim)
 - **Distribution**: AstroNvim for out-of-the-box IDE experience
+- **Theme**: OceanicNext colorscheme
 - **Package Manager**: Lazy.nvim for plugin management
-- **LSP Manager**: Mason for language servers, formatters, linters
+- **LSP Manager**: Mason for 56+ language servers, formatters, linters, and debuggers
 - **Languages**: Go, Python, JavaScript/TypeScript, Rust, and more
+- **AI Completion**: GitHub Copilot integration
 
 ### Terminal (tmux + TPM)
 - **Plugin Manager**: TPM (Tmux Plugin Manager)
@@ -74,6 +94,27 @@ cd ~/code/dotfiles
 - **Session Management**: Automatic session save/restore every 15 minutes
 - **Prefix Key**: `Ctrl+a` (instead of default `Ctrl+b`) - see Keyboard Bindings section for all shortcuts
 - **Cross-Platform**: Platform-aware clipboard integration
+
+### Terminal Emulator (Ghostty)
+- **Font**: Monaco Nerd Font, size 12
+- **Theme**: iTerm2 Dark Background
+- **Scrollback**: 10 million lines - I never want to lose output
+- **Keybindings**: Uses `Super` key to avoid conflicts with tmux's `Ctrl+a` prefix
+- **Splits**: `Cmd+d` (horizontal), `Cmd+Shift+d` (vertical) for quick splitting outside of tmux
+- **Shell Integration**: Cursor, sudo, and title detection
+
+### AI Tools
+I've been integrating AI tools into my terminal workflow as they've matured:
+- **Claude Code**: My primary AI coding assistant, installed via brew cask. Configured with MCP servers for Go (gopls) and Svelte. Settings and plugins live in `claude/`
+- **claude-code-templates**: CLI tool for configuring and managing Claude Code templates
+- **GitHub Copilot**: Integrated directly into Neovim for inline completions
+- **Gemini CLI & Codex**: Installed via Homebrew for quick terminal access
+
+### Git Configuration
+- **SSH-first**: All GitHub URLs are rewritten from HTTPS to SSH automatically
+- **Default Branch**: `main`
+- **Global Gitignore**: Shared ignore rules across all repos
+- **Work Config**: Conditional includes for work-specific settings when working with internal repos
 
 ### CLI Tools Evolution
 
@@ -216,14 +257,20 @@ For standard AstroNvim keybindings (LSP, file explorer, diagnostics, etc.), see:
 
 I've created a few scripts to help maintain this setup across my machines:
 
+### `./setup.sh`
+The main installation script. Handles everything from SSH key generation to package installation to symlinking dotfiles. It also supports an update mode (`./setup.sh update`) which updates the repo, submodules, all package managers, plugin managers, and language tools in one go.
+
 ### `./check.sh`
-Verifies that everything is installed and working correctly on the current system.
+My "did I set this up right?" script. It verifies essential commands (git, zsh, tmux, nvim), modern CLI tools (fzf, bat, eza, rg, zoxide), AI tools (claude, gemini, codex), symlink integrity, plugin managers (Zinit, TPM, AstroNvim), SSH keys, git config, and shell configuration loading. I run this after setting up a new machine to make sure nothing was missed.
 
 ### `./update.sh`
-Updates all the packages, plugins, and dependencies. I run this periodically to keep everything current.
+Updates all the packages, plugins, and dependencies. I run this periodically to keep everything current - it handles brew/dnf, Zinit, TPM, Neovim plugins, Mason tools, npm globals, and cargo packages.
 
 ### `./backup.sh`
-Creates timestamped backups of configurations before making changes.
+Creates compressed, timestamped backups to `~/.dotfiles-backup/`. It backs up config files and directories (including SSH keys and cargo config), captures git state (status, diff, stash, recent commits), records installed packages, and generates a manifest. It automatically cleans up old backups, keeping the last 10.
+
+### `./fedora_post_setup.sh`
+An interactive menu-driven script I use after a fresh Fedora install. It detects whether I'm on a desktop, laptop, or VM, then lets me selectively install things like browsers, Docker, Kubernetes tools, power management, virtualization, and security hardening (fail2ban).
 
 ## Cross-Platform Support
 
@@ -246,8 +293,9 @@ Organized package lists by category:
 
 ### Regular Updates
 ```bash
-./update.sh  # Update everything
-./check.sh   # Verify setup health
+./setup.sh update  # Full update: repo, submodules, packages, plugins, language tools
+./update.sh        # Update packages, plugins, and dependencies
+./check.sh         # Verify setup health
 ```
 
 ### Backup Before Changes
@@ -256,21 +304,40 @@ Organized package lists by category:
 ```
 
 ### Adding New Tools
-1. Add to appropriate package list (`brew_list` or `dnf_list`)
+1. Add to appropriate package list (`Brewfile` on macOS or `dnf_list` on Fedora)
 2. Run `./update.sh` to install
 3. Add configuration as needed
 
 ## File Structure
 
+### Configuration Files
 - `dot-zshrc`: Unified shell configuration (Zsh with all settings)
 - `dot-tmux.conf`: tmux configuration
-- `dot-*`: Other configuration files (automatically symlinked)
-- `nvim/`: Neovim configuration with AstroNvim
-- `*_list`: Package lists for different package managers
-- `setup.sh`: Main installation script
-- `check.sh`: Health check script
-- `update.sh`: Update all components
-- `backup.sh`: Backup configuration
+- `dot-ghostty`: Ghostty terminal emulator config
+- `dot-mostrc`: `most` pager configuration
+- `dot-todo.cfg`: todo.sh task management config
+- `dot-gitignore`: Global git ignore rules
+- `dotgitconfig`: Git user config, SSH auth, URL rewrites
+
+### Directories
+- `nvim/`: Neovim configuration with AstroNvim, Mason, and all plugin configs
+- `claude/`: Claude Code settings, MCP server configs, and project instructions
+- `fonts/`: Powerline/Nerd fonts (git submodule)
+- `fedora/`: Fedora-specific configs (fail2ban, btrbk backups, sysctl tuning, etc.)
+
+### Scripts
+- `setup.sh`: Main installation script (also supports `./setup.sh update`)
+- `check.sh`: Health check - verifies tools, symlinks, plugins, and configs
+- `update.sh`: Update all packages, plugins, and dependencies
+- `backup.sh`: Compressed timestamped backups with auto-cleanup
+- `fedora_post_setup.sh`: Interactive post-install wizard for Fedora
+
+### Package Lists
+- `Brewfile`: macOS Homebrew Bundle file (taps, CLI packages, and GUI casks)
+- `dnf_list` / `dnf_remove_list`: Fedora packages to install and remove
+- `npm_global_list`: Global npm packages (neovim provider)
+- `snap_list`: Snap packages for Fedora
+- `cargo-config`: Rust Cargo configuration
 
 ## Common Issues I've Encountered
 
