@@ -78,6 +78,18 @@ elif is_linux && has_cmd "dnf"; then
         log_warning "DNF update failed"
     fi
 
+    # Enable COPR repos
+    log_info "Enabling COPR repositories"
+    sudo dnf copr enable -y scottames/ghostty 2>/dev/null || true
+
+    # Disable repos that don't support ARM64
+    if [[ "$(uname -m)" == "aarch64" ]]; then
+        if [[ -f /etc/yum.repos.d/google-cloud-sdk.repo ]]; then
+            log_info "Disabling Google Cloud SDK repo (no ARM64 support)"
+            sudo dnf config-manager setopt google-cloud-cli.enabled=0 2>/dev/null || true
+        fi
+    fi
+
     # Install any missing packages from dnf_list
     if [[ -f ./dnf_list ]]; then
         log_info "Installing any missing DNF packages"

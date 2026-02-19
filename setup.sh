@@ -155,29 +155,24 @@ function setup_fedora() {
             log_warning "Snap installation failed"
         fi
         progress "Setting up Google Cloud SDK repository"
-        # Determine architecture - uname -i may return "unknown" in VMs
         ARCH=$(uname -m)
-        if [[ "$ARCH" == "x86_64" ]]; then
-            REPO_ARCH="x86_64"
-        elif [[ "$ARCH" == "aarch64" ]]; then
-            REPO_ARCH="arm64"
+        if [[ "$ARCH" == "aarch64" ]]; then
+            log_warning "Google Cloud SDK repo not available for ARM64 - install manually: curl https://sdk.cloud.google.com | bash"
         else
-            REPO_ARCH="$ARCH"
-        fi
-        
-        if sudo tee /etc/yum.repos.d/google-cloud-sdk.repo > /dev/null << EOM
+            if sudo tee /etc/yum.repos.d/google-cloud-sdk.repo > /dev/null << EOM
 [google-cloud-cli]
 name=Google Cloud CLI
-baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-${REPO_ARCH}
+baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-x86_64
 enabled=1
 gpgcheck=1
 repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOM
-        then
-            log_success "Google Cloud SDK repository configured"
-        else
-            log_warning "Google Cloud SDK repository setup failed"
+            then
+                log_success "Google Cloud SDK repository configured"
+            else
+                log_warning "Google Cloud SDK repository setup failed"
+            fi
         fi
         
         progress "Installing AWS CLI"
@@ -194,7 +189,7 @@ EOM
 
     progress "Adding COPR repositories"
     if sudo dnf install -y dnf-plugins-core && \
-       sudo dnf copr enable -y pgdev/ghostty; then
+       sudo dnf copr enable -y scottames/ghostty; then
         log_success "COPR repositories added"
     else
         log_warning "COPR repository setup failed"
@@ -400,6 +395,17 @@ if [[ -z $UPDATE ]]; then
     fi
 
     log_success "Symbolic links created"
+
+    # VM-specific configuration (Mesa Zink for OpenGL in UTM/QEMU)
+    if [[ $(uname) == "Linux" ]] && command -v systemd-detect-virt &>/dev/null; then
+        VIRT_TYPE=$(systemd-detect-virt 2>/dev/null || echo "none")
+        if [[ "$VIRT_TYPE" =~ ^(kvm|qemu|vmware|oracle|xen|hyperv)$ ]]; then
+            log_info "VM detected ($VIRT_TYPE), configuring Mesa Zink for OpenGL"
+            mkdir -p ~/.config/environment.d
+            echo "MESA_LOADER_DRIVER_OVERRIDE=zink" > ~/.config/environment.d/mesa.conf
+            log_success "Mesa Zink configured for VM graphics"
+        fi
+    fi
 
     # Install tmux plugins (must be after symlinks so .tmux.conf exists)
     if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then

@@ -30,7 +30,6 @@ copy-on-select = false
 # Link and URL Configuration
 # Cmd+Click (macOS) or Ctrl+Click (Linux) to open URLs
 link-url = true
-link-previews = false
 
 # Command/Control key behavior (macOS-friendly, tmux-safe)
 # Using Command key for terminal operations to avoid tmux conflicts
@@ -77,7 +76,6 @@ clipboard-trim-trailing-spaces = true
 unfocused-split-opacity = 0.8
 resize-overlay = never
 resize-overlay-position = center
-resize-overlay-duration = 0
 
 # Misc
 confirm-close-surface = true

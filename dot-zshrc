@@ -12,6 +12,7 @@
 # Platform detection functions (defined once, used everywhere)
 is_macos() { [[ "$OSTYPE" == darwin* ]] }
 is_linux() { [[ "$OSTYPE" == linux* ]] }
+is_vm() { [[ "$(systemd-detect-virt 2>/dev/null)" =~ ^(kvm|qemu|vmware|oracle|xen|hyperv)$ ]] }
 has_cmd() { command -v "$1" >/dev/null 2>&1 }
 
 # Efficient PATH management - only add if not already present
@@ -65,6 +66,11 @@ fi
 # Linux specific paths
 if is_linux; then
     set_path "/var/lib/snapd/snap/bin"
+fi
+
+# VM-specific settings (UTM/QEMU)
+if is_linux && is_vm; then
+    export MESA_LOADER_DRIVER_OVERRIDE=zink
 fi
 
 # System paths (these should come after user paths)

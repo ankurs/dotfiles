@@ -105,7 +105,7 @@ show_menu() {
     echo "  === System ==="
     echo "  8) Security Hardening (fail2ban, firewall)"
     echo "  9) System Optimizations (SSD, performance)"
-    echo "  10) Monitoring Tools (netdata, htop, etc.)"
+    echo "  10) Monitoring Tools (htop, btop, glances, etc.)"
     echo "  11) Laptop Power Management (TLP, powertop)"
     echo
     echo "  === Desktop ==="
@@ -465,20 +465,14 @@ setup_optimization() {
 
 setup_monitoring() {
     progress "Setting up Monitoring Tools"
-    
-    # Install monitoring packages
-    sudo dnf install -y netdata glances htop btop bpytop iotop iftop nmon
-    
-    # Setup netdata
-    if is_installed netdata; then
-        enable_service netdata
-        log_info "Netdata available at http://localhost:19999"
-    fi
-    
-    # Install additional system tools
-    sudo dnf install -y sysstat lm_sensors
+
+    # Install monitoring packages (netdata/bpytop not in Fedora repos)
+    sudo dnf install -y glances htop btop iotop iftop nmon sysstat lm_sensors
+
+    # Setup sensors
     sudo sensors-detect --auto
-    
+
+    log_info "For netdata, install from: https://learn.netdata.cloud/docs/installing/"
     log_success "Monitoring tools installed"
 }
 
@@ -660,8 +654,7 @@ main() {
     fi
     
     if [[ ${SELECTIONS["monitoring"]} ]]; then
-        echo "  • Monitoring tools installed"
-        echo "    - Netdata available at http://localhost:19999"
+        echo "  • Monitoring tools installed (htop, btop, glances)"
     fi
 
     echo
