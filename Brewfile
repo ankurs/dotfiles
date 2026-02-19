@@ -62,7 +62,6 @@ brew "tree-sitter"
 brew "universal-ctags", args: ["HEAD"]
 
 # AI CLI Tools
-brew "codex"
 brew "gemini-cli"
 brew "claude-code-templates"
 
@@ -97,7 +96,6 @@ brew "helm"
 brew "helmfile"
 brew "stern"
 brew "terragrunt"
-brew "consul"
 brew "consul-template"
 brew "vault"
 brew "colima"
@@ -111,7 +109,6 @@ brew "tailscale"
 # Security & Network Tools
 brew "nmap"
 brew "netcat"
-brew "mitmproxy"
 brew "wireshark"
 
 # Data & Documentation
@@ -159,9 +156,11 @@ cask "visualvm"
 cask "iterm2"
 cask "ghostty"
 cask "claude-code"
+cask "codex"
 cask "font-inconsolata-nerd-font"
 
 # Cloud & DevOps
+cask "consul"
 cask "gcloud-cli"
 cask "google-drive"
 
@@ -185,6 +184,7 @@ cask "tidal"
 # Network & Security
 cask "cloudflare-warp"
 cask "bitwarden"
+cask "mitmproxy"
 cask "wireshark-app"
 
 # Specialized Tools
