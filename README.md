@@ -75,6 +75,7 @@ cd ~/code/dotfiles
   - `cat` → `bat` (syntax-highlighted cat)
   - `grep` → `rg` (ripgrep for fast searching)
   - `cd` → `zoxide` integration for smart directory jumping
+  - `y` → `yazi` wrapper (terminal file manager that syncs directory on exit)
 - **Tools**: fzf integration for fuzzy finding files and history
 - **Performance**: Lazy loading for NVM, RVM to speed up shell startup
 - **Cross-Platform**: Automatic macOS/Fedora detection and PATH configuration
@@ -113,6 +114,8 @@ I've been integrating AI tools into my terminal workflow as they've matured:
 ### Git Configuration
 - **SSH-first**: All GitHub URLs are rewritten from HTTPS to SSH automatically
 - **Default Branch**: `main`
+- **Pager**: delta for syntax-highlighted, side-by-side diffs with word-level highlighting
+- **Merge Conflicts**: zdiff3 style for better conflict resolution
 - **Global Gitignore**: Shared ignore rules across all repos
 - **Work Config**: Conditional includes for work-specific settings when working with internal repos
 
@@ -127,6 +130,8 @@ Since all my development happens in the terminal, I've been curating command-lin
 - **nvim** → Modern vim - evolved from `vi` → `vim` → `neovim` for better plugin ecosystem
 - **tmux** → Terminal multiplexing - evolved from `screen` to `tmux` for session management
 - **zoxide** → Smart directory jumping - evolved from manual `cd` to various `z` implementations
+- **delta** → Syntax-highlighting git pager - replaced `most` for diffs with word-level highlighting and side-by-side view
+- **yazi** → Terminal file manager - async Rust-based file manager with image/PDF preview and zoxide/ripgrep integration
 
 **Personal Workflow Preferences:**
 - **tmuxifier** - session layout management for consistent project setups
@@ -189,6 +194,7 @@ Here are the key bindings I use daily in this setup:
 - `Ctrl+t` - fzf file finder (when fzf available)
 - `Alt+c` - fzf directory navigator (when fzf available)
 - `z <partial_name>` - Smart directory jumping with zoxide
+- `y` - Launch yazi file manager (changes directory on exit)
 
 #### Plugin-Provided Aliases
 
@@ -261,7 +267,7 @@ I've created a few scripts to help maintain this setup across my machines:
 The main installation script. Handles everything from SSH key generation to package installation to symlinking dotfiles. It also supports an update mode (`./setup.sh update`) which updates the repo, submodules, all package managers, plugin managers, and language tools in one go.
 
 ### `./check.sh`
-My "did I set this up right?" script. It verifies essential commands (git, zsh, tmux, nvim), modern CLI tools (fzf, bat, eza, rg, zoxide), AI tools (claude, gemini, codex), symlink integrity, plugin managers (Zinit, TPM, AstroNvim), SSH keys, git config, and shell configuration loading. I run this after setting up a new machine to make sure nothing was missed.
+My "did I set this up right?" script. It verifies essential commands (git, zsh, tmux, nvim), modern CLI tools (fzf, bat, eza, rg, zoxide, delta, yazi), AI tools (claude, gemini, codex), symlink integrity, plugin managers (Zinit, TPM, AstroNvim), SSH keys, git config, and shell configuration loading. I run this after setting up a new machine to make sure nothing was missed.
 
 ### `./update.sh`
 Updates all the packages, plugins, and dependencies. I run this periodically to keep everything current - it handles brew/dnf, Zinit, TPM, Neovim plugins, Mason tools, npm globals, and cargo packages.
@@ -285,7 +291,7 @@ The dotfiles automatically detect the platform and adapt accordingly:
 
 Organized package lists by category:
 - **Development Tools**: Languages (Go, Rust, Python, Node.js), compilers, LSP tools
-- **CLI Utilities**: Modern replacements (bat, eza, ripgrep, fzf, zoxide)
+- **CLI Utilities**: Modern replacements (bat, eza, ripgrep, fzf, zoxide, delta, yazi)
 - **DevOps & Cloud**: Kubernetes, Docker, Terraform, AWS/GCP tools
 - **System Tools**: Process management, networking, monitoring
 

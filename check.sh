@@ -70,7 +70,7 @@ done
 
 # Verify modern CLI tools
 log_info "\nChecking modern CLI tools:"
-MODERN_TOOLS=("fzf" "bat" "eza" "rg" "zoxide")
+MODERN_TOOLS=("fzf" "bat" "eza" "rg" "zoxide" "delta" "yazi")
 for tool in "${MODERN_TOOLS[@]}"; do
     if has_cmd "$tool"; then
         log_success "$tool is available"

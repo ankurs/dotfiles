@@ -39,6 +39,11 @@ brew "fq"
 brew "ghz"
 brew "grpcurl"
 brew "just"
+brew "git-delta"
+brew "difftastic"
+brew "yazi"
+brew "ffmpeg"    # yazi: video thumbnails
+brew "poppler"   # yazi: PDF preview
 
 # Shell & Terminal
 brew "zsh"

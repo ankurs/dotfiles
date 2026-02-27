@@ -177,6 +177,13 @@ EOM
         log_warning "System upgrade failed"
     fi
     
+    progress "Enabling COPR repositories"
+    if sudo dnf install -y dnf-plugins-core 2>/dev/null && sudo dnf copr enable -y lihaohong/yazi; then
+        log_success "COPR repositories enabled (yazi)"
+    else
+        log_warning "COPR repository setup failed (yazi may not install)"
+    fi
+
     progress "Installing packages from dnf_list"
     if cat ./dnf_list | grep -v '^#' | grep -v '^$' | xargs -L 20 sudo dnf install -y; then
         log_success "DNF packages installed"
@@ -203,7 +210,7 @@ count_steps() {
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
         if [[ $NAME == "Fedora Linux" ]]; then
-            STEPS_TOTAL=$((STEPS_TOTAL + 8))  # dnf config, ssh, repos, updates, dev tools, snap, cloud tools, packages
+            STEPS_TOTAL=$((STEPS_TOTAL + 9))  # dnf config, ssh, repos, updates, dev tools, snap, cloud tools, copr, packages
         fi
     fi
     
