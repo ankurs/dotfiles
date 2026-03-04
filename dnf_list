@@ -12,8 +12,13 @@ bat
 fzf
 ripgrep
 zoxide
+git-delta
+difftastic
+yazi
 most
 hugo
+ffmpeg-free
+poppler-utils
 
 # Shell & Development
 zsh

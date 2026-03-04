@@ -370,6 +370,18 @@ fi
 # zoxide integration (smart cd)
 has_cmd "zoxide" && eval "$(zoxide init zsh)"
 
+# yazi integration (cd to directory on exit)
+if has_cmd "yazi"; then
+    y() {
+        local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+        yazi "$@" --cwd-file="$tmp"
+        if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+            builtin cd -- "$cwd"
+        fi
+        rm -f -- "$tmp"
+    }
+fi
+
 # kubectl completion will be lazy loaded when first used
 
 # NVM - Load default Node version automatically
