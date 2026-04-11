@@ -14,7 +14,6 @@ return {
         "buf",
         "clj-kondo",
         "clojure-lsp",
-        "codespell",
         "debugpy",
         "delve",
         "docker-compose-language-service",

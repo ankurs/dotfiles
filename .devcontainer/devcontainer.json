@@ -1,0 +1,24 @@
+{
+  "name": "Dotfiles Dev",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  "remoteUser": "dev",
+  "features": {
+    // Uncomment language runtimes as needed:
+    // "ghcr.io/devcontainers/features/node:1": { "version": "lts" },
+    // "ghcr.io/devcontainers/features/go:1": {},
+    // "ghcr.io/devcontainers/features/rust:1": {},
+    // "ghcr.io/devcontainers/features/python:1": {}
+  },
+  "mounts": [
+    "source=nvim-mason,target=/home/dev/.local/share/nvim/mason,type=volume"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  }
+}

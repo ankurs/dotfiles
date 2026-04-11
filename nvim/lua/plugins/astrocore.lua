@@ -108,7 +108,7 @@ return {
         -- ["<C-S>"] = false,
       },
       v = {
-        ["<Leader>ca"] = { vim.lsp.buf.range_code_action, desc = "Code action" },
+        ["<Leader>ca"] = { vim.lsp.buf.code_action, desc = "Code action" },
       },
     },
   },

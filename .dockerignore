@@ -1,0 +1,11 @@
+.git
+fonts/
+fedora/
+*.md
+backup.sh
+check.sh
+fedora_post_setup.sh
+snap_list
+variety.conf
+weechat.setup
+.devcontainer/
