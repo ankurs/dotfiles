@@ -13,12 +13,21 @@
     "frontend-design@claude-plugins-official": true,
     "gitlab@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true
+    "pr-review-toolkit@claude-plugins-official": true,
+    "codex@openai-codex": true
+  },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
   "voiceEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754085417006
-  },
-  "effortLevel": "high"
+  }
 }
