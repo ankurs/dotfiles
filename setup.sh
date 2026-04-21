@@ -347,7 +347,7 @@ if [[ -z $UPDATE ]]; then
     
     # Additional configuration directories
     mkdir -p ~/.cargo/ ~/.config/
-    ln -sf "$DOTFILES_DIR/cargo-config" ~/.cargo/config
+    ln -sf "$DOTFILES_DIR/cargo-config.toml" ~/.cargo/config.toml
 
     # Neovim configuration - symlink the entire nvim directory
     if [[ -d "$HOME/.config/nvim" ]] && [[ ! -L "$HOME/.config/nvim" ]]; then

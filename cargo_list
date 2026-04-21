@@ -6,3 +6,6 @@ cargo-update
 
 # Modern CLI Tools
 eza
+
+# Version Control
+jj-cli

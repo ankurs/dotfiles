@@ -54,6 +54,7 @@ brew "reattach-to-user-namespace"
 
 # Version Control
 brew "git"
+brew "jj"
 
 # Development Tools
 brew "gcc"
