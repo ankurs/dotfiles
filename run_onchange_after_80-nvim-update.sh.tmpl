@@ -1,0 +1,16 @@
+#!/bin/bash
+# Restores plugins to the lockfile-pinned commits. Re-runs when the
+# tracked lockfile changes (e.g. after `chezmoi update` pulls a newer
+# version from another machine). To upgrade plugins to latest, run
+# `:Lazy sync` interactively in nvim — that writes through the symlink
+# created by run_onchange_after_15-symlink-lockfiles.sh, so the new
+# lockfile lands directly in the chezmoi source for git commit + push.
+set -eo pipefail
+
+# Re-run when the tracked lockfile changes:
+# {{ include "dot_config/nvim/lazy-lock.json" | sha256sum }}
+
+if command -v nvim >/dev/null 2>&1; then
+    nvim --headless "+Lazy! restore" +qa 2>/dev/null || \
+        echo "Neovim plugin restore failed; run :Lazy restore manually"
+fi

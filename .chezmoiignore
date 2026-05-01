@@ -1,0 +1,35 @@
+{{/*
+   Files at the repo root that aren't part of chezmoi source state.
+   Without these entries chezmoi would try to copy them to $HOME.
+*/ -}}
+README.md
+Dockerfile
+.devcontainer
+.dockerignore
+Brewfile
+dnf_list
+dnf_remove_list
+cargo_list
+npm_global_list
+snap_list
+backup.sh
+check.sh
+fedora_post_setup.sh
+bootstrap.sh
+fedora
+
+{{/*
+   Lockfiles that the application rewrites in place.
+   We symlink these to the source dir from a run_onchange script instead,
+   so app writes go straight back to the chezmoi source.
+*/ -}}
+.config/nvim/lazy-lock.json
+
+{{/* OS-specific gating: skip the wrong ghostty target on the wrong OS */ -}}
+{{ if ne .chezmoi.os "darwin" -}}
+Library
+{{ end -}}
+{{ if ne .chezmoi.os "linux" -}}
+.config/ghostty
+.config/variety
+{{ end -}}

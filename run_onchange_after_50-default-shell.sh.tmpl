@@ -1,0 +1,12 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "linux" -}}
+set -eo pipefail
+if [[ "$SHELL" != *"zsh"* ]] && command -v zsh >/dev/null 2>&1; then
+    ZSH_PATH=$(command -v zsh)
+    if ! grep -qx "$ZSH_PATH" /etc/shells; then
+        echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
+    fi
+    echo "Changing default shell to $ZSH_PATH (logout required to take effect)..."
+    chsh -s "$ZSH_PATH" || echo "chsh failed; run manually: chsh -s $ZSH_PATH"
+fi
+{{ end -}}

@@ -1,0 +1,31 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "linux" -}}
+{{ if eq .chezmoi.osRelease.id "fedora" -}}
+set -eo pipefail
+
+# dnf_list content hash (forces re-run when dnf_list changes):
+# {{ include "dnf_list" | sha256sum }}
+
+# Ensure copr plugin and required repos are present
+sudo dnf install -y dnf-plugins-core
+sudo dnf copr enable -y scottames/ghostty || true
+sudo dnf copr enable -y lihaohong/yazi || true
+
+# Disable Google Cloud SDK repo on aarch64 (no ARM64 packages available)
+if [[ "$(uname -m)" == "aarch64" ]] && [[ -f /etc/yum.repos.d/google-cloud-sdk.repo ]]; then
+    sudo dnf config-manager setopt google-cloud-cli.enabled=0 2>/dev/null || true
+fi
+
+PACKAGES=$(grep -v '^#\|^$' "{{ .chezmoi.sourceDir }}/dnf_list" | tr '\n' ' ')
+if [[ -n "$PACKAGES" ]]; then
+    echo "$PACKAGES" | xargs -L 20 sudo dnf install -y
+fi
+
+if [[ -f "{{ .chezmoi.sourceDir }}/dnf_remove_list" ]]; then
+    REMOVE_PKGS=$(grep -v '^#\|^$' "{{ .chezmoi.sourceDir }}/dnf_remove_list" | tr '\n' ' ')
+    if [[ -n "$REMOVE_PKGS" ]]; then
+        echo "$REMOVE_PKGS" | xargs sudo dnf remove -y || true
+    fi
+fi
+{{ end -}}
+{{ end -}}

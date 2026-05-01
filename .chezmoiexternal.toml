@@ -1,0 +1,6 @@
+[".local/share/fonts/powerline"]
+    type = "git-repo"
+    url = "https://github.com/powerline/fonts.git"
+    refreshPeriod = "168h"
+    [".local/share/fonts/powerline".clone]
+        args = ["--depth", "1"]

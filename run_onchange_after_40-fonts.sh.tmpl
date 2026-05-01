@@ -1,0 +1,17 @@
+#!/bin/bash
+{{ if eq .chezmoi.os "linux" -}}
+set -eo pipefail
+if command -v fc-cache >/dev/null 2>&1; then
+    echo "Refreshing font cache..."
+    fc-cache -f "$HOME/.local/share/fonts"
+fi
+{{ else if eq .chezmoi.os "darwin" -}}
+# macOS reads fonts on demand from ~/Library/Fonts; copy any TTFs the
+# powerline external dropped under ~/.local/share/fonts there.
+set -eo pipefail
+mkdir -p "$HOME/Library/Fonts"
+SRC="$HOME/.local/share/fonts/powerline"
+if [[ -d "$SRC" ]]; then
+    find "$SRC" -type f \( -name '*.ttf' -o -name '*.otf' \) -exec cp -n {} "$HOME/Library/Fonts/" \;
+fi
+{{ end -}}

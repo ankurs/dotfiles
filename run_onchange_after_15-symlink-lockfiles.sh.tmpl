@@ -1,0 +1,10 @@
+#!/bin/bash
+# Symlink app-modified lockfiles back into the chezmoi source dir so writes
+# from the app (e.g. :Lazy sync) land directly in the git-tracked file.
+# Without this, chezmoi's copy semantics would clobber the app's updates on
+# the next `chezmoi apply`.
+set -eo pipefail
+
+mkdir -p "$HOME/.config/nvim"
+ln -sf "{{ .chezmoi.sourceDir }}/dot_config/nvim/lazy-lock.json" \
+       "$HOME/.config/nvim/lazy-lock.json"

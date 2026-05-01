@@ -1,12 +1,13 @@
 [user]
 	name = Ankur Shrivastava
-	email = ankur@ankurs.com
+	email = {{ .email }}
 
 [url "git@github.com:"]
 	insteadOf = https://github.com/
-
-[url "git@source.golabs.io:"]
-	insteadOf = https://source.golabs.io
+{{ if .work.enabled }}
+[url "git@{{ .work.url_rewrite_host }}:"]
+	insteadOf = https://{{ .work.url_rewrite_host }}
+{{- end }}
 
 [core]
 	excludesfile = "$HOME/.gitignore"
@@ -48,5 +49,7 @@
 	defaultBranch = main
 	templateDir = ~/.git-templates
 
-[includeIf "hasconfig:remote.*.url:git@source.golabs.io:*/**"]
+{{- if .work.enabled }}
+[includeIf "hasconfig:remote.*.url:git@{{ .work.url_rewrite_host }}:*/**"]
 	path = "~/.gitconfig.work"
+{{- end }}

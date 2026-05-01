@@ -37,13 +37,23 @@ This setup includes the tools I use for my terminal-centric development workflow
 
 ## Using This Setup
 
-This is primarily my personal configuration, but if you want to explore or test it:
+This branch (`chezmoi`) is managed by [chezmoi](https://www.chezmoi.io/) instead of bash scripts. The `master` branch keeps the older `setup.sh`/`update.sh` workflow if you prefer that.
+
+Fresh machine, end-to-end:
 
 ```bash
-git clone --recursive https://github.com/ankurs/dotfiles.git ~/code/dotfiles
-cd ~/code/dotfiles
-./setup.sh
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply --branch chezmoi ankurs/dotfiles
 ```
+
+Or, after cloning manually:
+
+```bash
+git clone -b chezmoi https://github.com/ankurs/dotfiles.git ~/code/dotfiles
+cd ~/code/dotfiles
+./bootstrap.sh
+```
+
+On first apply, chezmoi prompts for a few values (git email, todo.txt dir, wallpapers dir, whether to enable work overrides) and stores the answers in `~/.config/chezmoi/chezmoi.toml` per machine.
 
 **Important**: This is an opinionated setup that will change your shell configuration and install packages. I'd recommend reviewing the code first to see if it aligns with what you want on your system.
 
@@ -261,22 +271,25 @@ For standard AstroNvim keybindings (LSP, file explorer, diagnostics, etc.), see:
 
 ## My Utility Scripts
 
-I've created a few scripts to help maintain this setup across my machines:
+### `./bootstrap.sh`
+One-shot fresh-install entry point: installs chezmoi (via brew/dnf or the official installer fallback), then runs `chezmoi init --apply` against this repo. Subsequent runs from inside the cloned repo apply the local checkout in place.
 
-### `./setup.sh`
-The main installation script. Handles everything from SSH key generation to package installation to symlinking dotfiles. It also supports an update mode (`./setup.sh update`) which updates the repo, submodules, all package managers, plugin managers, and language tools in one go.
+### Day-to-day chezmoi commands
+
+- `chezmoi update` — pulls the repo and applies changes (replaces the old `update.sh`). The `run_onchange_*` hooks only re-run package installs when the lists actually changed.
+- `chezmoi diff` — preview pending changes before applying them.
+- `chezmoi edit ~/.zshrc` — edit the source-state version of a managed file; `--apply` reapplies on save.
+- `chezmoi add ~/.somerc` — start managing a new file.
+- `chezmoi apply` — apply current source state. No-op if nothing changed.
 
 ### `./check.sh`
-My "did I set this up right?" script. It verifies essential commands (git, zsh, tmux, nvim), modern CLI tools (fzf, bat, eza, rg, zoxide, delta, yazi), AI tools (claude, gemini, codex), symlink integrity, plugin managers (Zinit, TPM, AstroNvim), SSH keys, git config, and shell configuration loading. I run this after setting up a new machine to make sure nothing was missed.
-
-### `./update.sh`
-Updates all the packages, plugins, and dependencies. I run this periodically to keep everything current - it handles brew/dnf, Zinit, TPM, Neovim plugins, Mason tools, npm globals, and cargo packages.
+My "did I set this up right?" health-check script. Verifies essential commands, modern CLI tools, AI tools, plugin managers, SSH keys, git config, and shell loading. Lives outside chezmoi's source state — kept around as a standalone utility.
 
 ### `./backup.sh`
-Creates compressed, timestamped backups to `~/.dotfiles-backup/`. It backs up config files and directories (including SSH keys and cargo config), captures git state (status, diff, stash, recent commits), records installed packages, and generates a manifest. It automatically cleans up old backups, keeping the last 10.
+Creates compressed, timestamped backups to `~/.dotfiles-backup/`. It backs up config files and directories, captures git state, records installed packages, and auto-cleans old backups (keeps last 10).
 
 ### `./fedora_post_setup.sh`
-An interactive menu-driven script I use after a fresh Fedora install. It detects whether I'm on a desktop, laptop, or VM, then lets me selectively install things like browsers, Docker, Kubernetes tools, power management, virtualization, and security hardening (fail2ban).
+Interactive menu-driven script for post-Fedora-install hardware/role-specific setup (browsers, Docker, K8s, power mgmt, fail2ban). Opt-in; not run by `chezmoi apply`.
 
 ## Cross-Platform Support
 
@@ -299,9 +312,9 @@ Organized package lists by category:
 
 ### Regular Updates
 ```bash
-./setup.sh update  # Full update: repo, submodules, packages, plugins, language tools
-./update.sh        # Update packages, plugins, and dependencies
-./check.sh         # Verify setup health
+chezmoi update     # git pull + apply (re-runs hooks only for changed inputs)
+chezmoi diff       # preview pending changes
+./check.sh         # verify setup health
 ```
 
 ### Backup Before Changes
@@ -310,61 +323,80 @@ Organized package lists by category:
 ```
 
 ### Adding New Tools
-1. Add to appropriate package list (`Brewfile` on macOS or `dnf_list` on Fedora)
-2. Run `./update.sh` to install
-3. Add configuration as needed
+1. Add the package to `Brewfile` (macOS) or `dnf_list` (Fedora).
+2. Run `chezmoi apply`. The `run_onchange_*` hook for that platform's package manager will detect the file-content change (its hash is embedded in the script template) and re-run only that step. Unchanged steps are no-ops.
+
+### Updating Neovim plugins
+`~/.config/nvim/lazy-lock.json` is symlinked (not copied) into the chezmoi source dir, so:
+1. In nvim, run `:Lazy sync` to update plugins. Lazy.nvim writes the new pinned SHAs through the symlink straight into the source-state lockfile.
+2. From the chezmoi source dir (`chezmoi cd`), `git commit -am "nvim: lockfile bump" && git push`.
+3. On other machines, `chezmoi update` pulls the new lockfile and `run_onchange_after_80` runs `:Lazy! restore` to check out the pinned commits.
+
+The same symlink pattern (`run_onchange_after_15-symlink-lockfiles.sh.tmpl`) applies to any other application-modified lockfile you want to track — chezmoi's default copy semantics would otherwise clobber the app's writes on the next apply.
 
 ## File Structure
 
-### Configuration Files
-- `dot-zshrc`: Unified shell configuration (Zsh with all settings)
-- `dot-tmux.conf`: tmux configuration
-- `dot-ghostty`: Ghostty terminal emulator config
-- `dot-mostrc`: `most` pager configuration
-- `dot-todo.cfg`: todo.sh task management config
-- `dot-gitignore`: Global git ignore rules
-- `dotgitconfig`: Git user config, SSH auth, URL rewrites
+### chezmoi source state (file → target)
+- `dot_zshrc.tmpl` → `~/.zshrc` (OS-specific PATH blocks gated at apply-time)
+- `dot_tmux.conf` → `~/.tmux.conf`
+- `dot_mostrc` → `~/.mostrc`
+- `dot_gitconfig.tmpl` → `~/.gitconfig` (templates email + work URL rewrite)
+- `dot_gitignore` → `~/.gitignore`
+- `dot_todo.cfg.tmpl` → `~/.todo.cfg` (templates `TODO_DIR`)
+- `dot_cargo/config.toml` → `~/.cargo/config.toml`
+- `dot_config/nvim/` → `~/.config/nvim/`
+- `dot_config/variety/variety.conf.tmpl` → `~/.config/variety/variety.conf` (Linux only)
+- `dot_config/ghostty/config.tmpl` → `~/.config/ghostty/config` (Linux only; thin wrapper around shared template)
+- `private_Library/private_Application Support/com.mitchellh.ghostty/config.tmpl` → `~/Library/Application Support/com.mitchellh.ghostty/config` (macOS only)
+- `dot_claude/CLAUDE.md`, `dot_claude/settings.json`, `dot_claude/mcp-global.json.tmpl` → `~/.claude/...`
+- `.chezmoitemplates/ghostty.conf` — shared template body for Ghostty config
 
-### Directories
-- `nvim/`: Neovim configuration with AstroNvim, Mason, and all plugin configs
-- `claude/`: Claude Code settings, MCP server configs, and project instructions
-- `fonts/`: Powerline/Nerd fonts (git submodule)
-- `fedora/`: Fedora-specific configs (fail2ban, btrbk backups, sysctl tuning, etc.)
+### chezmoi config files
+- `.chezmoi.toml.tmpl` — prompts on first init (email, todo dir, wallpapers dir, work overrides)
+- `.chezmoiignore` — repo-root files that aren't dotfiles (Brewfile, scripts, etc.) and OS-gated targets
+- `.chezmoiexternal.toml` — pulls the powerline fonts repo into `~/.local/share/fonts/powerline` (replaces the old git submodule)
 
-### Scripts
-- `setup.sh`: Main installation script (also supports `./setup.sh update`)
-- `check.sh`: Health check - verifies tools, symlinks, plugins, and configs
-- `update.sh`: Update all packages, plugins, and dependencies
-- `backup.sh`: Compressed timestamped backups with auto-cleanup
-- `fedora_post_setup.sh`: Interactive post-install wizard for Fedora
+### Bootstrap and update hooks
+- `run_onchange_before_10-ssh-key.sh.tmpl` — generate ed25519 if absent
+- `run_onchange_after_20-zinit.sh` — install Zinit if absent
+- `run_onchange_after_30-tpm.sh` — install TPM and tmux plugins
+- `run_onchange_after_40-fonts.sh.tmpl` — refresh font cache (Linux) / copy to `~/Library/Fonts` (macOS)
+- `run_onchange_after_50-default-shell.sh.tmpl` — `chsh -s zsh` on Linux if not already
+- `run_onchange_after_70-packages-darwin.sh.tmpl` — `brew bundle install` (re-runs when Brewfile changes)
+- `run_onchange_after_71-packages-fedora.sh.tmpl` — copr enable + `dnf install` (re-runs when dnf_list changes)
+- `run_onchange_after_72-cargo.sh.tmpl` — install missing cargo packages, then `cargo install-update -a`
+- `run_onchange_after_73-npm.sh.tmpl` — `npm i -g --upgrade` from npm_global_list
+- `run_onchange_after_80-nvim-update.sh.tmpl` — `nvim --headless +Lazy! sync` (re-runs when lazy-lock.json changes)
 
-### Package Lists
-- `Brewfile`: macOS Homebrew Bundle file (taps, CLI packages, and GUI casks)
-- `dnf_list` / `dnf_remove_list`: Fedora packages to install and remove
-- `npm_global_list`: Global npm packages (neovim provider)
-- `snap_list`: Snap packages for Fedora
-- `cargo-config`: Rust Cargo configuration
+All hooks are idempotent and safe to re-run; chezmoi only fires them when their hashed inputs change.
+
+### Standalone scripts (not run by chezmoi)
+- `bootstrap.sh` — one-shot fresh-install entry point
+- `check.sh` — health check
+- `backup.sh` — timestamped backups
+- `fedora_post_setup.sh` — interactive Fedora post-install wizard
+
+### Package and config lists
+- `Brewfile`, `dnf_list`, `dnf_remove_list`, `cargo_list`, `npm_global_list`, `snap_list` — package manifests, hashed by the `run_onchange_*` hooks
+- `fedora/` — Fedora-specific configs (fail2ban, btrbk, sysctl, etc.); applied manually by `fedora_post_setup.sh`
 
 ## Common Issues I've Encountered
 
-A few things that have tripped me up when setting up on new machines:
-
-**Zinit not installing automatically**
+**Force a hook to re-run**
+chezmoi caches script hashes under `~/.config/chezmoi/scriptstate.boltdb`. To rerun a single hook (e.g. after fixing a transient install failure):
 ```bash
-# Manual installation if needed
-git clone https://github.com/zdharma-continuum/zinit.git ~/.local/share/zinit/zinit.git
+chezmoi state delete-bucket --bucket=scriptState
+chezmoi apply
 ```
 
-**tmux plugins not loading**
+**Re-prompt for a template variable**
+Edit `~/.config/chezmoi/chezmoi.toml` directly, or:
 ```bash
-# Reset TPM if needed
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-# In tmux: Ctrl+a + I to install plugins
+chezmoi init  # re-runs prompts; overwrites chezmoi.toml
 ```
 
 **Shell changes not taking effect**
 ```bash
-# Reload configuration
 source ~/.zshrc
 ```
 

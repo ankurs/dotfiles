@@ -1,0 +1,14 @@
+#!/bin/bash
+set -eo pipefail
+
+if ! command -v npm >/dev/null 2>&1; then
+    exit 0
+fi
+
+# npm_global_list content hash:
+# {{ include "npm_global_list" | sha256sum }}
+
+PACKAGES=$(grep -v '^#\|^$' "{{ .chezmoi.sourceDir }}/npm_global_list" | tr '\n' ' ')
+if [[ -n "$PACKAGES" ]]; then
+    echo "$PACKAGES" | xargs npm i -g --upgrade
+fi

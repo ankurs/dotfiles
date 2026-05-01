@@ -1,0 +1,16 @@
+{{- $email := promptStringOnce . "email" "Git email" "ankur@ankurs.com" -}}
+{{- $todoDir := promptStringOnce . "todo_dir" "todo.txt directory" "~/GoogleDrive/My Drive/todo-txt" -}}
+{{- $wallpapersDir := promptStringOnce . "wallpapers_dir" "Variety wallpapers directory" "~/GoogleDrive/My Drive/Wallpapers" -}}
+{{- $workEnabled := promptBoolOnce . "work.enabled" "Configure work (golabs) overrides?" false -}}
+
+[data]
+email = {{ $email | quote }}
+todo_dir = {{ $todoDir | quote }}
+wallpapers_dir = {{ $wallpapersDir | quote }}
+
+[data.work]
+enabled = {{ $workEnabled }}
+{{- if $workEnabled }}
+goprivate = "source.golabs.io"
+url_rewrite_host = "source.golabs.io"
+{{- end }}

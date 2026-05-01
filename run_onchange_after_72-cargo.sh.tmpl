@@ -1,0 +1,20 @@
+#!/bin/bash
+set -eo pipefail
+
+if ! command -v cargo >/dev/null 2>&1; then
+    exit 0
+fi
+
+# cargo_list content hash:
+# {{ include "cargo_list" | sha256sum }}
+
+while IFS= read -r pkg; do
+    [[ -z "$pkg" || "$pkg" =~ ^# ]] && continue
+    if ! cargo install --list | grep -q "^$pkg "; then
+        cargo install "$pkg" || echo "WARN: cargo install $pkg failed"
+    fi
+done < "{{ .chezmoi.sourceDir }}/cargo_list"
+
+if cargo install --list | grep -q '^cargo-update '; then
+    cargo install-update -a || true
+fi

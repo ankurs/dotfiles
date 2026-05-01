@@ -52,21 +52,19 @@ set_path "$HOME/.jenv/bin"
 set_path "$HOME/.node/bin"
 set_path "$HOME/.vim/plugged/vim-iced/bin"
 
-# macOS specific paths
-if is_macos; then
-    set_path "/opt/homebrew/bin"
-    set_path "/opt/homebrew/sbin"
-    set_path "/usr/local/opt/gnu-sed/libexec/gnubin"
-    set_path "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
-    set_path "/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
-    set_path "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
-    set_path "/Library/TeX/texbin"
-fi
-
-# Linux specific paths
-if is_linux; then
-    set_path "/var/lib/snapd/snap/bin"
-fi
+{{ if eq .chezmoi.os "darwin" -}}
+# macOS specific paths (gated at chezmoi-apply time, not runtime)
+set_path "/opt/homebrew/bin"
+set_path "/opt/homebrew/sbin"
+set_path "/usr/local/opt/gnu-sed/libexec/gnubin"
+set_path "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+set_path "/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+set_path "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
+set_path "/Library/TeX/texbin"
+{{ else if eq .chezmoi.os "linux" -}}
+# Linux specific paths (gated at chezmoi-apply time, not runtime)
+set_path "/var/lib/snapd/snap/bin"
+{{ end }}
 
 # VM-specific settings (UTM/QEMU)
 if is_linux && is_vm; then
@@ -436,5 +434,7 @@ rvm() {
 
 # Ensure colors work properly
 autoload -U colors && colors
-# Added by Antigravity
-export PATH="/Users/ankurshrivastava/.antigravity/antigravity/bin:$PATH"
+{{ if eq .chezmoi.os "darwin" -}}
+# Added by Antigravity (macOS install only)
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+{{ end -}}
