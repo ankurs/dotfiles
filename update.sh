@@ -110,14 +110,23 @@ if [[ -d "$HOME/.local/share/zinit" ]]; then
     fi
 fi
 
-# Tmux plugin updates
-if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
+# Tmux plugins: install missing first (covers fresh setup), then update existing
+if [[ -d "$HOME/.tmux/plugins/tpm" ]] && has_cmd "tmux"; then
+    log_info "Installing any missing tmux plugins"
+    if ~/.tmux/plugins/tpm/bin/install_plugins; then
+        log_success "Tmux plugins installed"
+    else
+        log_warning "Tmux plugin install failed"
+    fi
+
     log_info "Updating tmux plugins"
     if ~/.tmux/plugins/tpm/bin/update_plugins all; then
         log_success "Tmux plugins updated"
     else
         log_warning "Tmux plugin update failed"
     fi
+elif [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
+    log_warning "tmux not on PATH, skipping plugin install/update"
 fi
 
 # Neovim plugin updates (AstroNvim)

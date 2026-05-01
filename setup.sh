@@ -71,8 +71,25 @@ function setup_mac() {
 }
 
 function setup_fedora() {
-    log_info "Setting up Fedora environment"
-    
+    # Detect Asahi Remix (ARM Macs running Fedora). The Asahi kernel uses 16k
+    # pages which breaks snapd and requires kernel-16k-devel instead of
+    # kernel-devel for bcc/bpftrace headers.
+    local IS_ASAHI=0
+    if [[ -f /etc/os-release ]]; then
+        local _id _id_like
+        _id=$(. /etc/os-release; echo "${ID:-}")
+        _id_like=$(. /etc/os-release; echo "${ID_LIKE:-}")
+        if [[ "$_id" == "fedora-asahi-remix" || "$_id_like" == *"fedora-asahi-remix"* ]]; then
+            IS_ASAHI=1
+        fi
+    fi
+
+    if [[ $IS_ASAHI -eq 1 ]]; then
+        log_info "Setting up Fedora Asahi Remix environment (Apple Silicon)"
+    else
+        log_info "Setting up Fedora environment"
+    fi
+
     # Verify required files exist
     if [[ ! -f "./dnf_list" ]]; then
         log_error "Required file dnf_list not found"
@@ -107,10 +124,10 @@ function setup_fedora() {
         fi
         
         progress "Updating core system packages"
-        sudo dnf group upgrade core -y && sudo dnf update-minimal -y
-        
+        sudo dnf group upgrade core -y && sudo dnf upgrade --minimal -y
+
         progress "Installing Development Tools"
-        if sudo dnf group install "Development Tools" -y; then
+        if sudo dnf group install development-tools -y; then
             log_success "Development Tools installed"
         else
             log_warning "Development Tools installation failed"
@@ -123,14 +140,36 @@ function setup_fedora() {
             log_warning "Some essential packages failed to install"
         fi
         
-        progress "Installing and configuring Snap"
-        if sudo dnf install -y snapd; then
-            sudo ln -sf /var/lib/snapd/snap /snap 2>/dev/null || true
-            log_info "Waiting for snap to seed..."
-            sudo snap wait system seed.loaded
-            log_success "Snap installed and configured"
+        if [[ $IS_ASAHI -eq 0 ]]; then
+            progress "Installing and configuring Snap"
+            if sudo dnf install -y snapd; then
+                sudo ln -sf /var/lib/snapd/snap /snap 2>/dev/null || true
+                log_info "Waiting for snap to seed..."
+                sudo snap wait system seed.loaded
+                log_success "Snap installed and configured"
+            else
+                log_warning "Snap installation failed"
+            fi
         else
-            log_warning "Snap installation failed"
+            progress "Skipping snapd on Asahi (16k page kernel incompatible with most snaps)"
+            log_info "Using Flatpak instead — see next step"
+        fi
+
+        progress "Configuring Flatpak with Flathub"
+        if sudo dnf install -y flatpak && \
+           flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo; then
+            log_success "Flatpak/Flathub configured"
+        else
+            log_warning "Flatpak/Flathub configuration failed"
+        fi
+
+        if [[ $IS_ASAHI -eq 1 ]]; then
+            progress "Installing kernel-16k-devel for Asahi (matches running 16k kernel)"
+            if sudo dnf install -y kernel-16k-devel; then
+                log_success "kernel-16k-devel installed (eBPF tools will have matching headers)"
+            else
+                log_warning "kernel-16k-devel install failed (bcc/bpftrace may lack headers)"
+            fi
         fi
         progress "Setting up Google Cloud SDK repository"
         ARCH=$(uname -m)
@@ -188,7 +227,9 @@ EOM
     fi
 
     progress "Installing packages from dnf_list"
-    if cat ./dnf_list | grep -v '^#' | grep -v '^$' | xargs -L 20 sudo dnf install -y; then
+    # --allowerasing handles known conflicts like podman-docker (preinstalled on
+    # Fedora Workstation/Asahi) vs moby-engine — both provide the `docker` cmd.
+    if cat ./dnf_list | grep -v '^#' | grep -v '^$' | xargs -L 20 sudo dnf install -y --allowerasing; then
         log_success "DNF packages installed"
     else
         log_warning "Some DNF packages failed to install"
@@ -212,8 +253,14 @@ count_steps() {
         STEPS_TOTAL=$((STEPS_TOTAL + 2))  # optimization, Brewfile install
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
-        if [[ $NAME == "Fedora Linux" ]]; then
-            STEPS_TOTAL=$((STEPS_TOTAL + 11))  # dnf config, ssh, repos, copr (ghostty), updates, dev tools, snap, cloud tools, copr (yazi), packages, zsh shell
+        if [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
+            # dnf config, ssh, repos, copr (ghostty), updates, dev tools,
+            # snap (or skip-warning on Asahi), flatpak, cloud tools,
+            # copr (yazi), packages, zsh shell
+            STEPS_TOTAL=$((STEPS_TOTAL + 12))
+            if [[ "$ID" == "fedora-asahi-remix" ]]; then
+                STEPS_TOTAL=$((STEPS_TOTAL + 1))  # kernel-16k-devel
+            fi
         fi
     fi
     
@@ -238,7 +285,7 @@ function do_setup() {
         fi
     elif [[ $platform == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
-        if [[ $NAME == "Fedora Linux" ]]; then
+        if [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
             if ! setup_fedora; then
                 log_error "Fedora setup failed"
                 return 1
@@ -327,11 +374,13 @@ if [[ -z $UPDATE ]]; then
     progress "Creating symbolic links"
     DOTFILES_DIR=$(pwd)
 
-    # Create configuration symlinks (compatible with bash 3.x on macOS)
+    # Create configuration symlinks (compatible with bash 3.x on macOS).
+    # -n is critical when re-running setup: without it, ln dereferences an
+    # existing symlink-to-directory and creates a self-referential link inside.
     create_symlink() {
         local src="$1"
         local dst="$2"
-        if ln -sf "$src" "$dst"; then
+        if ln -sfn "$src" "$dst"; then
             log_info "Linked $(basename "$src")"
         else
             log_warning "Failed to link $(basename "$src")"
@@ -347,14 +396,14 @@ if [[ -z $UPDATE ]]; then
     
     # Additional configuration directories
     mkdir -p ~/.cargo/ ~/.config/
-    ln -sf "$DOTFILES_DIR/cargo-config.toml" ~/.cargo/config.toml
+    ln -sfn "$DOTFILES_DIR/cargo-config.toml" ~/.cargo/config.toml
 
     # Neovim configuration - symlink the entire nvim directory
     if [[ -d "$HOME/.config/nvim" ]] && [[ ! -L "$HOME/.config/nvim" ]]; then
         log_warning "Existing nvim config found, backing up to ~/.config/nvim.bak"
         mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
     fi
-    if ln -sf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"; then
+    if ln -sfn "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"; then
         log_info "Linked nvim config"
     else
         log_warning "Failed to link nvim config"
@@ -364,7 +413,7 @@ if [[ -z $UPDATE ]]; then
     if [[ $(uname) == "Darwin" ]]; then
         # macOS: Use Application Support directory
         mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"
-        if ln -sf "$DOTFILES_DIR/dot-ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"; then
+        if ln -sfn "$DOTFILES_DIR/dot-ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"; then
             log_info "Linked Ghostty config (macOS)"
         else
             log_warning "Failed to link Ghostty config"
@@ -372,7 +421,7 @@ if [[ -z $UPDATE ]]; then
     else
         # Linux: Use XDG config directory
         mkdir -p ~/.config/ghostty
-        if ln -sf "$DOTFILES_DIR/dot-ghostty" ~/.config/ghostty/config; then
+        if ln -sfn "$DOTFILES_DIR/dot-ghostty" ~/.config/ghostty/config; then
             log_info "Linked Ghostty config (Linux)"
         else
             log_warning "Failed to link Ghostty config"
@@ -398,15 +447,8 @@ if [[ -z $UPDATE ]]; then
         fi
     fi
 
-    # Install tmux plugins (must be after symlinks so .tmux.conf exists)
-    if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
-        progress "Installing tmux plugins"
-        if ~/.tmux/plugins/tpm/bin/install_plugins; then
-            log_success "Tmux plugins installed"
-        else
-            log_warning "Tmux plugin installation failed"
-        fi
-    fi
+    # Tmux plugins are installed after do_setup (so the package manager has
+    # had a chance to install tmux itself).
 else
     # In update mode, just refresh font cache if on Linux
     if [[ $(uname) == "Linux" ]] && command -v fc-cache &>/dev/null; then
@@ -466,4 +508,4 @@ fi
 
 log_success "\nDotfiles setup completed! (${STEPS_COMPLETED}/${STEPS_TOTAL} steps)"
 log_info "Language servers are now managed by Mason.nvim in Neovim config"
-log_info "Tmux plugins have been installed. If you're in tmux, reload with: tmux source ~/.tmux.conf"
+log_info "Run ./update.sh to install tmux plugins (and to refresh them later)"

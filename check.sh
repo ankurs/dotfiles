@@ -185,7 +185,7 @@ elif is_linux; then
     if [[ -f /etc/os-release ]]; then
         source /etc/os-release
         log_info "Distribution: $NAME $VERSION"
-        if [[ $NAME == "Fedora Linux" ]]; then
+        if [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
             check_cmd "dnf"
         fi
     fi
