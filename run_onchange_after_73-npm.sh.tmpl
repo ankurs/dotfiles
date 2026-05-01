@@ -1,4 +1,9 @@
 #!/bin/bash
+# Install globals into ~/.node so we don't need root to write to
+# /usr/local/lib/node_modules. dot_zshrc already adds $HOME/.node/bin to
+# PATH and $HOME/.node/lib/node_modules to NODE_PATH. Setting the prefix
+# only via env var (not ~/.npmrc) keeps it from conflicting with nvm in
+# interactive shells.
 set -eo pipefail
 
 if ! command -v npm >/dev/null 2>&1; then
@@ -7,6 +12,9 @@ fi
 
 # npm_global_list content hash:
 # {{ include "npm_global_list" | sha256sum }}
+
+export NPM_CONFIG_PREFIX="$HOME/.node"
+mkdir -p "$NPM_CONFIG_PREFIX"
 
 PACKAGES=$(grep -v '^#\|^$' "{{ .chezmoi.sourceDir }}/npm_global_list" | tr '\n' ' ')
 if [[ -n "$PACKAGES" ]]; then
