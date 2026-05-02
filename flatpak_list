@@ -1,0 +1,12 @@
+# Flatpak applications (installed --user from flathub)
+# Only verified/official upstream entries.
+
+# Password manager
+com.bitwarden.desktop
+
+# Messaging
+org.telegram.desktop
+
+# Media
+org.kde.ghostwriter
+org.videolan.VLC

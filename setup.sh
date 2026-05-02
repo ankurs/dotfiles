@@ -71,9 +71,8 @@ function setup_mac() {
 }
 
 function setup_fedora() {
-    # Detect Asahi Remix (ARM Macs running Fedora). The Asahi kernel uses 16k
-    # pages which breaks snapd and requires kernel-16k-devel instead of
-    # kernel-devel for bcc/bpftrace headers.
+    # Detect Asahi Remix (ARM Macs running Fedora). Used to skip x86_64-only
+    # paths (Google Cloud SDK repo, etc.).
     local IS_ASAHI=0
     if [[ -f /etc/os-release ]]; then
         local _id _id_like
@@ -139,20 +138,12 @@ function setup_fedora() {
         else
             log_warning "Some essential packages failed to install"
         fi
-        
-        if [[ $IS_ASAHI -eq 0 ]]; then
-            progress "Installing and configuring Snap"
-            if sudo dnf install -y snapd; then
-                sudo ln -sf /var/lib/snapd/snap /snap 2>/dev/null || true
-                log_info "Waiting for snap to seed..."
-                sudo snap wait system seed.loaded
-                log_success "Snap installed and configured"
-            else
-                log_warning "Snap installation failed"
-            fi
+
+        progress "Installing COSMIC desktop environment"
+        if sudo dnf install -y @cosmic-desktop-environment; then
+            log_success "COSMIC desktop environment installed"
         else
-            progress "Skipping snapd on Asahi (16k page kernel incompatible with most snaps)"
-            log_info "Using Flatpak instead — see next step"
+            log_warning "COSMIC install failed (group may not exist on this system)"
         fi
 
         progress "Configuring Flatpak with Flathub"
@@ -163,14 +154,6 @@ function setup_fedora() {
             log_warning "Flatpak/Flathub configuration failed"
         fi
 
-        if [[ $IS_ASAHI -eq 1 ]]; then
-            progress "Installing kernel-16k-devel for Asahi (matches running 16k kernel)"
-            if sudo dnf install -y kernel-16k-devel; then
-                log_success "kernel-16k-devel installed (eBPF tools will have matching headers)"
-            else
-                log_warning "kernel-16k-devel install failed (bcc/bpftrace may lack headers)"
-            fi
-        fi
         progress "Setting up Google Cloud SDK repository"
         ARCH=$(uname -m)
         if [[ "$ARCH" == "aarch64" ]]; then
@@ -234,7 +217,17 @@ EOM
     else
         log_warning "Some DNF packages failed to install"
     fi
-    
+
+    if [[ -f ./flatpak_list ]] && command -v flatpak &>/dev/null; then
+        progress "Installing flatpaks from flatpak_list"
+        while IFS= read -r app; do
+            [[ -z "$app" || "$app" =~ ^[[:space:]]*# ]] && continue
+            flatpak install --user -y --noninteractive flathub "$app" \
+                || log_warning "Failed to install flatpak: $app"
+        done < ./flatpak_list
+        log_success "Flatpaks installed"
+    fi
+
     if [[ -z $UPDATE ]] && [[ -f "fedora_post_setup.sh" ]]; then
         progress "Running Fedora post-setup script"
         if bash fedora_post_setup.sh; then
@@ -254,13 +247,10 @@ count_steps() {
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
         if [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
-            # dnf config, ssh, repos, copr (ghostty), updates, dev tools,
-            # snap (or skip-warning on Asahi), flatpak, cloud tools,
-            # copr (yazi), packages, zsh shell
-            STEPS_TOTAL=$((STEPS_TOTAL + 12))
-            if [[ "$ID" == "fedora-asahi-remix" ]]; then
-                STEPS_TOTAL=$((STEPS_TOTAL + 1))  # kernel-16k-devel
-            fi
+            # dnf config, ssh, rpm-fusion, core upgrade, dev tools, essential
+            # packages, cosmic, flatpak, cloud sdk, aws cli, copr (ghostty),
+            # upgrade, copr (yazi), dnf packages, flatpak_list, zsh shell
+            STEPS_TOTAL=$((STEPS_TOTAL + 15))
         fi
     fi
     

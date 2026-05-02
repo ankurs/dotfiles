@@ -100,6 +100,28 @@ elif has_cmd "apt"; then
     fi
 fi
 
+# Flatpak updates and missing-app install
+if has_cmd "flatpak"; then
+    log_info "Updating flatpaks"
+    if flatpak update --user -y; then
+        log_success "Flatpaks updated"
+    else
+        log_warning "Flatpak update failed"
+    fi
+
+    if [[ -f ./flatpak_list ]]; then
+        log_info "Installing any missing flatpaks"
+        while IFS= read -r app; do
+            [[ -z "$app" || "$app" =~ ^[[:space:]]*# ]] && continue
+            if ! flatpak info --user "$app" &>/dev/null; then
+                log_info "Installing $app..."
+                flatpak install --user -y --noninteractive flathub "$app" \
+                    || log_warning "Failed to install $app"
+            fi
+        done < ./flatpak_list
+    fi
+fi
+
 # Zinit plugin updates
 if [[ -d "$HOME/.local/share/zinit" ]]; then
     log_info "Updating Zinit and plugins"
