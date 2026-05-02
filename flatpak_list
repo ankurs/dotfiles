@@ -10,3 +10,7 @@ org.telegram.desktop
 # Media
 org.kde.ghostwriter
 org.videolan.VLC
+
+# Browser
+com.brave.Browser
+org.chromium.Chromium
