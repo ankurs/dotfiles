@@ -40,7 +40,11 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      cssls = {
+        settings = {
+          css = { validate = true, lint = { unknownAtRules = "ignore" } },
+        },
+      },
       gopls = {
         settings = {
           gopls = {

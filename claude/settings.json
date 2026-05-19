@@ -14,7 +14,10 @@
     "gitlab@claude-plugins-official": true,
     "github@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "code-simplifier@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "playground@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "openai-codex": {
@@ -26,6 +29,8 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "editorMode": "vim",
+  "agentPushNotifEnabled": true,
   "voiceEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754085417006

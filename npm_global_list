@@ -2,3 +2,5 @@
 # Used by setup.sh and update.sh
 
 neovim
+typescript
+create-next-app

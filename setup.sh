@@ -193,6 +193,17 @@ EOM
     else
         log_warning "Some DNF packages failed to install"
     fi
+
+    progress "Installing uv (Python package manager)"
+    if ! command -v uv &>/dev/null; then
+        if curl -LsSf https://astral.sh/uv/install.sh | sh; then
+            log_success "uv installed"
+        else
+            log_warning "uv installation failed"
+        fi
+    else
+        log_info "uv already installed"
+    fi
     
     if [[ -z $UPDATE ]] && [[ -f "fedora_post_setup.sh" ]]; then
         progress "Running Fedora post-setup script"
@@ -213,7 +224,7 @@ count_steps() {
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
         if [[ $NAME == "Fedora Linux" ]]; then
-            STEPS_TOTAL=$((STEPS_TOTAL + 11))  # dnf config, ssh, repos, copr (ghostty), updates, dev tools, snap, cloud tools, copr (yazi), packages, zsh shell
+            STEPS_TOTAL=$((STEPS_TOTAL + 12))  # dnf config, ssh, repos, copr (ghostty), updates, dev tools, snap, cloud tools, copr (yazi), packages, uv, zsh shell
         fi
     fi
     

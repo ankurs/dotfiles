@@ -123,7 +123,15 @@ fi
 # Neovim plugin updates (AstroNvim)
 if has_cmd "nvim"; then
     log_info "Updating AstroNvim (plugins, language servers, and tools)"
-    if nvim --headless "+AstroUpdate" +qa 2>/dev/null; then
+    # :AstroUpdate triggers :MasonToolsUpdate asynchronously, so +qa would cut
+    # Mason installs/updates off mid-flight. nvim/update_headless.lua sets up
+    # an `UpdateCompleted` listener and routes progress to stdout; we then
+    # vim.wait on _G.upd_done before quitting.
+    update_lua="$(dirname "$0")/nvim/update_headless.lua"
+    if nvim --headless \
+        -c "luafile $update_lua" \
+        -c "AstroUpdate" \
+        -c "lua vim.wait(600000, function() return _G.upd_done end, 200); vim.cmd('qa!')"; then
         log_success "AstroNvim updated successfully"
     else
         log_warning "AstroNvim update failed - try running :AstroUpdate manually"

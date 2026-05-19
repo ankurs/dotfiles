@@ -85,6 +85,7 @@ brew "scala"
 # Language Management
 brew "nvm"
 brew "pyenv"
+brew "uv"
 brew "jenv"
 brew "jabba"
 
