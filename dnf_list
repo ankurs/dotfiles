@@ -16,6 +16,7 @@ git-delta
 difftastic
 yazi
 most
+htop
 hugo
 ffmpeg-free
 poppler-utils
@@ -32,34 +33,17 @@ gcc-c++
 # Languages & Runtimes
 golang
 python-devel
-opam
 nodejs
 
 # Container & Virtualization
 moby-engine
 docker-compose
 
-# DevOps & Cloud Tools
-kubernetes
-# google-cloud-sdk - requires Google Cloud repo (see fedora_post_setup.sh)
-# google-cloud-sdk-gke-gcloud-auth-plugin - requires Google Cloud repo
-
 # Network & Security Tools
-rsyslog
-fail2ban
-sendmail
 wireguard-tools
-
-# System Monitoring & Performance
-bcc
-bcc-tools
-bcc-doc
-bpftrace
-# netdata - install from https://learn.netdata.cloud/docs/installing/
 
 # File System & Storage
 btrfs-progs
-btrfs-heatmap
 btrbk
 rclone
 
@@ -69,23 +53,14 @@ protobuf-compiler
 freetype-devel
 
 # GUI Applications
-telegram-desktop
-vlc
-# chromium-freeworld - requires RPM Fusion repo
-alacritty
-variety
+# GUI apps are managed via flatpak_list (telegram, vlc, ghostwriter, etc.)
 ghostty
-ghostwriter
 pavucontrol
 NetworkManager-tui
 
 # Android Development
 android-tools
 android-file-transfer
-
-# Security & System Management
-setools-gui
-setroubleshoot
 
 # Text Processing
 texlive

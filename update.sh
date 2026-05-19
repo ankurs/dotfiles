@@ -100,6 +100,28 @@ elif has_cmd "apt"; then
     fi
 fi
 
+# Flatpak updates and missing-app install
+if has_cmd "flatpak"; then
+    log_info "Updating flatpaks"
+    if flatpak update --user -y; then
+        log_success "Flatpaks updated"
+    else
+        log_warning "Flatpak update failed"
+    fi
+
+    if [[ -f ./flatpak_list ]]; then
+        log_info "Installing any missing flatpaks"
+        while IFS= read -r app; do
+            [[ -z "$app" || "$app" =~ ^[[:space:]]*# ]] && continue
+            if ! flatpak info --user "$app" &>/dev/null; then
+                log_info "Installing $app..."
+                flatpak install --user -y --noninteractive flathub "$app" \
+                    || log_warning "Failed to install $app"
+            fi
+        done < ./flatpak_list
+    fi
+fi
+
 # Zinit plugin updates
 if [[ -d "$HOME/.local/share/zinit" ]]; then
     log_info "Updating Zinit and plugins"
@@ -110,14 +132,23 @@ if [[ -d "$HOME/.local/share/zinit" ]]; then
     fi
 fi
 
-# Tmux plugin updates
-if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
+# Tmux plugins: install missing first (covers fresh setup), then update existing
+if [[ -d "$HOME/.tmux/plugins/tpm" ]] && has_cmd "tmux"; then
+    log_info "Installing any missing tmux plugins"
+    if ~/.tmux/plugins/tpm/bin/install_plugins; then
+        log_success "Tmux plugins installed"
+    else
+        log_warning "Tmux plugin install failed"
+    fi
+
     log_info "Updating tmux plugins"
     if ~/.tmux/plugins/tpm/bin/update_plugins all; then
         log_success "Tmux plugins updated"
     else
         log_warning "Tmux plugin update failed"
     fi
+elif [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
+    log_warning "tmux not on PATH, skipping plugin install/update"
 fi
 
 # Neovim plugin updates (AstroNvim)

@@ -87,41 +87,26 @@ show_menu() {
     
     echo "Select components to install/configure:"
     echo
-    echo "  === Browsers ==="
-    echo "  1) Brave Browser"
-    if [[ "$ARCH" == "x86_64" ]]; then
-        echo "  2) Google Chrome"
-    else
-        echo "  2) Google Chrome (not available for ARM64)"
-    fi
-    echo "  3) Chromium (open-source Chrome alternative)"
-    echo
     echo "  === Development ==="
-    echo "  4) Docker & Container Tools"
-    echo "  5) Node.js & npm (via NodeSource)"
-    echo "  6) Virtualization (KVM/QEMU)"
-    echo "  7) Kubernetes (Minikube)"
+    echo "  1) Docker (service + group)"
+    echo "  2) Virtualization (KVM/QEMU)"
+    echo "  3) Kubernetes (Minikube)"
     echo
     echo "  === System ==="
-    echo "  8) Security Hardening (fail2ban, firewall)"
-    echo "  9) System Optimizations (SSD, performance)"
-    echo "  10) Monitoring Tools (htop, btop, glances, etc.)"
-    echo "  11) Laptop Power Management (TLP, powertop)"
-    echo
-    echo "  === Desktop ==="
-    echo "  12) Desktop Applications (variety, rofi)"
+    echo "  4) Security Hardening (fail2ban, firewall)"
+    echo "  5) System Optimizations (SSD, zram, sysctl)"
+    echo "  6) Laptop Power Management (TLP, powertop)"
     echo
     echo "  === Storage ==="
-    echo "  13) OpenZFS Support"
-    echo "  14) Backup Tools (btrbk, restic)"
+    echo "  7) Backup Tools (restic, borg, duplicity)"
     echo
     echo "  === Presets ==="
     if is_laptop; then
-        echo "  R) Recommended (1,3,4,5,8,9,10,11,12)"
+        echo "  R) Recommended (1,4,5,6)"
     else
-        echo "  R) Recommended (1,3,4,5,8,9,10,12)"
+        echo "  R) Recommended (1,4,5)"
     fi
-    echo "  D) Development (4,5,6,7)"
+    echo "  D) Development (1,2,3)"
     echo "  A) All (everything)"
     echo
     echo "  Q) Quit"
@@ -134,54 +119,34 @@ show_menu() {
     for choice in "${ADDR[@]}"; do
         choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]' | tr -d ' ')
         case $choice in
-            1) SELECTIONS["brave"]=1 ;;
-            2) [[ "$ARCH" == "x86_64" ]] && SELECTIONS["chrome"]=1 ;;
-            3) SELECTIONS["chromium"]=1 ;;
-            4) SELECTIONS["docker"]=1 ;;
-            5) SELECTIONS["nodejs"]=1 ;;
-            6) SELECTIONS["virt"]=1 ;;
-            7) SELECTIONS["minikube"]=1 ;;
-            8) SELECTIONS["security"]=1 ;;
-            9) SELECTIONS["optimization"]=1 ;;
-            10) SELECTIONS["monitoring"]=1 ;;
-            11) SELECTIONS["laptop"]=1 ;;
-            12) SELECTIONS["desktop_apps"]=1 ;;
-            13) SELECTIONS["zfs"]=1 ;;
-            14) SELECTIONS["backup"]=1 ;;
+            1) SELECTIONS["docker"]=1 ;;
+            2) SELECTIONS["virt"]=1 ;;
+            3) SELECTIONS["minikube"]=1 ;;
+            4) SELECTIONS["security"]=1 ;;
+            5) SELECTIONS["optimization"]=1 ;;
+            6) SELECTIONS["laptop"]=1 ;;
+            7) SELECTIONS["backup"]=1 ;;
             r)
-                SELECTIONS["brave"]=1
-                SELECTIONS["chromium"]=1
                 SELECTIONS["docker"]=1
-                SELECTIONS["nodejs"]=1
                 SELECTIONS["security"]=1
                 SELECTIONS["optimization"]=1
-                SELECTIONS["monitoring"]=1
                 is_laptop && SELECTIONS["laptop"]=1
-                SELECTIONS["desktop_apps"]=1
                 ;;
             d)
                 SELECTIONS["docker"]=1
-                SELECTIONS["nodejs"]=1
                 SELECTIONS["virt"]=1
                 SELECTIONS["minikube"]=1
                 ;;
             a)
-                SELECTIONS["brave"]=1
-                [[ "$ARCH" == "x86_64" ]] && SELECTIONS["chrome"]=1
-                SELECTIONS["chromium"]=1
                 SELECTIONS["docker"]=1
-                SELECTIONS["nodejs"]=1
                 SELECTIONS["virt"]=1
                 SELECTIONS["minikube"]=1
                 SELECTIONS["security"]=1
                 SELECTIONS["optimization"]=1
-                SELECTIONS["monitoring"]=1
                 SELECTIONS["laptop"]=1
-                SELECTIONS["desktop_apps"]=1
-                SELECTIONS["zfs"]=1
                 SELECTIONS["backup"]=1
                 ;;
-            q) 
+            q)
                 log_info "Exiting..."
                 exit 0
                 ;;
@@ -206,81 +171,13 @@ show_menu() {
 }
 
 # Setup functions
-setup_brave() {
-    progress "Installing Brave Browser"
-    if ! is_installed brave-browser; then
-        # Download and add the repo file directly
-        sudo curl -fsSL https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo -o /etc/yum.repos.d/brave-browser.repo
-        sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-        if sudo dnf install -y brave-browser; then
-            log_success "Brave Browser installed"
-        else
-            log_warning "Brave Browser installation failed"
-        fi
-    else
-        log_info "Brave Browser already installed"
-    fi
-}
-
-setup_chrome() {
-    progress "Installing Google Chrome"
-    
-    # Check architecture first
-    if [[ "$ARCH" != "x86_64" ]]; then
-        log_warning "Google Chrome is not available for ARM64/aarch64"
-        log_info "Consider using Chromium instead (option 3)"
-        return 1
-    fi
-    
-    if ! is_installed google-chrome-stable; then
-        # Create Google Chrome repo directly
-        sudo tee /etc/yum.repos.d/google-chrome.repo > /dev/null << 'EOF'
-[google-chrome]
-name=google-chrome
-baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
-enabled=1
-gpgcheck=1
-gpgkey=https://dl.google.com/linux/linux_signing_key.pub
-EOF
-        
-        # Import GPG key
-        sudo rpm --import https://dl.google.com/linux/linux_signing_key.pub
-        
-        if sudo dnf install -y google-chrome-stable; then
-            log_success "Google Chrome installed"
-        else
-            log_warning "Google Chrome installation failed"
-        fi
-    else
-        log_info "Google Chrome already installed"
-    fi
-}
-
-setup_chromium() {
-    progress "Installing Chromium Browser"
-    if ! is_installed chromium; then
-        if sudo dnf install -y chromium; then
-            log_success "Chromium installed"
-        else
-            log_warning "Chromium installation failed"
-        fi
-    else
-        log_info "Chromium already installed"
-    fi
-}
-
 setup_docker() {
-    progress "Setting up Docker & Container Tools"
+    progress "Setting up Docker (service + group)"
 
-    # Install moby-engine (Fedora's Docker package)
-    if ! is_installed moby-engine; then
-        sudo dnf install -y moby-engine docker-compose
-    fi
-
-    # Enable service
+    # moby-engine and docker-compose are installed by dnf_list; this option
+    # only handles the service-enable and user-group bits.
     enable_service docker
 
-    # Add user to docker group
     if getent group docker >/dev/null; then
         sudo usermod -aG docker "$USER"
         log_info "User added to docker group (logout required for changes to take effect)"
@@ -289,70 +186,49 @@ setup_docker() {
     log_success "Docker setup completed"
 }
 
-setup_nodejs() {
-    progress "Setting up Node.js & npm"
-    
-    # Use NodeSource repository for latest LTS
-    if ! is_installed nodejs; then
-        curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo bash -
-        sudo dnf install -y nodejs
-    fi
-    
-    # Setup user npm directory
-    mkdir -p ~/.npm-global
-    npm config set prefix '~/.npm-global'
-    
-    # Add to PATH if not already there
-    if ! grep -q "npm-global/bin" ~/.bashrc 2>/dev/null; then
-        echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
-    fi
-    
-    # Install useful global packages
-    npm install -g neovim typescript prettier eslint
-    
-    log_success "Node.js setup completed"
-}
-
 setup_virtualization() {
     progress "Setting up Virtualization tools"
-    
-    if [[ -f fedora/virt.sh ]]; then
-        bash -e fedora/virt.sh
-    else
-        sudo dnf group install -y virtualization
-        sudo dnf install -y virt-manager
-    fi
-    
+
+    sudo dnf group install -y virtualization
+    sudo dnf install -y virt-manager
+
     # Add user to necessary groups
     sudo usermod -aG kvm,libvirt "$USER"
-    
+
     # Enable services
     enable_service libvirtd
-    
+
     log_success "Virtualization setup completed"
 }
 
 setup_minikube() {
     progress "Installing Minikube"
-    
-    if [[ -f fedora/minikube.sh ]]; then
-        bash -e fedora/minikube.sh
-    else
-        # Install kubectl
-        if ! command -v kubectl &>/dev/null; then
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-            rm kubectl
-        fi
-        
-        # Install minikube
-        if ! command -v minikube &>/dev/null; then
-            curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-            sudo install minikube-linux-amd64 /usr/local/bin/minikube
-            rm minikube-linux-amd64
-        fi
+
+    # Map uname -m to the names kubernetes/minikube release URLs use.
+    local arch
+    case "$ARCH" in
+        x86_64)  arch="amd64" ;;
+        aarch64) arch="arm64" ;;
+        *)
+            log_warning "Unsupported architecture for Minikube: $ARCH"
+            return 1
+            ;;
+    esac
+
+    # Install kubectl
+    if ! command -v kubectl &>/dev/null; then
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${arch}/kubectl"
+        sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+        rm kubectl
     fi
-    
+
+    # Install minikube
+    if ! command -v minikube &>/dev/null; then
+        curl -LO "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-${arch}"
+        sudo install "minikube-linux-${arch}" /usr/local/bin/minikube
+        rm "minikube-linux-${arch}"
+    fi
+
     log_success "Minikube installed"
 }
 
@@ -361,8 +237,8 @@ setup_security() {
     
     # Install security tools
     # Note: firewalld is usually pre-installed, fail2ban is optional
-    sudo dnf install -y firewalld rkhunter lynis aide
-    
+    sudo dnf install -y firewalld
+
     # Optional: Install and configure fail2ban if user wants it
     read -p "Install fail2ban for brute-force protection? [y/N]: " install_fail2ban
     if [[ $install_fail2ban == "y" || $install_fail2ban == "Y" ]]; then
@@ -456,120 +332,46 @@ setup_optimization() {
     
     # Optimize boot time
     sudo systemctl disable NetworkManager-wait-online.service 2>/dev/null || true
-    
-    # Install performance tools
-    sudo dnf install -y htop iotop iftop ncdu tldr
-    
+
     log_success "System optimizations completed"
-}
-
-setup_monitoring() {
-    progress "Setting up Monitoring Tools"
-
-    # Install monitoring packages (netdata/bpytop not in Fedora repos)
-    sudo dnf install -y glances htop btop iotop iftop nmon sysstat lm_sensors
-
-    # Setup sensors
-    sudo sensors-detect --auto
-
-    log_info "For netdata, install from: https://learn.netdata.cloud/docs/installing/"
-    log_success "Monitoring tools installed"
 }
 
 setup_laptop() {
     progress "Setting up Laptop Power Management"
-    
+
     # Check if this is actually a laptop
     if ! is_laptop; then
         log_warning "This doesn't appear to be a laptop (no battery detected)"
         log_info "Skipping laptop power management setup"
         return 0
     fi
-    
-    if [[ -f fedora/laptop.sh ]]; then
-        bash -e fedora/laptop.sh
-    else
-        # Install power management tools
-        sudo dnf install -y tlp tlp-rdw powertop thermald
-        
-        # Enable TLP
-        sudo systemctl enable --now tlp
-        
-        # Disable conflicting services
-        sudo systemctl mask systemd-rfkill.service
-        sudo systemctl mask systemd-rfkill.socket
-        
-        # Install battery utilities
-        sudo dnf install -y acpi
-    fi
-    
+
+    # Install power management tools
+    sudo dnf install -y tlp tlp-rdw powertop thermald
+
+    # Enable TLP
+    sudo systemctl enable --now tlp
+
+    # Disable conflicting services
+    sudo systemctl mask systemd-rfkill.service
+    sudo systemctl mask systemd-rfkill.socket
+
+    # Install battery utilities
+    sudo dnf install -y acpi
+
     log_success "Laptop power management configured"
-}
-
-setup_desktop_apps() {
-    progress "Setting up Desktop Applications"
-    
-    # Flatpak setup
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    
-    # Install desktop applications
-    # Check which rofi variant to install
-    local rofi_package=""
-    if is_installed rofi-wayland; then
-        log_info "rofi-wayland already installed, skipping rofi"
-    elif is_installed rofi; then
-        log_info "rofi already installed"
-    else
-        # If neither is installed, prefer rofi-wayland for Wayland compatibility
-        rofi_package="rofi-wayland"
-    fi
-    
-    # Install packages, including rofi only if needed
-    sudo dnf install -y --skip-broken variety dunst feh picom $rofi_package
-    
-    # Setup variety wallpaper manager
-    if [[ -f variety.conf ]]; then
-        mkdir -p ~/.config/variety
-        cp variety.conf ~/.config/variety/
-    fi
-
-    log_success "Desktop applications configured"
-}
-
-setup_zfs() {
-    progress "Installing OpenZFS"
-    
-    if [[ -f fedora/openzfs.sh ]]; then
-        bash -e fedora/openzfs.sh
-    else
-        # Install ZFS repository
-        sudo dnf install -y "https://zfsonlinux.org/epel/zfs-release-2-3.el$(rpm -E %rhel).noarch.rpm"
-        sudo dnf install -y kernel-devel zfs
-        sudo modprobe zfs
-        
-        # Enable ZFS services
-        sudo systemctl enable --now zfs-import-cache
-        sudo systemctl enable --now zfs-mount
-        sudo systemctl enable --now zfs-zed
-    fi
-    
-    log_success "OpenZFS installed"
 }
 
 setup_backup() {
     progress "Setting up Backup Tools"
-    
-    # Install backup tools
-    sudo dnf install -y restic borgbackup duplicity rclone
-    
-    # Setup btrbk if using btrfs
-    if mount | grep -q btrfs; then
-        sudo dnf install -y btrbk
-        if [[ -f fedora/btrbk/btrbk.conf ]]; then
-            sudo cp fedora/btrbk/btrbk.conf /etc/btrbk/
-        fi
+
+    # btrbk and rclone come from dnf_list; this option ships the rest.
+    sudo dnf install -y restic borgbackup duplicity
+
+    if mount | grep -q btrfs && [[ -f fedora/btrbk/btrbk.conf ]]; then
+        sudo install -Dm 644 fedora/btrbk/btrbk.conf /etc/btrbk/btrbk.conf
     fi
-    
+
     log_success "Backup tools installed"
 }
 
@@ -604,19 +406,12 @@ main() {
     echo
     
     # Execute selected setups
-    [[ ${SELECTIONS["brave"]} ]] && setup_brave
-    [[ ${SELECTIONS["chrome"]} ]] && setup_chrome
-    [[ ${SELECTIONS["chromium"]} ]] && setup_chromium
     [[ ${SELECTIONS["docker"]} ]] && setup_docker
-    [[ ${SELECTIONS["nodejs"]} ]] && setup_nodejs
     [[ ${SELECTIONS["virt"]} ]] && setup_virtualization
     [[ ${SELECTIONS["minikube"]} ]] && setup_minikube
     [[ ${SELECTIONS["security"]} ]] && setup_security
     [[ ${SELECTIONS["optimization"]} ]] && setup_optimization
-    [[ ${SELECTIONS["monitoring"]} ]] && setup_monitoring
     [[ ${SELECTIONS["laptop"]} ]] && setup_laptop
-    [[ ${SELECTIONS["desktop_apps"]} ]] && setup_desktop_apps
-    [[ ${SELECTIONS["zfs"]} ]] && setup_zfs
     [[ ${SELECTIONS["backup"]} ]] && setup_backup
     
     # Always update shell to zsh
@@ -632,36 +427,27 @@ main() {
     log_info "Summary of changes:"
     
     if [[ ${SELECTIONS["docker"]} ]]; then
-        echo "  • Docker installed and configured"
+        echo "  • Docker service enabled, user added to docker group"
         echo "    - Logout required for docker group membership"
     fi
-    
-    if [[ ${SELECTIONS["nodejs"]} ]]; then
-        echo "  • Node.js LTS installed with npm"
-        echo "    - Global packages in ~/.npm-global"
-    fi
-    
+
     if [[ ${SELECTIONS["security"]} ]]; then
         echo "  • Security hardening applied"
         echo "    - Firewall enabled with basic rules"
         echo "    - Automatic updates configured"
     fi
-    
+
     if [[ ${SELECTIONS["optimization"]} ]]; then
         echo "  • System optimizations applied"
         echo "    - SSD optimizations (if applicable)"
         echo "    - Memory compression with zram"
-    fi
-    
-    if [[ ${SELECTIONS["monitoring"]} ]]; then
-        echo "  • Monitoring tools installed (htop, btop, glances)"
     fi
 
     echo
     log_warning "Some changes require logout/reboot to take effect:"
     echo "  • Shell change to zsh"
     echo "  • Docker group membership"
-    echo "  • Kernel modules (ZFS, virtualization)"
+    echo "  • Kernel modules (virtualization)"
     echo
     
     echo -n "Would you like to reboot now? [y/N]: "

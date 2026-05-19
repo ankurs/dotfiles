@@ -276,7 +276,7 @@ Updates all the packages, plugins, and dependencies. I run this periodically to 
 Creates compressed, timestamped backups to `~/.dotfiles-backup/`. It backs up config files and directories (including SSH keys and cargo config), captures git state (status, diff, stash, recent commits), records installed packages, and generates a manifest. It automatically cleans up old backups, keeping the last 10.
 
 ### `./fedora_post_setup.sh`
-An interactive menu-driven script I use after a fresh Fedora install. It detects whether I'm on a desktop, laptop, or VM, then lets me selectively install things like browsers, Docker, Kubernetes tools, power management, virtualization, and security hardening (fail2ban).
+An interactive menu-driven script I use after a fresh Fedora install. It detects whether I'm on a desktop, laptop, or VM, then lets me selectively install things like browsers (Brave/Chromium via Flatpak), Docker, Kubernetes tools, power management, virtualization, and security hardening (fail2ban).
 
 ## Cross-Platform Support
 
@@ -310,9 +310,28 @@ Organized package lists by category:
 ```
 
 ### Adding New Tools
-1. Add to appropriate package list (`Brewfile` on macOS or `dnf_list` on Fedora)
+1. Add to the appropriate package list:
+   - `Brewfile` on macOS
+   - `dnf_list` for Fedora system packages
+   - `flatpak_list` for Flathub GUI apps
+   - `cargo_list` / `npm_global_list` for language-managed tools
 2. Run `./update.sh` to install
 3. Add configuration as needed
+
+### Migrating from snap (one-time)
+Earlier versions of this repo used `snap_list` for proprietary GUI apps. Snap
+no longer works on Asahi (16k page kernel) and the apps now ship as official
+Flatpaks. If upgrading an older machine:
+
+```bash
+sudo snap remove bitwarden slack spotify  # whichever are present
+sudo dnf remove --noautoremove snapd
+sudo dnf remove telegram-desktop vlc ghostwriter alacritty fail2ban sendmail rsyslog
+./setup.sh update
+```
+
+Slack and Tidal have no official Linux clients on aarch64 — use the web
+versions (`app.slack.com`, `listen.tidal.com`).
 
 ## File Structure
 
@@ -341,8 +360,9 @@ Organized package lists by category:
 ### Package Lists
 - `Brewfile`: macOS Homebrew Bundle file (taps, CLI packages, and GUI casks)
 - `dnf_list` / `dnf_remove_list`: Fedora packages to install and remove
+- `flatpak_list`: Flathub apps installed per-user (Bitwarden, Telegram, VLC, ghostwriter)
 - `npm_global_list`: Global npm packages (neovim provider)
-- `snap_list`: Snap packages for Fedora
+- `cargo_list`: Rust crates installed via `cargo install`
 - `cargo-config`: Rust Cargo configuration
 
 ## Common Issues I've Encountered
