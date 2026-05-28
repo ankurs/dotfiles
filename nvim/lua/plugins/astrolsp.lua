@@ -128,6 +128,7 @@ return {
         ["<Leader>ws"] = { vim.lsp.buf.workspace_symbol, desc = "Workspace symbol" },
         ["<Leader>di"] = { vim.lsp.buf.implementation, desc = "Implementation" },
         ["<Leader>td"] = { vim.lsp.buf.type_definition, desc = "Type definition" },
+        ["<Leader>dt"] = { vim.lsp.buf.type_definition, desc = "Type definition" },
         ["<Leader>rf"] = { vim.lsp.buf.references, desc = "References" },
         ["<Leader>sd"] = { function() vim.diagnostic.open_float() end, desc = "Show line diagnostics" },
         ["<Leader>pd"] = { function() vim.diagnostic.goto_prev() end, desc = "Go to previous diagnostic" },

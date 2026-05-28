@@ -58,6 +58,33 @@ return {
         -- vim.keymap.set("n", "<leader><leader>", "<C-^>")
       },
     },
+    -- User commands. `:LspRestart` (and friends) were removed from
+    -- nvim-lspconfig, so we provide our own thin replacement.
+    commands = {
+      LspRestart = {
+        function(args)
+          local filter = args.args ~= "" and { name = args.args } or nil
+          local clients = vim.lsp.get_clients(filter)
+          if #clients == 0 then
+            vim.notify("LspRestart: no matching clients", vim.log.levels.WARN)
+            return
+          end
+          for _, c in ipairs(clients) do
+            c:stop()
+          end
+          vim.defer_fn(vim.cmd.edit, 500)
+        end,
+        nargs = "?",
+        complete = function()
+          local names = {}
+          for _, c in ipairs(vim.lsp.get_clients()) do
+            names[#names + 1] = c.name
+          end
+          return names
+        end,
+        desc = "Stop matching LSP client(s) and re-attach the current buffer",
+      },
+    },
     -- Mappings can be configured through AstroCore as well.
     -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
     mappings = {
