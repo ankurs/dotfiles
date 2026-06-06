@@ -133,7 +133,6 @@ brew "todo-txt"
 brew "weechat"
 brew "sysdig"
 brew "qemu"
-brew "ollama"
 brew "clojure"
 brew "clojure-lsp/brew/clojure-lsp-native"
 
@@ -197,6 +196,7 @@ cask "wireshark-app"
 # Specialized Tools
 cask "cubicsdr"
 cask "via"
+cask "ollama-app"
 
 # Java Development
 cask "oracle-jdk"
