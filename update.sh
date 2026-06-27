@@ -16,19 +16,19 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 # Platform detection
 is_macos() { [[ "$OSTYPE" == darwin* ]]; }
 is_linux() { [[ "$OSTYPE" == linux* ]]; }
-has_cmd() { command -v "$1" &> /dev/null; }
+has_cmd() { command -v "$1" &>/dev/null; }
 
 log_info "Starting dotfiles update..."
 
 # Update git repository
-if git rev-parse --git-dir > /dev/null 2>&1; then
+if git rev-parse --git-dir >/dev/null 2>&1; then
     log_info "Updating dotfiles repository"
     if git pull; then
         log_success "Repository updated"
     else
         log_warning "Repository update failed"
     fi
-    
+
     # Update submodules
     if [[ -f .gitmodules ]]; then
         log_info "Updating git submodules"
@@ -54,7 +54,7 @@ if is_macos && has_cmd "brew"; then
     # Install any missing packages from Brewfile
     if [[ -f ./Brewfile ]]; then
         log_info "Installing any missing packages from Brewfile"
-        if brew bundle install --file=Brewfile; then
+        if brew bundle install --file=Brewfile --verbose; then
             log_success "Brewfile packages installed"
         else
             log_warning "Some Brewfile packages may have failed to install"
@@ -190,6 +190,15 @@ if has_cmd "npm"; then
     fi
 fi
 
+# Bootstrap the Rust toolchain if cargo is missing. Uses the official rustup
+# installer so the ~/.cargo/bin layout is identical on macOS and Linux.
+if ! has_cmd "cargo"; then
+    log_info "Bootstrapping Rust toolchain"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path \
+        || log_warning "Failed to bootstrap Rust toolchain"
+    [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+    has_cmd "cargo" && log_success "Rust toolchain installed"
+fi
 
 if has_cmd "cargo"; then
     # Install any missing packages from cargo_list
@@ -201,7 +210,7 @@ if has_cmd "cargo"; then
                 log_info "Installing $package..."
                 cargo install "$package" || log_warning "Failed to install $package"
             fi
-        done < ./cargo_list
+        done <./cargo_list
     fi
 
     log_info "Updating Rust packages"

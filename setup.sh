@@ -399,6 +399,16 @@ if [[ -z $UPDATE ]]; then
     mkdir -p ~/.cargo/ ~/.config/
     ln -sfn "$DOTFILES_DIR/cargo-config.toml" ~/.cargo/config.toml
 
+    # Bootstrap the Rust toolchain if cargo is missing. Uses the official rustup
+    # installer so the ~/.cargo/bin layout is identical on macOS and Linux.
+    if ! command -v cargo &> /dev/null; then
+        progress "Bootstrapping Rust toolchain"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path \
+            || log_warning "Failed to bootstrap Rust toolchain"
+        [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+        command -v cargo &> /dev/null && log_success "Rust toolchain installed"
+    fi
+
     # Neovim configuration - symlink the entire nvim directory
     if [[ -d "$HOME/.config/nvim" ]] && [[ ! -L "$HOME/.config/nvim" ]]; then
         log_warning "Existing nvim config found, backing up to ~/.config/nvim.bak"

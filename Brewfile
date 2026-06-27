@@ -5,7 +5,6 @@
 # =============================================================================
 # Taps
 # =============================================================================
-tap "clojure-lsp/brew"
 tap "hashicorp/tap"
 
 # =============================================================================
@@ -29,7 +28,6 @@ brew "parallel"
 # Modern CLI Tools
 brew "fzf"
 brew "bat"
-brew "eza"
 brew "ripgrep"
 brew "zoxide"
 brew "jq"
@@ -54,7 +52,6 @@ brew "reattach-to-user-namespace"
 
 # Version Control
 brew "git"
-brew "jj"
 
 # Development Tools
 brew "gcc"
@@ -68,7 +65,6 @@ brew "tree-sitter"
 brew "universal-ctags", args: ["HEAD"]
 
 # AI CLI Tools
-brew "gemini-cli"
 brew "claude-code-templates"
 
 # Languages & Runtimes
@@ -78,7 +74,6 @@ brew "python"
 brew "perl"
 brew "lua"
 brew "luajit"
-brew "rustup-init"
 brew "groovy"
 brew "scala"
 
@@ -104,7 +99,6 @@ brew "helmfile"
 brew "stern"
 brew "terragrunt"
 brew "consul-template"
-brew "vault"
 brew "colima"
 brew "docker"
 brew "docker-compose"
@@ -133,8 +127,6 @@ brew "todo-txt"
 brew "weechat"
 brew "sysdig"
 brew "qemu"
-brew "clojure"
-brew "clojure-lsp/brew/clojure-lsp-native"
 
 # Tap-specific packages
 brew "hashicorp/tap/terraform"
@@ -155,6 +147,7 @@ cask "android-studio"
 cask "intellij-idea"
 cask "cursor"
 cask "claude"
+cask "antigravity-cli"
 cask "utm"
 cask "visualvm"
 
@@ -188,18 +181,15 @@ cask "steam"
 cask "tidal"
 
 # Network & Security
-cask "cloudflare-warp"
 cask "bitwarden"
 cask "mitmproxy"
 cask "wireshark-app"
 
 # Specialized Tools
 cask "cubicsdr"
-cask "via"
 cask "ollama-app"
 
 # Java Development
-cask "oracle-jdk"
 cask "jdk-mission-control"
 
 # Document Processing
@@ -209,8 +199,6 @@ cask "mactex"
 cask "flutter"
 
 # Productivity & Notes
-cask "krisp"
-cask "evernote"
 cask "antigravity"
 cask "obsidian"
 cask "rustdesk"
