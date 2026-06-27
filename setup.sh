@@ -409,6 +409,28 @@ if [[ -z $UPDATE ]]; then
         command -v cargo &> /dev/null && log_success "Rust toolchain installed"
     fi
 
+    # Register a JDK with jenv so Java tooling (e.g. nvim jdtls) can find a
+    # runtime. openjdk is keg-only on macOS / unlinked on Linux, so it is not on
+    # PATH until jenv knows about it.
+    if command -v jenv &> /dev/null; then
+        eval "$(jenv init -)"
+        jenv enable-plugin export &> /dev/null || true
+        JDK_HOME=""
+        if [[ -d /opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home ]]; then
+            JDK_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home
+        elif [[ -d /usr/lib/jvm ]]; then
+            JDK_HOME=$(find /usr/lib/jvm -maxdepth 1 -type d -name "java-*" 2>/dev/null | sort -V | tail -1)
+        fi
+        if [[ -n "$JDK_HOME" && -d "$JDK_HOME" ]]; then
+            jenv add "$JDK_HOME" &> /dev/null || true
+            latest=$(jenv versions --bare 2>/dev/null | grep -v '^system$' | sort -V | tail -1)
+            [[ -n "$latest" ]] && jenv global "$latest"
+            log_success "Registered JDK with jenv ($JDK_HOME)"
+        else
+            log_warning "No JDK found to register with jenv"
+        fi
+    fi
+
     # Neovim configuration - symlink the entire nvim directory
     if [[ -d "$HOME/.config/nvim" ]] && [[ ! -L "$HOME/.config/nvim" ]]; then
         log_warning "Existing nvim config found, backing up to ~/.config/nvim.bak"

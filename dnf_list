@@ -34,6 +34,7 @@ gcc-c++
 golang
 python-devel
 nodejs
+java-latest-openjdk-devel
 
 # Container & Virtualization
 moby-engine

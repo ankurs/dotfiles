@@ -86,6 +86,11 @@ set_path "$HOME/.local/bin"
 # Cargo environment
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
+# jenv (Java version manager) - activates shims and JAVA_HOME
+if command -v jenv &> /dev/null; then
+    eval "$(jenv init -)"
+fi
+
 # =============================================================================
 # Zsh Configuration & Completion System
 # =============================================================================
