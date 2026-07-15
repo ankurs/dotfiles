@@ -30,7 +30,7 @@ This setup includes the tools I use for my terminal-centric development workflow
 - **Editor**: Neovim configured with AstroNvim (OceanicNext theme) - powerful terminal-based editing
 - **Terminal Emulator**: Ghostty with Monaco Nerd Font and iTerm2 Dark Background theme
 - **Terminal Multiplexer**: tmux with Catppuccin Frappé theme - essential for managing multiple sessions
-- **AI Tools**: Claude Code, GitHub Copilot (in Neovim), Gemini CLI, and Codex
+- **AI Tools**: Claude Code, GitHub Copilot (in Neovim), Antigravity CLI, and Codex
 - **CLI Tools**: Evolved alternatives that enhance terminal productivity (see CLI Tools Evolution)
 - **Scripts**: Personal utilities for maintenance, backups, and health checks
 - **Package Lists**: What I install on new systems to recreate this terminal environment
@@ -107,9 +107,10 @@ cd ~/code/dotfiles
 ### AI Tools
 I've been integrating AI tools into my terminal workflow as they've matured:
 - **Claude Code**: My primary AI coding assistant, installed via brew cask. Configured with MCP servers for Go (gopls) and Svelte. Settings and plugins live in `claude/`
+- **Mistral Vibe**: Open-source CLI coding agent with MCP support. Configuration lives in `vibe/` with AGENTS.md for shared instructions
 - **claude-code-templates**: CLI tool for configuring and managing Claude Code templates
 - **GitHub Copilot**: Integrated directly into Neovim for inline completions
-- **Gemini CLI & Codex**: Installed via Homebrew for quick terminal access
+- **Antigravity CLI & Codex**: Installed via Homebrew for quick terminal access (Antigravity's CLI binary is `agy`)
 
 ### Git Configuration
 - **SSH-first**: All GitHub URLs are rewritten from HTTPS to SSH automatically
@@ -267,7 +268,7 @@ I've created a few scripts to help maintain this setup across my machines:
 The main installation script. Handles everything from SSH key generation to package installation to symlinking dotfiles. It also supports an update mode (`./setup.sh update`) which updates the repo, submodules, all package managers, plugin managers, and language tools in one go.
 
 ### `./check.sh`
-My "did I set this up right?" script. It verifies essential commands (git, zsh, tmux, nvim), modern CLI tools (fzf, bat, eza, rg, zoxide, delta, yazi), AI tools (claude, gemini, codex), symlink integrity, plugin managers (Zinit, TPM, AstroNvim), SSH keys, git config, and shell configuration loading. I run this after setting up a new machine to make sure nothing was missed.
+My "did I set this up right?" script. It verifies essential commands (git, zsh, tmux, nvim), modern CLI tools (fzf, bat, eza, rg, zoxide, delta, yazi), AI tools (claude, vibe, agy, codex), symlink integrity, plugin managers (Zinit, TPM, AstroNvim), SSH keys, git config, and shell configuration loading. I run this after setting up a new machine to make sure nothing was missed.
 
 ### `./update.sh`
 Updates all the packages, plugins, and dependencies. I run this periodically to keep everything current - it handles brew/dnf, Zinit, TPM, Neovim plugins, Mason tools, npm globals, and cargo packages.
@@ -347,6 +348,7 @@ versions (`app.slack.com`, `listen.tidal.com`).
 ### Directories
 - `nvim/`: Neovim configuration with AstroNvim, Mason, and all plugin configs
 - `claude/`: Claude Code settings, MCP server configs, and project instructions
+- `vibe/`: Mistral Vibe configuration with AGENTS.md for shared AI assistant instructions
 - `fonts/`: Powerline/Nerd fonts (git submodule)
 - `fedora/`: Fedora-specific configs (fail2ban, btrbk backups, sysctl tuning, etc.)
 

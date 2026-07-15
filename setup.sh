@@ -467,6 +467,13 @@ if [[ -z $UPDATE ]]; then
     create_symlink "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
     create_symlink "$DOTFILES_DIR/claude/mcp-global.json" "$HOME/.claude/mcp-global.json"
 
+    # Mistral Vibe configuration
+    mkdir -p ~/.vibe
+    create_symlink "$DOTFILES_DIR/vibe/config.toml" "$HOME/.vibe/config.toml"
+    create_symlink "$DOTFILES_DIR/vibe/mcp.json" "$HOME/.vibe/mcp.json"
+    create_symlink "$DOTFILES_DIR/vibe/AGENTS.md" "$HOME/.vibe/AGENTS.md"
+    create_symlink "$DOTFILES_DIR/vibe/CLAUDE.md" "$HOME/.vibe/CLAUDE.md"
+
     log_success "Symbolic links created"
 
     # VM-specific configuration (Mesa Zink for OpenGL in UTM/QEMU)

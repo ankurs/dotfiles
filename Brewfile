@@ -66,6 +66,7 @@ brew "universal-ctags", args: ["HEAD"]
 
 # AI CLI Tools
 brew "claude-code-templates"
+brew "mistral-vibe"
 
 # Languages & Runtimes
 brew "go"
@@ -88,7 +89,6 @@ brew "jabba"
 brew "openjdk"
 brew "gradle"
 brew "maven"
-brew "leiningen"
 
 # DevOps & Cloud Tools
 brew "awscli"
@@ -201,4 +201,3 @@ cask "flutter"
 # Productivity & Notes
 cask "antigravity"
 cask "obsidian"
-cask "rustdesk"

@@ -81,7 +81,7 @@ done
 
 # Verify AI CLI tools
 log_info "\nChecking AI CLI tools:"
-AI_TOOLS=("claude" "gemini" "codex")
+AI_TOOLS=("claude" "vibe" "agy" "codex")
 for tool in "${AI_TOOLS[@]}"; do
     if has_cmd "$tool"; then
         log_success "$tool is available"
