@@ -273,7 +273,6 @@ alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list -
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
 alias t='todo.sh'
 alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
-alias doroutes='sh $HOME/code/jek/vpn-tun.sh'
 
 # =============================================================================
 # Custom Functions
@@ -298,7 +297,7 @@ code() {
     SVC=$1
     if [[ ! -z $SVC"" ]]; then
         # Search for the service in multiple locations
-        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/jek/" "" "$HOME/code/ColdBrew/"; do
+        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/mis/" "" "$HOME/code/ColdBrew/"; do
             if [[ -d $base$SVC ]]; then
                 tmux_code $base/$SVC $(basename $SVC)
                 return

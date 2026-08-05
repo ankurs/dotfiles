@@ -173,6 +173,7 @@ cask "telegram-desktop"
 cask "lark"
 cask "whatsapp"
 cask "zoom"
+cask "slack"
 
 # Media & Entertainment
 cask "vlc"
@@ -201,3 +202,4 @@ cask "flutter"
 # Productivity & Notes
 cask "antigravity"
 cask "obsidian"
+cask "notion"
