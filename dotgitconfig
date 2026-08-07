@@ -5,9 +5,6 @@
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 
-[url "git@source.golabs.io:"]
-	insteadOf = https://source.golabs.io
-
 [core]
 	excludesfile = "$HOME/.gitignore"
 	pager = delta
@@ -47,6 +44,3 @@
 [init]
 	defaultBranch = main
 	templateDir = ~/.git-templates
-
-[includeIf "hasconfig:remote.*.url:git@source.golabs.io:*/**"]
-	path = "~/.gitconfig.work"
