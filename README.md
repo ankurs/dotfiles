@@ -107,7 +107,8 @@ cd ~/code/dotfiles
 ### AI Tools
 I've been integrating AI tools into my terminal workflow as they've matured:
 - **Claude Code**: My primary AI coding assistant, installed via brew cask. Configured with MCP servers for Go (gopls) and Svelte. Settings and plugins live in `claude/`
-- **Mistral Vibe**: Open-source CLI coding agent with MCP support. Configuration lives in `vibe/` with AGENTS.md for shared instructions
+- **Vibe**: Open-source CLI coding agent with MCP support. Configuration lives in `vibe/` with AGENTS.md for shared instructions
+- **Pi**: Minimal, extensible terminal coding agent (no telemetry/phone-home). Extended with `pi-mcp-adapter` (MCP, incl. OAuth remotes) and `pi-lens` (LSP diagnostics on every edit); reads the shared `AGENTS.md` natively. Extensions tracked in `pi_extensions_list`
 - **claude-code-templates**: CLI tool for configuring and managing Claude Code templates
 - **GitHub Copilot**: Integrated directly into Neovim for inline completions
 - **Antigravity CLI & Codex**: Installed via Homebrew for quick terminal access (Antigravity's CLI binary is `agy`)
@@ -118,7 +119,7 @@ I've been integrating AI tools into my terminal workflow as they've matured:
 - **Pager**: delta for syntax-highlighted, side-by-side diffs with word-level highlighting
 - **Merge Conflicts**: zdiff3 style for better conflict resolution
 - **Global Gitignore**: Shared ignore rules across all repos
-- **Work Config**: Conditional includes for work-specific settings when working with internal repos
+- **Work Config**: Work/internal settings live in a separate private repo (not here); the public config only carries the hooks — a git `includeIf` and a `~/.work.zsh` source line — that layer it on when present
 
 ### CLI Tools Evolution
 
@@ -348,7 +349,7 @@ versions (`app.slack.com`, `listen.tidal.com`).
 ### Directories
 - `nvim/`: Neovim configuration with AstroNvim, Mason, and all plugin configs
 - `claude/`: Claude Code settings, MCP server configs, and project instructions
-- `vibe/`: Mistral Vibe configuration with AGENTS.md for shared AI assistant instructions
+- `vibe/`: Vibe configuration with AGENTS.md for shared AI assistant instructions
 - `fonts/`: Powerline/Nerd fonts (git submodule)
 - `fedora/`: Fedora-specific configs (fail2ban, btrbk backups, sysctl tuning, etc.)
 
@@ -363,7 +364,8 @@ versions (`app.slack.com`, `listen.tidal.com`).
 - `Brewfile`: macOS Homebrew Bundle file (taps, CLI packages, and GUI casks)
 - `dnf_list` / `dnf_remove_list`: Fedora packages to install and remove
 - `flatpak_list`: Flathub apps installed per-user (Bitwarden, Telegram, VLC, ghostwriter)
-- `npm_global_list`: Global npm packages (neovim provider)
+- `npm_global_list`: Global npm packages (neovim provider, Pi coding agent)
+- `pi_extensions_list`: Pi coding agent extensions installed via `pi install` (MCP adapter, LSP/lens)
 - `cargo_list`: Rust crates installed via `cargo install`
 - `cargo-config`: Rust Cargo configuration
 

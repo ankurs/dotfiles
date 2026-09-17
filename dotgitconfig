@@ -44,3 +44,9 @@
 [init]
 	defaultBranch = main
 	templateDir = ~/.git-templates
+
+# Work-specific overrides for repos under ~/code/mis/. The file is
+# provided by the private dotfiles-work repo; git silently skips this include
+# when ~/.gitconfig-work is absent, so this is a no-op on non-work machines.
+[includeIf "gitdir:~/code/mis/"]
+	path = ~/.gitconfig-work

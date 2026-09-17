@@ -188,6 +188,23 @@ if has_cmd "npm"; then
             log_warning "Some npm packages may have failed to install"
         fi
     fi
+
+    # Keep Pi coding agent extensions (MCP + LSP) up to date
+    if has_cmd "pi" && [[ -f ./pi_extensions_list ]]; then
+        log_info "Installing any missing Pi extensions"
+        while IFS= read -r ext; do
+            [[ -z "$ext" || "$ext" =~ ^# ]] && continue
+            pi install "npm:$ext" || log_warning "Failed to install pi extension $ext"
+        done <./pi_extensions_list
+
+        # Update already-installed extensions to their latest versions
+        log_info "Updating Pi extensions"
+        if pi update --extensions; then
+            log_success "Pi extensions updated"
+        else
+            log_warning "Pi extension update failed"
+        fi
+    fi
 fi
 
 # Bootstrap the Rust toolchain if cargo is missing. Uses the official rustup
@@ -208,13 +225,19 @@ if has_cmd "cargo"; then
             [[ -z "$package" || "$package" =~ ^# ]] && continue
             if ! cargo install --list | grep -q "^$package "; then
                 log_info "Installing $package..."
-                cargo install "$package" || log_warning "Failed to install $package"
+                # --locked uses each crate's bundled Cargo.lock so dependency
+                # resolution can't pick incompatible transitive versions
+                # (e.g. eza pulling palette 0.7.5 with palette_derive 0.7.7).
+                cargo install --locked "$package" || log_warning "Failed to install $package"
             fi
         done <./cargo_list
     fi
 
     log_info "Updating Rust packages"
-    if cargo install-update -a 2>/dev/null; then
+    # --locked upgrades each crate to its latest published version but builds
+    # with that version's bundled Cargo.lock, so updates can't re-resolve into
+    # an incompatible transitive combo (see the install note above).
+    if cargo install-update -a --locked 2>/dev/null; then
         log_success "Rust packages updated"
     else
         log_warning "cargo-update not installed, skipping update"

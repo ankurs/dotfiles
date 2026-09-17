@@ -8,6 +8,7 @@ return {
   { import = "astrocommunity.completion.cmp-spell" },
   { import = "astrocommunity.completion.copilot-cmp" },
   { import = "astrocommunity.fuzzy-finder.fzf-lua" },
+  { import = "astrocommunity.markdown-and-latex.markdown-preview-nvim" },
   { import = "astrocommunity.pack.clojure" },
   { import = "astrocommunity.pack.docker" },
   { import = "astrocommunity.pack.go" },

@@ -467,12 +467,16 @@ if [[ -z $UPDATE ]]; then
     create_symlink "$DOTFILES_DIR/claude/settings.json" "$HOME/.claude/settings.json"
     create_symlink "$DOTFILES_DIR/claude/mcp-global.json" "$HOME/.claude/mcp-global.json"
 
-    # Mistral Vibe configuration
+    # Vibe configuration
     mkdir -p ~/.vibe
     create_symlink "$DOTFILES_DIR/vibe/config.toml" "$HOME/.vibe/config.toml"
     create_symlink "$DOTFILES_DIR/vibe/mcp.json" "$HOME/.vibe/mcp.json"
     create_symlink "$DOTFILES_DIR/vibe/AGENTS.md" "$HOME/.vibe/AGENTS.md"
     create_symlink "$DOTFILES_DIR/vibe/CLAUDE.md" "$HOME/.vibe/CLAUDE.md"
+
+    # Pi coding agent (reads AGENTS.md natively from ~/.pi/agent/)
+    mkdir -p ~/.pi/agent
+    create_symlink "$DOTFILES_DIR/vibe/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
 
     log_success "Symbolic links created"
 
@@ -529,6 +533,19 @@ if [[ -f ./npm_global_list ]]; then
     fi
 else
     log_warning "npm_global_list not found, skipping npm packages"
+fi
+
+# Install Pi coding agent extensions (MCP + LSP). Pi is installed via
+# npm_global_list above, so `pi` should be on PATH by this point.
+if command -v pi &> /dev/null && [[ -f ./pi_extensions_list ]]; then
+    log_info "Installing Pi coding agent extensions"
+    while IFS= read -r ext; do
+        [[ -z "$ext" || "$ext" =~ ^# ]] && continue
+        pi install "npm:$ext" || log_warning "Failed to install pi extension $ext"
+    done <./pi_extensions_list
+    log_success "Pi extensions installed"
+else
+    log_warning "pi not found or pi_extensions_list missing, skipping Pi extensions"
 fi
 
 

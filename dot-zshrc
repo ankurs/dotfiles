@@ -61,6 +61,9 @@ if is_macos; then
     set_path "/opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
     set_path "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin"
     set_path "/Library/TeX/texbin"
+
+    # Secretive SSH agent
+    export SSH_AUTH_SOCK="$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"
 fi
 
 # Linux specific paths
@@ -296,8 +299,11 @@ kubectl() {
 code() {
     SVC=$1
     if [[ ! -z $SVC"" ]]; then
-        # Search for the service in multiple locations
-        for base in "$HOME/code/ss/" "$HOME/code/" "$HOME/code/mis/" "" "$HOME/code/ColdBrew/"; do
+        # Search for the service in multiple locations. Extra base dirs (e.g.
+        # work paths) are appended via CODE_EXTRA_BASES, set in ~/.work.zsh.
+        local bases=("$HOME/code/ss/" "$HOME/code/" "" "$HOME/code/ColdBrew/")
+        [[ -n "${CODE_EXTRA_BASES:-}" ]] && bases+=(${=CODE_EXTRA_BASES})
+        for base in "${bases[@]}"; do
             if [[ -d $base$SVC ]]; then
                 tmux_code $base/$SVC $(basename $SVC)
                 return
@@ -439,6 +445,9 @@ rvm() {
 
 # Load secrets if available
 [[ -f ~/.secret.rc ]] && source ~/.secret.rc
+
+# Load non-secret work env if available (provided by the private dotfiles-work repo)
+[[ -f ~/.work.zsh ]] && source ~/.work.zsh
 
 # =============================================================================
 # Final Setup

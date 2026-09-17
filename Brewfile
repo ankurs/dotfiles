@@ -30,6 +30,7 @@ brew "fzf"
 brew "bat"
 brew "ripgrep"
 brew "zoxide"
+brew "gh"
 brew "jq"
 brew "httpie"
 brew "hexyl"
@@ -107,6 +108,8 @@ brew "argocd"
 brew "glooctl"
 brew "minikube"
 brew "tailscale"
+brew "gopass"
+brew "secretspec"
 
 # Security & Network Tools
 brew "nmap"
@@ -196,6 +199,7 @@ cask "jdk-mission-control"
 
 # Document Processing
 cask "mactex"
+cask "skim"
 
 # Mobile Development
 cask "flutter"
@@ -205,3 +209,4 @@ cask "antigravity"
 cask "obsidian"
 cask "notion"
 cask "linear"
+cask "granola"

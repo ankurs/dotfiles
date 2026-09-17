@@ -4,6 +4,7 @@
     "commit": "",
     "pr": ""
   },
+  "model": "opus",
   "enabledPlugins": {
     "gopls-lsp@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
@@ -33,6 +34,7 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "autoCompactWindow": 800000,
   "tui": "fullscreen",
   "theme": "dark",
   "editorMode": "vim",

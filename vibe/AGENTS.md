@@ -21,7 +21,6 @@
 ## Tools & Workflow
 
 - Use `make` commands when available in the project
-- For Go projects: respect `GOPRIVATE=source.golabs.io`
 - For search operations: always use `rg` (ripgrep) instead of `grep`
 - For file viewing: prefer `bat` over `cat`
 

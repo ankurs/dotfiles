@@ -4,3 +4,6 @@
 neovim
 typescript
 create-next-app
+
+# AI coding agents
+@earendil-works/pi-coding-agent

@@ -1,4 +1,4 @@
-# Mistral Vibe Configuration
+# Vibe Configuration
 # Equivalent to claude/settings.json
 
 active_model = "mistral-medium-3.5"

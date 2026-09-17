@@ -1,0 +1,9 @@
+# Pi coding agent extensions
+# Used by setup.sh and update.sh
+# Installed with: pi install npm:<package>
+
+# MCP support (official adapter — token-efficient, handles OAuth remote servers)
+pi-mcp-adapter
+
+# LSP / diagnostics / linters injected into every edit (35+ languages)
+pi-lens
