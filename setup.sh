@@ -474,9 +474,10 @@ if [[ -z $UPDATE ]]; then
     create_symlink "$DOTFILES_DIR/vibe/AGENTS.md" "$HOME/.vibe/AGENTS.md"
     create_symlink "$DOTFILES_DIR/vibe/CLAUDE.md" "$HOME/.vibe/CLAUDE.md"
 
-    # Pi coding agent (reads AGENTS.md natively from ~/.pi/agent/)
-    mkdir -p ~/.pi/agent
+    # Pi coding agent (reads AGENTS.md and extensions from ~/.pi/agent/)
+    mkdir -p ~/.pi/agent/extensions
     create_symlink "$DOTFILES_DIR/vibe/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
+    create_symlink "$DOTFILES_DIR/pi/extensions/compact-footer.ts" "$HOME/.pi/agent/extensions/compact-footer.ts"
 
     # Pi Lens UI preferences
     mkdir -p ~/.pi-lens

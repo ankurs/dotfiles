@@ -7,3 +7,17 @@ pi-mcp-adapter
 
 # LSP / diagnostics / linters injected into every edit (35+ languages)
 pi-lens
+
+# Pi ships a deliberately minimal core; the rest re-add what it left out.
+
+# Subagents + parallel delegation
+@tintinweb/pi-subagents
+
+# Read-only /plan mode
+@narumitw/pi-plan-mode
+
+# Todo overlay that survives /reload and context compaction
+@juicesharp/rpiv-todo
+
+# Reviews recently changed code for clarity and maintainability
+pi-simplify

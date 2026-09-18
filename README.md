@@ -390,7 +390,8 @@ versions (`app.slack.com`, `listen.tidal.com`).
 - `nvim/`: Neovim configuration with AstroNvim, Mason, and all plugin configs
 - `claude/`: Claude Code settings, MCP server configs, and project instructions
 - `vibe/`: Vibe configuration with AGENTS.md for shared AI assistant instructions
-- `pi-lens/`: Global Pi Lens preferences, including the compact hidden-by-default diagnostics widget
+- `pi/`: Pi extensions, including a compact one-line footer styled with the tmux Catppuccin Frappé palette; it shows the session name and latest cache-hit rate while omitting extension status rows
+- `pi-lens/`: Global Pi Lens preferences, including the hidden-by-default diagnostics widget
 - `fonts/`: Powerline/Nerd fonts (git submodule)
 - `fedora/`: Fedora-specific configs (fail2ban, btrbk backups, sysctl tuning, etc.)
 

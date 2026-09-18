@@ -97,6 +97,7 @@ check_symlink "$HOME/.zshrc"
 # Verify Pi configuration
 log_info "\nChecking Pi configuration:"
 check_symlink "$HOME/.pi/agent/AGENTS.md"
+check_symlink "$HOME/.pi/agent/extensions/compact-footer.ts"
 check_symlink "$HOME/.pi-lens/config.json"
 
 # Verify zsh as default shell
