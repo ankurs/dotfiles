@@ -50,14 +50,17 @@ cd ~/code/dotfiles
 ## Requirements
 
 ### macOS
+
 - Homebrew
 - Xcode Command Line Tools
 
 ### Fedora Linux
+
 - DNF package manager
 - Development tools group
 
 ### Common Dependencies
+
 - Git
 - Zsh (will be set as default shell)
 - tmux
@@ -67,10 +70,11 @@ cd ~/code/dotfiles
 ## Configuration Overview
 
 ### Shell (Zsh + Zinit)
+
 - **Single Config File**: Consolidated dot-zshrc with optimized loading order
 - **Plugin Manager**: Zinit with interactive installation
 - **Plugins**: Oh My Zsh plugins for git, docker, kubectl, tmux, brew, and more
-- **Modern Aliases**: 
+- **Modern Aliases**:
   - `ls` → `eza` (modern ls with icons)
   - `cat` → `bat` (syntax-highlighted cat)
   - `grep` → `rg` (ripgrep for fast searching)
@@ -81,6 +85,7 @@ cd ~/code/dotfiles
 - **Cross-Platform**: Automatic macOS/Fedora detection and PATH configuration
 
 ### Editor (Neovim + AstroNvim)
+
 - **Distribution**: AstroNvim for out-of-the-box IDE experience
 - **Theme**: OceanicNext colorscheme
 - **Package Manager**: Lazy.nvim for plugin management
@@ -89,6 +94,7 @@ cd ~/code/dotfiles
 - **AI Completion**: GitHub Copilot integration
 
 ### Terminal (tmux + TPM)
+
 - **Plugin Manager**: TPM (Tmux Plugin Manager)
 - **Theme**: Catppuccin Frappé with clean, muted status bar
 - **Status Bar**: Displays session info, load averages, CPU usage, battery status, and date/time
@@ -97,6 +103,7 @@ cd ~/code/dotfiles
 - **Cross-Platform**: Platform-aware clipboard integration
 
 ### Terminal Emulator (Ghostty)
+
 - **Font**: Monaco Nerd Font, size 12
 - **Theme**: iTerm2 Dark Background
 - **Scrollback**: 10 million lines - I never want to lose output
@@ -105,7 +112,9 @@ cd ~/code/dotfiles
 - **Shell Integration**: Cursor, sudo, and title detection
 
 ### AI Tools
+
 I've been integrating AI tools into my terminal workflow as they've matured:
+
 - **Claude Code**: My primary AI coding assistant, installed via brew cask. Configured with MCP servers for Go (gopls) and Svelte. Settings and plugins live in `claude/`
 - **Vibe**: Open-source CLI coding agent with MCP support. Configuration lives in `vibe/` with AGENTS.md for shared instructions
 - **Pi**: Minimal, extensible terminal coding agent (no telemetry/phone-home). Extended with `pi-mcp-adapter` (MCP, incl. OAuth remotes) and `pi-lens` (LSP diagnostics on every edit); reads the shared `AGENTS.md` natively. Extensions tracked in `pi_extensions_list`
@@ -114,6 +123,7 @@ I've been integrating AI tools into my terminal workflow as they've matured:
 - **Antigravity CLI & Codex**: Installed via Homebrew for quick terminal access (Antigravity's CLI binary is `agy`)
 
 ### Git Configuration
+
 - **SSH-first**: All GitHub URLs are rewritten from HTTPS to SSH automatically
 - **Default Branch**: `main`
 - **Pager**: delta for syntax-highlighted, side-by-side diffs with word-level highlighting
@@ -136,6 +146,7 @@ Since all my development happens in the terminal, I've been curating command-lin
 - **yazi** → Terminal file manager - async Rust-based file manager with image/PDF preview and zoxide/ripgrep integration
 
 **Personal Workflow Preferences:**
+
 - **tmuxifier** - session layout management for consistent project setups
 - **Custom `code()` function** - searches multiple directories (`~/code/ss/`, `~/code/`, `~/code/jek/`, etc.) to find a project and opens it in tmux. Usage: `code project-name`
 - **Cross-platform clipboard** - unified copy/paste commands across macOS and Linux
@@ -150,11 +161,13 @@ Here are the key bindings I use daily in this setup:
 ### tmux (Terminal Multiplexer)
 
 #### Basic Controls
+
 - **Prefix Key**: `Ctrl+a` (instead of default `Ctrl+b`)
 - `Ctrl+a` + `r` - Reload configuration file
 - `Ctrl+a` + `?` - Show all key bindings
 
 #### Pane Management
+
 - `Ctrl+a` + `|` - Split window horizontally (left/right panes)
 - `Ctrl+a` + `-` - Split window vertically (top/bottom panes)
 - `Ctrl+a` + `h` - Move to pane on the left
@@ -164,6 +177,7 @@ Here are the key bindings I use daily in this setup:
 - `Ctrl+a` + `Ctrl+a` - Quick cycle through panes
 
 #### Window Management
+
 - `Ctrl+a` + `c` - Create new window
 - `Ctrl+a` + `n` - Next window
 - `Ctrl+a` + `p` - Previous window
@@ -171,12 +185,14 @@ Here are the key bindings I use daily in this setup:
 - `Ctrl+a` + `&` - Kill current window
 
 #### Session Management
+
 - `Ctrl+a` + `Ctrl+s` - Save session (tmux-resurrect)
 - `Ctrl+a` + `Ctrl+r` - Restore session (tmux-resurrect)
 - `Ctrl+a` + `y` - Synchronize input across all panes (ON)
 - `Ctrl+a` + `u` - Turn off pane synchronization (OFF)
 
 #### Copy Mode (Vi-style)
+
 - `Ctrl+a` + `[` - Enter copy mode
 - `v` - Begin selection (in copy mode)
 - `y` - Copy selection to system clipboard
@@ -187,12 +203,14 @@ Here are the key bindings I use daily in this setup:
 ### Shell (Zsh + Plugins)
 
 #### History & Navigation
+
 - `Ctrl+r` - Reverse history search (incremental)
 - `Ctrl+l` - Clear screen
 - Up/Down arrows - Navigate through history
 - Vi-mode enabled - Use `Esc` then vi commands for editing
 
 #### Modern Tool Shortcuts
+
 - `Ctrl+t` - fzf file finder (when fzf available)
 - `Alt+c` - fzf directory navigator (when fzf available)
 - `z <partial_name>` - Smart directory jumping with zoxide
@@ -201,6 +219,7 @@ Here are the key bindings I use daily in this setup:
 #### Plugin-Provided Aliases
 
 **tmux shortcuts** (when tmux plugin loaded):
+
 - `ta` - tmux attach-session
 - `ts` - tmux new-session
 - `tl` - tmux list-sessions
@@ -208,6 +227,7 @@ Here are the key bindings I use daily in this setup:
 - `tksv` - tmux kill-server
 
 **Git shortcuts** (from OMZ git plugin):
+
 - `gs` - git status
 - `ga` - git add
 - `gc` - git commit
@@ -218,11 +238,13 @@ Here are the key bindings I use daily in this setup:
 - `gco` - git checkout
 
 **Docker shortcuts** (when docker command available):
+
 - `dps` - docker ps
 - `dpa` - docker ps -a
 - `di` - docker images
 
 **Kubernetes shortcuts** (when kubectl available):
+
 - `k` - kubectl
 - `kg` - kubectl get
 - `kd` - kubectl describe
@@ -230,10 +252,12 @@ Here are the key bindings I use daily in this setup:
 ### Neovim (AstroNvim + Custom)
 
 #### Leader Keys
+
 - **Leader**: `\` (backslash)
 - **Local Leader**: `,` (comma)
 
 #### Custom Mappings
+
 - `<tab>` - Switch between windows
 - `<Leader><Leader>` - Switch to last buffer
 - `t` - File finder (FzfLua)
@@ -242,6 +266,7 @@ Here are the key bindings I use daily in this setup:
 - `]b` / `[b` - Next/previous buffer
 
 #### Test Runner
+
 - `<Leader>tt` - Run nearest test
 - `<Leader>tf` - Run test file  
 - `<Leader>ts` - Test summary
@@ -250,15 +275,18 @@ Here are the key bindings I use daily in this setup:
 - `<Leader>tS` - Stop test
 
 #### Code Coverage
+
 - `<Leader>cc` - Toggle coverage
 - `<Leader>cs` - Coverage summary
 - `<Leader>cl` - Load coverage
 
 #### Code Actions
+
 - `<Leader>ca` - Code action (in visual mode)
 
 #### AstroNvim Defaults
-For standard AstroNvim keybindings (LSP, file explorer, diagnostics, etc.), see: 
+
+For standard AstroNvim keybindings (LSP, file explorer, diagnostics, etc.), see:
 [AstroNvim Mappings Documentation](https://docs.astronvim.com/mappings)
 
 ## My Utility Scripts
@@ -266,18 +294,23 @@ For standard AstroNvim keybindings (LSP, file explorer, diagnostics, etc.), see:
 I've created a few scripts to help maintain this setup across my machines:
 
 ### `./setup.sh`
+
 The main installation script. Handles everything from SSH key generation to package installation to symlinking dotfiles. It also supports an update mode (`./setup.sh update`) which updates the repo, submodules, all package managers, plugin managers, and language tools in one go.
 
 ### `./check.sh`
+
 My "did I set this up right?" script. It verifies essential commands (git, zsh, tmux, nvim), modern CLI tools (fzf, bat, eza, rg, zoxide, delta, yazi), AI tools (claude, vibe, agy, codex), symlink integrity, plugin managers (Zinit, TPM, AstroNvim), SSH keys, git config, and shell configuration loading. I run this after setting up a new machine to make sure nothing was missed.
 
 ### `./update.sh`
+
 Updates all the packages, plugins, and dependencies. I run this periodically to keep everything current - it handles brew/dnf, Zinit, TPM, Neovim plugins, Mason tools, npm globals, and cargo packages.
 
 ### `./backup.sh`
+
 Creates compressed, timestamped backups to `~/.dotfiles-backup/`. It backs up config files and directories (including SSH keys and cargo config), captures git state (status, diff, stash, recent commits), records installed packages, and generates a manifest. It automatically cleans up old backups, keeping the last 10.
 
 ### `./fedora_post_setup.sh`
+
 An interactive menu-driven script I use after a fresh Fedora install. It detects whether I'm on a desktop, laptop, or VM, then lets me selectively install things like browsers (Brave/Chromium via Flatpak), Docker, Kubernetes tools, power management, virtualization, and security hardening (fail2ban).
 
 ## Cross-Platform Support
@@ -292,6 +325,7 @@ The dotfiles automatically detect the platform and adapt accordingly:
 ## Package Lists
 
 Organized package lists by category:
+
 - **Development Tools**: Languages (Go, Rust, Python, Node.js), compilers, LSP tools
 - **CLI Utilities**: Modern replacements (bat, eza, ripgrep, fzf, zoxide, delta, yazi)
 - **DevOps & Cloud**: Kubernetes, Docker, Terraform, AWS/GCP tools
@@ -300,6 +334,7 @@ Organized package lists by category:
 ## Maintenance
 
 ### Regular Updates
+
 ```bash
 ./setup.sh update  # Full update: repo, submodules, packages, plugins, language tools
 ./update.sh        # Update packages, plugins, and dependencies
@@ -307,11 +342,13 @@ Organized package lists by category:
 ```
 
 ### Backup Before Changes
+
 ```bash
 ./backup.sh  # Create timestamped backup
 ```
 
 ### Adding New Tools
+
 1. Add to the appropriate package list:
    - `Brewfile` on macOS
    - `dnf_list` for Fedora system packages
@@ -321,6 +358,7 @@ Organized package lists by category:
 3. Add configuration as needed
 
 ### Migrating from snap (one-time)
+
 Earlier versions of this repo used `snap_list` for proprietary GUI apps. Snap
 no longer works on Asahi (16k page kernel) and the apps now ship as official
 Flatpaks. If upgrading an older machine:
@@ -338,6 +376,7 @@ versions (`app.slack.com`, `listen.tidal.com`).
 ## File Structure
 
 ### Configuration Files
+
 - `dot-zshrc`: Unified shell configuration (Zsh with all settings)
 - `dot-tmux.conf`: tmux configuration
 - `dot-ghostty`: Ghostty terminal emulator config
@@ -347,13 +386,16 @@ versions (`app.slack.com`, `listen.tidal.com`).
 - `dotgitconfig`: Git user config, SSH auth, URL rewrites
 
 ### Directories
+
 - `nvim/`: Neovim configuration with AstroNvim, Mason, and all plugin configs
 - `claude/`: Claude Code settings, MCP server configs, and project instructions
 - `vibe/`: Vibe configuration with AGENTS.md for shared AI assistant instructions
+- `pi-lens/`: Global Pi Lens preferences, including the compact hidden-by-default diagnostics widget
 - `fonts/`: Powerline/Nerd fonts (git submodule)
 - `fedora/`: Fedora-specific configs (fail2ban, btrbk backups, sysctl tuning, etc.)
 
 ### Scripts
+
 - `setup.sh`: Main installation script (also supports `./setup.sh update`)
 - `check.sh`: Health check - verifies tools, symlinks, plugins, and configs
 - `update.sh`: Update all packages, plugins, and dependencies
@@ -361,6 +403,7 @@ versions (`app.slack.com`, `listen.tidal.com`).
 - `fedora_post_setup.sh`: Interactive post-install wizard for Fedora
 
 ### Package Lists
+
 - `Brewfile`: macOS Homebrew Bundle file (taps, CLI packages, and GUI casks)
 - `dnf_list` / `dnf_remove_list`: Fedora packages to install and remove
 - `flatpak_list`: Flathub apps installed per-user (Bitwarden, Telegram, VLC, ghostwriter)
@@ -374,12 +417,14 @@ versions (`app.slack.com`, `listen.tidal.com`).
 A few things that have tripped me up when setting up on new machines:
 
 **Zinit not installing automatically**
+
 ```bash
 # Manual installation if needed
 git clone https://github.com/zdharma-continuum/zinit.git ~/.local/share/zinit/zinit.git
 ```
 
 **tmux plugins not loading**
+
 ```bash
 # Reset TPM if needed
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -387,6 +432,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
 **Shell changes not taking effect**
+
 ```bash
 # Reload configuration
 source ~/.zshrc

@@ -478,6 +478,10 @@ if [[ -z $UPDATE ]]; then
     mkdir -p ~/.pi/agent
     create_symlink "$DOTFILES_DIR/vibe/AGENTS.md" "$HOME/.pi/agent/AGENTS.md"
 
+    # Pi Lens UI preferences
+    mkdir -p ~/.pi-lens
+    create_symlink "$DOTFILES_DIR/pi-lens/config.json" "$HOME/.pi-lens/config.json"
+
     log_success "Symbolic links created"
 
     # VM-specific configuration (Mesa Zink for OpenGL in UTM/QEMU)

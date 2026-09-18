@@ -94,6 +94,11 @@ done
 log_info "\nChecking shell configuration:"
 check_symlink "$HOME/.zshrc"
 
+# Verify Pi configuration
+log_info "\nChecking Pi configuration:"
+check_symlink "$HOME/.pi/agent/AGENTS.md"
+check_symlink "$HOME/.pi-lens/config.json"
+
 # Verify zsh as default shell
 if [[ "$SHELL" == *"zsh"* ]]; then
     log_success "zsh is the default shell"
