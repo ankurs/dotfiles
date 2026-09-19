@@ -276,6 +276,7 @@ alias gdrive='rclone mount drive: ~/GoogleDrive/My\ Drive --daemon --fast-list -
 alias rgdrive='fusermount -u ~/GoogleDrive/My\ Drive'
 alias t='todo.sh'
 alias todo='vim ~/GoogleDrive/My\ Drive/todo-txt/todo.txt'
+has_cmd 'ollama' && alias olp='ollama launch pi --model gemma4:26b'
 
 # =============================================================================
 # Custom Functions

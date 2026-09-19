@@ -23,7 +23,7 @@ progress() {
 }
 
 check_command() {
-    if ! command -v "$1" &> /dev/null; then
+    if ! command -v "$1" &>/dev/null; then
         log_error "Required command '$1' not found"
         return 1
     fi
@@ -37,7 +37,7 @@ fi
 
 function setup_mac() {
     log_info "Setting up macOS environment"
-    
+
     # Verify Brewfile exists
     if [[ ! -f "./Brewfile" ]]; then
         log_error "Required file Brewfile not found"
@@ -76,8 +76,14 @@ function setup_fedora() {
     local IS_ASAHI=0
     if [[ -f /etc/os-release ]]; then
         local _id _id_like
-        _id=$(. /etc/os-release; echo "${ID:-}")
-        _id_like=$(. /etc/os-release; echo "${ID_LIKE:-}")
+        _id=$(
+            . /etc/os-release
+            echo "${ID:-}"
+        )
+        _id_like=$(
+            . /etc/os-release
+            echo "${ID_LIKE:-}"
+        )
         if [[ "$_id" == "fedora-asahi-remix" || "$_id_like" == *"fedora-asahi-remix"* ]]; then
             IS_ASAHI=1
         fi
@@ -114,14 +120,14 @@ function setup_fedora() {
         else
             log_warning "SSH service setup failed"
         fi
-        
+
         progress "Setting up RPM Fusion repositories"
         if sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm; then
             log_success "RPM Fusion repositories installed"
         else
             log_warning "RPM Fusion setup failed"
         fi
-        
+
         progress "Updating core system packages"
         sudo dnf group upgrade core -y && sudo dnf upgrade --minimal -y
 
@@ -131,7 +137,7 @@ function setup_fedora() {
         else
             log_warning "Development Tools installation failed"
         fi
-        
+
         progress "Installing essential development packages"
         if sudo dnf install -y cmake make python-devel vim neovim zsh gcc-c++; then
             log_success "Essential packages installed"
@@ -147,8 +153,8 @@ function setup_fedora() {
         fi
 
         progress "Configuring Flatpak with Flathub"
-        if sudo dnf install -y flatpak && \
-           flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo; then
+        if sudo dnf install -y flatpak &&
+            flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo; then
             log_success "Flatpak/Flathub configured"
         else
             log_warning "Flatpak/Flathub configuration failed"
@@ -159,7 +165,7 @@ function setup_fedora() {
         if [[ "$ARCH" == "aarch64" ]]; then
             log_warning "Google Cloud SDK repo not available for ARM64 - install manually: curl https://sdk.cloud.google.com | bash"
         else
-            if sudo tee /etc/yum.repos.d/google-cloud-sdk.repo > /dev/null << EOM
+            if sudo tee /etc/yum.repos.d/google-cloud-sdk.repo >/dev/null <<EOM
 [google-cloud-cli]
 name=Google Cloud CLI
 baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el8-x86_64
@@ -174,12 +180,12 @@ EOM
                 log_warning "Google Cloud SDK repository setup failed"
             fi
         fi
-        
+
         progress "Installing AWS CLI"
         # Use uname -m for architecture as uname -i may return "unknown" in VMs
-        if curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
-           unzip awscliv2.zip && \
-           sudo ./aws/install; then
+        if curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" &&
+            unzip awscliv2.zip &&
+            sudo ./aws/install; then
             log_success "AWS CLI installed"
         else
             log_warning "AWS CLI installation failed"
@@ -188,8 +194,8 @@ EOM
     fi
 
     progress "Adding COPR repositories"
-    if sudo dnf install -y dnf-plugins-core && \
-       sudo dnf copr enable -y scottames/ghostty; then
+    if sudo dnf install -y dnf-plugins-core &&
+        sudo dnf copr enable -y scottames/ghostty; then
         log_success "COPR repositories added"
     else
         log_warning "COPR repository setup failed"
@@ -233,9 +239,9 @@ EOM
         progress "Installing flatpaks from flatpak_list"
         while IFS= read -r app; do
             [[ -z "$app" || "$app" =~ ^[[:space:]]*# ]] && continue
-            flatpak install --user -y --noninteractive flathub "$app" \
-                || log_warning "Failed to install flatpak: $app"
-        done < ./flatpak_list
+            flatpak install --user -y --noninteractive flathub "$app" ||
+                log_warning "Failed to install flatpak: $app"
+        done <./flatpak_list
         log_success "Flatpaks installed"
     fi
 
@@ -250,11 +256,11 @@ EOM
 }
 
 count_steps() {
-    STEPS_TOTAL=8  # SSH key, Zinit, TPM, fonts, symlinks, platform setup, npm, nvim
-    
+    STEPS_TOTAL=8 # SSH key, Zinit, TPM, fonts, symlinks, platform setup, npm, nvim
+
     # Add platform-specific steps
     if [[ $(uname) == "Darwin" ]]; then
-        STEPS_TOTAL=$((STEPS_TOTAL + 2))  # optimization, Brewfile install
+        STEPS_TOTAL=$((STEPS_TOTAL + 2)) # optimization, Brewfile install
     elif [[ $(uname) == "Linux" ]] && [[ -f /etc/os-release ]]; then
         source /etc/os-release
         if [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
@@ -264,13 +270,13 @@ count_steps() {
             STEPS_TOTAL=$((STEPS_TOTAL + 16))
         fi
     fi
-    
+
     if [[ -z $UPDATE ]]; then
-        STEPS_TOTAL=$((STEPS_TOTAL + 2))  # fonts and symlinks only in non-update mode
+        STEPS_TOTAL=$((STEPS_TOTAL + 2)) # fonts and symlinks only in non-update mode
     else
         # In update mode on Linux, add font cache refresh step
         if [[ $(uname) == "Linux" ]]; then
-            STEPS_TOTAL=$((STEPS_TOTAL + 1))  # font cache refresh
+            STEPS_TOTAL=$((STEPS_TOTAL + 1)) # font cache refresh
         fi
     fi
 }
@@ -278,7 +284,7 @@ count_steps() {
 function do_setup() {
     local platform=$(uname)
     log_info "Detected platform: $platform"
-    
+
     if [[ $platform == "Darwin" ]]; then
         if ! setup_mac; then
             log_error "macOS setup failed"
@@ -371,7 +377,7 @@ if [[ -z $UPDATE ]]; then
     else
         log_warning "Font installation failed or script not found"
     fi
-    
+
     progress "Creating symbolic links"
     DOTFILES_DIR=$(pwd)
 
@@ -394,27 +400,27 @@ if [[ -z $UPDATE ]]; then
     create_symlink "$DOTFILES_DIR/dotgitconfig" "$HOME/.gitconfig"
     create_symlink "$DOTFILES_DIR/dot-gitignore" "$HOME/.gitignore"
     create_symlink "$DOTFILES_DIR/dot-todo.cfg" "$HOME/.todo.cfg"
-    
+
     # Additional configuration directories
     mkdir -p ~/.cargo/ ~/.config/
     ln -sfn "$DOTFILES_DIR/cargo-config.toml" ~/.cargo/config.toml
 
     # Bootstrap the Rust toolchain if cargo is missing. Uses the official rustup
     # installer so the ~/.cargo/bin layout is identical on macOS and Linux.
-    if ! command -v cargo &> /dev/null; then
+    if ! command -v cargo &>/dev/null; then
         progress "Bootstrapping Rust toolchain"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path \
-            || log_warning "Failed to bootstrap Rust toolchain"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path ||
+            log_warning "Failed to bootstrap Rust toolchain"
         [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
-        command -v cargo &> /dev/null && log_success "Rust toolchain installed"
+        command -v cargo &>/dev/null && log_success "Rust toolchain installed"
     fi
 
     # Register a JDK with jenv so Java tooling (e.g. nvim jdtls) can find a
     # runtime. openjdk is keg-only on macOS / unlinked on Linux, so it is not on
     # PATH until jenv knows about it.
-    if command -v jenv &> /dev/null; then
+    if command -v jenv &>/dev/null; then
         eval "$(jenv init -)"
-        jenv enable-plugin export &> /dev/null || true
+        jenv enable-plugin export &>/dev/null || true
         JDK_HOME=""
         if [[ -d /opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home ]]; then
             JDK_HOME=/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home
@@ -422,7 +428,7 @@ if [[ -z $UPDATE ]]; then
             JDK_HOME=$(find /usr/lib/jvm -maxdepth 1 -type d -name "java-*" 2>/dev/null | sort -V | tail -1)
         fi
         if [[ -n "$JDK_HOME" && -d "$JDK_HOME" ]]; then
-            jenv add "$JDK_HOME" &> /dev/null || true
+            jenv add "$JDK_HOME" &>/dev/null || true
             latest=$(jenv versions --bare 2>/dev/null | grep -v '^system$' | sort -V | tail -1)
             [[ -n "$latest" ]] && jenv global "$latest"
             log_success "Registered JDK with jenv ($JDK_HOME)"
@@ -491,7 +497,7 @@ if [[ -z $UPDATE ]]; then
         if [[ "$VIRT_TYPE" =~ ^(kvm|qemu|vmware|oracle|xen|hyperv)$ ]]; then
             log_info "VM detected ($VIRT_TYPE), configuring Mesa Zink for OpenGL"
             mkdir -p ~/.config/environment.d
-            echo "MESA_LOADER_DRIVER_OVERRIDE=zink" > ~/.config/environment.d/mesa.conf
+            echo "MESA_LOADER_DRIVER_OVERRIDE=zink" >~/.config/environment.d/mesa.conf
             log_success "Mesa Zink configured for VM graphics"
         fi
     fi
@@ -542,7 +548,7 @@ fi
 
 # Install Pi coding agent extensions (MCP + LSP). Pi is installed via
 # npm_global_list above, so `pi` should be on PATH by this point.
-if command -v pi &> /dev/null && [[ -f ./pi_extensions_list ]]; then
+if command -v pi &>/dev/null && [[ -f ./pi_extensions_list ]]; then
     log_info "Installing Pi coding agent extensions"
     while IFS= read -r ext; do
         [[ -z "$ext" || "$ext" =~ ^# ]] && continue
@@ -553,15 +559,14 @@ else
     log_warning "pi not found or pi_extensions_list missing, skipping Pi extensions"
 fi
 
-
 progress "Installing and updating Neovim plugins"
-if command -v nvim &> /dev/null; then
+if command -v nvim &>/dev/null; then
     if nvim --headless "+Lazy! sync" +qa 2>/dev/null; then
         log_success "Neovim plugins synced via Lazy.nvim"
     else
         log_warning "Neovim plugin sync failed"
     fi
-    
+
     # Mason packages will auto-install on first Neovim startup
     log_info "Language servers managed by Mason.nvim"
 else

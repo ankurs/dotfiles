@@ -16,7 +16,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1" >&2; }
 # Platform detection
 is_macos() { [[ "$OSTYPE" == darwin* ]]; }
 is_linux() { [[ "$OSTYPE" == linux* ]]; }
-has_cmd() { command -v "$1" &> /dev/null; }
+has_cmd() { command -v "$1" &>/dev/null; }
 
 check_cmd() {
     if has_cmd "$1"; then
@@ -129,14 +129,14 @@ log_info "\nChecking neovim configuration:"
 # Verify AstroNvim setup
 if [[ -f "$HOME/.config/nvim/init.lua" ]]; then
     log_success "AstroNvim configuration exists"
-    
+
     # Verify Lazy.nvim
     if [[ -f "$HOME/.config/nvim/lazy-lock.json" ]]; then
         log_success "Lazy.nvim lockfile found"
     else
         log_warning "Lazy.nvim lockfile not found"
     fi
-    
+
     # Verify Mason configuration
     if [[ -f "$HOME/.config/nvim/lua/plugins/mason.lua" ]]; then
         log_success "Mason configuration exists"
@@ -226,7 +226,7 @@ else
 fi
 
 # Verify git repository status
-if git rev-parse --git-dir > /dev/null 2>&1; then
+if git rev-parse --git-dir >/dev/null 2>&1; then
     log_info "\nGit repository status:"
     if [[ -n "$(git status --porcelain)" ]]; then
         log_warning "Repository has uncommitted changes"
@@ -234,7 +234,7 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
     else
         log_success "Repository is clean"
     fi
-    
+
     # Verify git submodules
     if [[ -f .gitmodules ]]; then
         log_info "\nGit submodules status:"
@@ -247,21 +247,20 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
                     log_error "$submodule_path is missing"
                 fi
             fi
-        done < .gitmodules
-        
+        done <.gitmodules
+
         # Display submodule status
         log_info "Submodule commit status:"
         git submodule status | while read status_line; do
             if [[ $status_line =~ ^[[:space:]]*([+-]?)([[:alnum:]]+)[[:space:]]+([^[:space:]]+) ]]; then
                 status_char="${BASH_REMATCH[1]}"
-                commit_hash="${BASH_REMATCH[2]}"
                 path="${BASH_REMATCH[3]}"
-                
+
                 case "$status_char" in
-                    "-") log_warning "$path: not initialized" ;;
-                    "+") log_info "$path: newer commits available" ;;
-                    "") log_success "$path: up to date" ;;
-                    *) log_info "$path: $status_line" ;;
+                "-") log_warning "$path: not initialized" ;;
+                "+") log_info "$path: newer commits available" ;;
+                "") log_success "$path: up to date" ;;
+                *) log_info "$path: $status_line" ;;
                 esac
             fi
         done

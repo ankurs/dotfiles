@@ -117,7 +117,7 @@ I've been integrating AI tools into my terminal workflow as they've matured:
 
 - **Claude Code**: My primary AI coding assistant, installed via brew cask. Configured with MCP servers for Go (gopls) and Svelte. Settings and plugins live in `claude/`
 - **Vibe**: Open-source CLI coding agent with MCP support. Configuration lives in `vibe/` with AGENTS.md for shared instructions
-- **Pi**: Minimal, extensible terminal coding agent (no telemetry/phone-home). Extended with `pi-mcp-adapter` (MCP, incl. OAuth remotes) and `pi-lens` (LSP diagnostics on every edit); reads the shared `AGENTS.md` natively. Extensions tracked in `pi_extensions_list`
+- **Pi**: Minimal, extensible terminal coding agent (no telemetry/phone-home). Extended with `pi-mcp-adapter` (MCP, incl. OAuth remotes) and `pi-lens` (LSP diagnostics on every edit); reads the shared `AGENTS.md` natively. Extensions are tracked in `pi_extensions_list`; `olp` launches Pi through Ollama with local `gemma4:26b` as the selected model.
 - **claude-code-templates**: CLI tool for configuring and managing Claude Code templates
 - **GitHub Copilot**: Integrated directly into Neovim for inline completions
 - **Antigravity CLI & Codex**: Installed via Homebrew for quick terminal access (Antigravity's CLI binary is `agy`)
